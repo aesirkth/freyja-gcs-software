@@ -1,7 +1,7 @@
-#include <zephyr/zephyr.h>
+#include <zephyr/kernel.h>
 
 void main(void) {
-    while(True) {
+    while(true) {
         k_msleep(1000);
     }
 }
