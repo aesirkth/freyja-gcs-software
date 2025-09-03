@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from views import plain_dashboard
+from ui.views import plain_dashboard
 
 def save_callback():
     print("Save Clicked")
