@@ -41,7 +41,6 @@ uv pip install -U -r zephyr/scripts/requirements-base.txt
 
 ```bash
 cd zephyr
-west sdk install --toolchains arm-zephyr-eabi:w
-
+west sdk install --toolchains arm-zephyr-eabi
 cd ..
 ```
