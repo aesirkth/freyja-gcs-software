@@ -1,4 +1,6 @@
-bootloader
-modules
-tools
-zephyr
+ext/bootloader
+ext/modules
+ext/tools
+ext/zephyr
+
+*.egg-info

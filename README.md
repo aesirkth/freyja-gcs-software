@@ -29,18 +29,16 @@ west update
 
 with pip:
 ```bash
-pip install -U -r zephyr/scripts/requirements-base.txt
+pip install -U -r ext/zephyr/scripts/requirements-base.txt
 ```
 
 or with uv:
 ```bash
-uv pip install -U -r zephyr/scripts/requirements-base.txt
+uv pip install -U -r ext/zephyr/scripts/requirements-base.txt
 ```
 
 ### install zephyr sdk
 
 ```bash
-cd zephyr
 west sdk install --toolchains arm-zephyr-eabi
-cd ..
 ```
