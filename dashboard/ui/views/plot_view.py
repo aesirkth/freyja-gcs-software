@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from ui.tag_config import PLOT_DASHBOARD
+from ui.tags_config import PLOT_DASHBOARD
 
 def build(parent: int | str) -> dict:
     with dpg.child_window(parent=parent, tag="plot_dashboard:panel", width=0, height=0, border=False):

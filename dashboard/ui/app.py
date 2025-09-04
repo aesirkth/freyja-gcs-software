@@ -8,6 +8,7 @@ dpg.setup_dearpygui()
 
 with dpg.window(width=1200, height=600, no_collapse=True, no_resize=True):
     with dpg.group(horizontal=True):
+        
         with dpg.child_window(tag="panel:left", width=520, height=-1, border=True):
             with dpg.tab_bar(tag="tabs:left"):
                 with dpg.tab(label="Plain Dashboard", tag="tab:left:dash"):
