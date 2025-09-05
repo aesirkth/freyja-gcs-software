@@ -5,46 +5,202 @@
  */
 
 /dts-v1/;
-#include "freyja_gcs-common.dtsi"
+#include <st/u5/stm32u575Xg.dtsi>
+#include <st/u5/stm32u575rgtx-pinctrl.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 
 / {
-	model = "STMicroelectronics STM32U575ZI-NUCLEO-Q board";
-	compatible = "st,stm32u575zi-nucleo-q";
-
-	#address-cells = <1>;
-	#size-cells = <1>;
+	model = "freyja gcs board";
 
 	chosen {
-		zephyr,console = &usart1;
-		zephyr,shell-uart = &usart1;
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,canbus = &fdcan1;
 	};
 
-	aliases {
-		led0 = &blue_led_1;
-		sw0 = &user_button;
-		pwm-led0 = &pwm_led_1;
-		pwm-led1 = &pwm_led_2;
-		watchdog0 = &iwdg;
-		volt-sensor0 = &vref1;
-		volt-sensor1 = &vbat4;
-		die-temp0 = &die_temp;
+	leds: leds {
+		compatible = "gpio-leds";
+
+		tgl0_led: tgl0_led {
+			gpios = <&gpioa 2 GPIO_ACTIVE_HIGH>;
+		};
+		tgl1_led: tgl1_led {
+			gpios = <&gpioa 4 GPIO_ACTIVE_HIGH>;
+		};
+		tgl2_led: tgl2_led {
+			gpios = <&gpioa 7 GPIO_ACTIVE_HIGH>;
+		};
+		tgl3_led: tgl3_led {
+			gpios = <&gpioc 4 GPIO_ACTIVE_HIGH>;
+		};
+		tgl4_led: tgl4_led {
+			gpios = <&gpiob 0 GPIO_ACTIVE_HIGH>;
+		};
+		tgl5_led: tgl5_led {
+			gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
+		};
+		tgl6_led: tgl6_led {
+			gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
+		};
+		tgl7_led: tgl7_led {
+			gpios = <&gpioc 9 GPIO_ACTIVE_HIGH>;
+		};
+
+		launch_armd_led: launch_armd_led {
+			gpios = <&gpioc 10 GPIO_ACTIVE_HIGH>;
+		};
+		cmd_send_armd_led: cmd_send_armd_led {
+			gpios = <&gpioc 0 GPIO_ACTIVE_HIGH>;
+		};
+		fault_led: fault_led {
+			gpios = <&gpioc 2 GPIO_ACTIVE_HIGH>;
+		};
+		con_sts_rkt_led: con_sts_rkt_led {
+			gpios = <&gpioa 0 GPIO_ACTIVE_HIGH>;
+		};
+		con_sts_lpd_led: con_sts_lpd_led {
+			gpios = <&gpioc 13 GPIO_ACTIVE_HIGH>;
+		};
+		launched_led: launched_led {
+			gpios = <&gpioc 1 GPIO_ACTIVE_HIGH>;
+		};
+		aux1_led: aux1_led {
+			gpios = <&gpioc 0 GPIO_ACTIVE_HIGH>;
+		};
+		aux2_led: aux2_led {
+			gpios = <&gpioc 3 GPIO_ACTIVE_HIGH>;
+		};
 	};
-};
 
-&usart1 {
-	pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
-	pinctrl-names = "default";
-	current-speed = <115200>;
-	status = "okay";
-};
+	buttons: buttons {
+		compatible = "gpio_keys";
+		
+		tgl0: tgl0 {
+			gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
+		};
+		tgl1: tgl1 {
+			gpios = <&gpioa 5 GPIO_ACTIVE_HIGH>;
+		};
+		tgl2: tgl2 {
+			gpios = <&gpioa 7 GPIO_ACTIVE_HIGH>;
+		};
+		tgl3: tgl3 {
+			gpios = <&gpioc 5 GPIO_ACTIVE_HIGH>;
+		};
+		tgl4: tgl4 {
+			gpios = <&gpiob 1 GPIO_ACTIVE_HIGH>;
+		};
+		tgl5: tgl5 {
+			gpios = <&gpiob 10 GPIO_ACTIVE_HIGH>;
+		};
+		tgl6: tgl6 {
+			gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
+		};
+		tgl7: tgl7 {
+			gpios = <&gpioa 8 GPIO_ACTIVE_HIGH>;
+		};
 
-&gpdma1 {
-	status = "okay";
+		btn_launch: btn_launch {
+			gpios = <&gpiod 2 GPIO_ACTIVE_HIGH>;
+		};
+		btn_cmd_send: btn_cmd_send {
+			gpios = <&gpioa 10 GPIO_ACTIVE_HIGH>;
+		};
+		btn_aux: btn_aux {
+			gpios = <&gpioc 11 GPIO_ACTIVE_HIGH>;
+		};
+
+		launch_armd: launch_armd {
+			gpios = <&gpioc 12 GPIO_ACTIVE_HIGH>;
+		};
+		cmd_send_armd: cmd_send_armd {
+			gpios = <&gpioa 9 GPIO_ACTIVE_HIGH>;
+		};
+	};
 };
 
 &die_temp {
 	status = "okay";
 };
+
+&clk_hsi48 {
+	status = "okay";
+};
+
+&clk_lse {
+	status = "okay";
+};
+
+&clk_msis {
+	status = "okay";
+	msi-range = <4>;
+	msi-pll-mode;
+};
+
+&pll1 {
+	div-m = <1>;
+	mul-n = <80>;
+	div-q = <2>;
+	div-r = <2>;
+	clocks = <&clk_msis>;
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&pll1>;
+	clock-frequency = <DT_FREQ_M(160)>;
+	ahb-prescaler = <1>;
+	apb1-prescaler = <1>;
+	apb2-prescaler = <1>;
+	apb3-prescaler = <1>;
+};
+
+&timers3 {
+	st,prescaler = <10000>;
+	status = "okay";
+
+	fan_pwm: pwm {
+		pinctrl-0 = <&tim2_ch1_pa15>;
+		pinctrl-names = "default";
+		status = "okay";
+	};
+};
+
+&iwdg {
+	status = "okay";
+};
+
+&rng {
+	status = "okay";
+};
+
+zephyr_udc0: &usbotg_fs {
+	pinctrl-0 = <&usb_otg_fs_dm_pa11 &usb_otg_fs_dp_pa12>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&fdcan1 {
+	clocks = <&rcc STM32_CLOCK_BUS_APB1_2 0x00000200>,
+		 <&rcc STM32_SRC_PLL1_Q FDCAN1_SEL(1)>;
+	pinctrl-0 = <&fdcan1_rx_pb8 &fdcan1_tx_pb9>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&rtc {
+	clocks = <&rcc STM32_CLOCK_BUS_APB3 0x00200000>,
+		 <&rcc STM32_SRC_LSE RTC_SEL(1)>;
+	status = "okay";
+};
+
+&vbat4 {
+	status = "okay";
+};
+
+stm32_lp_tick_source: &lptim1 {
+	clocks = <&rcc STM32_CLOCK_BUS_APB3 0x00000800>,
+		 <&rcc STM32_SRC_LSI LPTIM1_SEL(1)>;
+	status = "okay";
+};
+
