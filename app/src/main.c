@@ -1,9 +1,13 @@
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/uart.h>
+#include <zephyr/logging/log.h>
 
-#define LED0_NODE DT_NODELABEL(tgl0_led)
+LOG_MODULE_REGISTER(main);
 
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+const struct device * cdc_acm = DEVICE_DT_GET(DT_NODELABEL(cdc_acm_uart0));
+
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl0_led), gpios);
 
 int main(void)
 {
@@ -20,13 +24,20 @@ int main(void)
 	}
 
 	while (1) {
+		LOG_INF("toggling");
 		ret = gpio_pin_toggle_dt(&led);
 		if (ret < 0) {
 			return 0;
 		}
 
+		/* Send some bytes */
+		const char *msg = "Hello over CDC ACM!\r\n";
+		for (const char *p = msg; *p; ++p) {
+			uart_poll_out(cdc_acm, *p);   // simple, blocking
+		}
+
 		led_state = !led_state;
-		k_msleep(500);
+		k_msleep(1000);
 	}
 	return 0;
 }

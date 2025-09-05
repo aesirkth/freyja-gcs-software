@@ -16,6 +16,8 @@
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,canbus = &fdcan1;
+        zephyr,console = &cdc_acm_uart1;
+        zephyr,shell-uart = &cdc_acm_uart1;
 	};
 
 	leds: leds {
@@ -204,3 +206,11 @@ stm32_lp_tick_source: &lptim1 {
 	status = "okay";
 };
 
+&zephyr_udc0 {
+    cdc_acm_uart0: cdc_acm_uart0 {
+        compatible = "zephyr,cdc-acm-uart";
+    };
+	cdc_acm_uart1: cdc_acm_uart1 {
+		compatible = "zephyr,cdc-acm-uart";
+	};
+};
