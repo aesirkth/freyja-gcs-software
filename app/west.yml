@@ -14,4 +14,4 @@ manifest:
         path-prefix: ext
 
   self:
-    path: app
+    path: .
