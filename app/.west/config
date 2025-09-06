@@ -1,6 +1,7 @@
 [manifest]
 path = .
 file = west.yml
+project-filter = -hal_nxp -hal_espressif -hal_silabs -hal_nordic -hal_infineon -lvgl
 
 [zephyr]
 base = ext/zephyr
