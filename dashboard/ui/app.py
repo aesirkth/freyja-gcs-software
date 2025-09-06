@@ -19,8 +19,7 @@ with dpg.window(width=1200, height=600, no_collapse=True, no_resize=True):
         with dpg.child_window(tag="panel:right", width=0, height=-1, border=True):
             with dpg.tab_bar(tag="tabs:right"):
                 with dpg.tab(label="Plot Dashboard", tag="tab:right:plot"):
-                    # dashboard_tags["right"] = plot_view.build(parent="tab:right:plot")
-                    pass
+                    dashboard_tags["right"] = plot_view.build(parent="tab:right:plot")
 
 dpg.show_viewport()
 

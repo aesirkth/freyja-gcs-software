@@ -29,4 +29,4 @@ def update(data: TelemetryInput, tags: dict) -> None:
     dpg.set_value(tags["post_cc_temp_text"], f"Post-combustion Chamber Temperature: {_format(data.post_cc_temp, '°C', 1)}")
     dpg.set_value(tags["nozzle_temp_text"], f"Nozzle temperature: {_format(data.nozzle_temp, '°C', 1)}")
     dpg.set_value(tags["injector_pressure_text"], f"Pressure at injector: {_format(data.injector_pressure, 'P', 1)}")
-    
+  
