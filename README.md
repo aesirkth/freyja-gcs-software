@@ -2,6 +2,10 @@
 
 ## installation of zephyr env
 
+download and install stm32 cube prog 
+https://www.st.com/en/development-tools/stm32cubeprog.html
+
+then move to app directory:
 ```bash
 cd app
 ```
