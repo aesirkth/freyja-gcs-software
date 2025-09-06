@@ -48,6 +48,20 @@ west sdk install --toolchains arm-zephyr-eabi
 ```
 
 
+## build app
+
+to build:
+```bash
+make
+```
+
+to flash over usb enter bootloader by holding the upper button while pressing the
+lower button briefly. and then:
+```bash
+make flash-app-usb
+```
+
+
 ## installation of dashboard env
 
 ```bash
