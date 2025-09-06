@@ -9,7 +9,7 @@ dpg.setup_dearpygui()
 
 dashboard_tags = {"left": {}, "right": {}}
 
-with dpg.window(width=1200, height=600, no_collapse=True, no_resize=True):
+with dpg.window(width=1200, height=600, no_collapse=True, no_resize=True) as primary_window:
     with dpg.group(horizontal=True):
         with dpg.child_window(tag="panel:left", width=520, height=-1, border=True):
             with dpg.tab_bar(tag="tabs:left"):
@@ -21,6 +21,7 @@ with dpg.window(width=1200, height=600, no_collapse=True, no_resize=True):
                 with dpg.tab(label="Plot Dashboard", tag="tab:right:plot"):
                     dashboard_tags["right"] = plot_view.build(parent="tab:right:plot")
 
+dpg.set_primary_window(primary_window, True)
 dpg.show_viewport()
 
 while dpg.is_dearpygui_running():
