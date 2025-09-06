@@ -4,5 +4,6 @@ ext/tools
 ext/zephyr
 
 *.egg-info
+__pycache__
 
 build
