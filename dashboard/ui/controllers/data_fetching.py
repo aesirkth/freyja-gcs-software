@@ -1,2 +1,3 @@
 def fetch_latest_tel_data():
-    pass
+    print("Fetching")
+    return

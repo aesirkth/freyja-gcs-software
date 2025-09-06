@@ -4,5 +4,3 @@ class DataQueue:
 
     def get_latest_data():
         pass
-
-    
