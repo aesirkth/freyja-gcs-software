@@ -32,6 +32,12 @@ uv sync
 west update
 ```
 
+### register zephyr as cmake package
+
+```bash
+west zephyr-export
+```
+
 
 ### install zephyr python packages
 
