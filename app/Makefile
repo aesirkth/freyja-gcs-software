@@ -1,7 +1,11 @@
-.PHONY: build-app
-build-app:
+.PHONY: build
+build:
 	west build
 
-.PHONY: flash-app-usb
-flash-app-usb:
+.PHONY: flash-usb
+flash-usb:
 	west flash --runner stm32cubeprogrammer --port=USB1
+
+.PHONY: clean
+clean:
+	rm -rf build
