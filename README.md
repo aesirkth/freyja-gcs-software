@@ -1,6 +1,10 @@
 # freyja-gcs-software
 
-## installation
+## installation of zephyr env
+
+```bash
+cd app
+```
 
 ### setup python env
 
@@ -41,4 +45,25 @@ uv pip install -U -r ext/zephyr/scripts/requirements-base.txt
 
 ```bash
 west sdk install --toolchains arm-zephyr-eabi
+```
+
+
+## installation of dashboard env
+
+```bash
+cd dashboard
+```
+
+with pip:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install .
+```
+
+or with uv:
+```bash
+uv venv
+source .venv/bin/activate
+uv sync
 ```

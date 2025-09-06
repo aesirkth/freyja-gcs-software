@@ -1,6 +1,6 @@
 .PHONY: build-app
 build-app:
-	west build app
+	west build
 
 .PHONY: flash-app-usb
 flash-app-usb:
