@@ -137,8 +137,10 @@ uv sync
 |        | 32~63 | latitude                       | f32   |
 | 0x72A  | 0~31  | altitude                       | f32   |
 | 0x72B  | 0~31  | sigurd temperature 1           | f32   |
-|        | 32~64 | sigurd temperature 1           | f32   |
-| 0x72C  | 0~31  | fjalar bat voltage             | f32   |
+|        | 32~64 | sigurd temperature 2           | f32   |
+| 0x72C  | 0~31  | sigurd temperature 3           | f32   |
+|        | 32~64 | sigurd temperature 4           | f32   |
+| 0x72D  | 0~31  | fjalar bat voltage             | f32   |
 |        | 32~63 | loki bat voltage               | f32   |
 
 
