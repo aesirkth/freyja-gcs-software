@@ -1,3 +1,3 @@
 import asyncio
 
-telemetry_q = asyncio.LifoQueue()
+telemetry_queue = asyncio.LifoQueue()
