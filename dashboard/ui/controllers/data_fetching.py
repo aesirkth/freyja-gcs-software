@@ -11,4 +11,4 @@ def fetch_latest_tel_data():
         else:
             raise TypeError
     except Exception as e:
-        logger.e(f"Error while fetching lates telemetry data. {e}")
+        logger.error(f"Error while fetching lates telemetry data. {e}")

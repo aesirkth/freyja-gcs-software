@@ -10,4 +10,4 @@ def format_value(value, unit, digits=1):
             return f"{value:.{digits}f} {unit}"
         return f"{value} {unit}"
     except Exception as e:
-        logger.e(f"Error while formatting value for dashboard. {e}")
+        logger.error(f"Error while formatting value for dashboard. {e}")

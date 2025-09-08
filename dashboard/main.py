@@ -1,7 +1,7 @@
 import asyncio
-import contextlib
 from src.core import core_loop
 from ui.app import ui_loop
+import contextlib
 
 async def main():
     tasks = [

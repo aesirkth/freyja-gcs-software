@@ -40,4 +40,4 @@ async def ui_loop():
 
         dpg.destroy_context()
     except Exception as e:
-        logger.e(f"Error while running DPG ui loop. {e}")
+        logger.error(f"Error while running DPG ui loop. {e}")
