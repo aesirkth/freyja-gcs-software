@@ -3,6 +3,7 @@ from models.input_data import TelemetryInput
 from ui.controllers.data_fetching import fetch_latest_tel_data
 from ui.views import plain_dashboard, plot_view
 import logging
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,7 @@ async def ui_loop():
             plain_dashboard.update(tel, dashboard_tags["left"])
 
             dpg.render_dearpygui_frame()
+            await asyncio.sleep(1/60)
 
         dpg.destroy_context()
     except Exception as e:

@@ -6,6 +6,8 @@ logger = logging.getLogger(__name__)
 
 def fetch_latest_tel_data():
     try:
+        print("Telemetry queue: \n")
+        print(telemetry_queue)
         if isinstance(telemetry_queue, TelemetryInput):
             return telemetry_queue
         else:

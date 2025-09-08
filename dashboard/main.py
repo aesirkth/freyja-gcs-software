@@ -7,7 +7,6 @@ async def main():
     tasks = [
         asyncio.create_task(core_loop(), name="core"),
     ]
-
     try:
         await ui_loop()
     finally:
