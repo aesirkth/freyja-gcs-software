@@ -4,10 +4,8 @@ from src.core import core_loop
 from ui.app import ui_loop
 
 async def main():
-    # start background producers
     tasks = [
         asyncio.create_task(core_loop(), name="core"),
-        
     ]
 
     try:
