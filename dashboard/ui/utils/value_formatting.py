@@ -1,6 +1,13 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 def format_value(value, unit, digits=1):
-    if value is None:
-        return f"-- {unit}"
-    if isinstance(value, float):
-        return f"{value:.{digits}f} {unit}"
-    return f"{value} {unit}"
+    try:
+        if value is None:
+            return f"-- {unit}"
+        if isinstance(value, float):
+            return f"{value:.{digits}f} {unit}"
+        return f"{value} {unit}"
+    except Exception as e:
+        logger.e(f"Error while formatting value for dashboard. {e}")
