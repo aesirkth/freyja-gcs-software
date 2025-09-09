@@ -112,15 +112,15 @@ uv sync
 |        | 2    | loki substate                  | uint8 |
 |        | 3    | drogue deployed                | bool  |
 |        | 4    | main deployed/line cut         | bool  |
-|        | 5    | freyr airbrake safety solenoid | bool  |
-|        | 6    | gnss fix                       | bool  |
+|        | 5    | gnss fix                       | bool  |
 | 0x721  | 0~3  | fafnir main valve percantage   | f32   |
 |        | 4    | fafnir motor solenoid 1        | bool  |
 |        | 5    | fafnir motor solenoid 2        | bool  |
 |        | 6    | fafnir motor solenoid 3        | bool  |
 |        | 7    | fafnir motor solenoid 4        | bool  |
 | 0x722  | 0~3  | thrust (from loadcell)         | f32   |
-| 0x723  | 0~3  | airbrake percantage            | f32   |
+| 0x723  | 0    | freyr airbrake safety solenoid | bool  |
+|        | 1~4  | airbrake percantage            | f32   |
 | 0x724  | 0    | pyro1 fired/connected          | bool  |
 |        | 1    | pyro2 fired/connected          | bool  |
 |        | 2    | pyro3 fired/connected          | bool  |
