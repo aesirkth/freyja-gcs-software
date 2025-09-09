@@ -105,43 +105,43 @@ uv sync
 
 ### fjalar to gcs
 
-| CAN ID | bit   | data                           | type  |
-| ------ | ----- | ------------------------------ | ----- |
-| 0x720  | 0~7   | flight state                   | uint8 |
-|        | 8~15  | loki state                     | uint8 |
-|        | 16~23 | loki substate                  | uint8 |
-|        | 24    | drogue deployed                | bool  |
-|        | 25    | main deployed/line cut         | bool  |
-|        | 26    | freyr airbrake safety solenoid | bool  |
-|        | 27    | gnss fix                       | bool  |
-|        | 28    | pyro1 fired/connected          | bool  |
-|        | 29    | pyro2 fired/connected          | bool  |
-|        | 30    | pyro3 fired/connected          | bool  |
-|        | 31    | fafnir motor solenoid 1        | bool  |
-|        | 32    | fafnir motor solenoid 2        | bool  |
-|        | 33    | fafnir motor solenoid 3        | bool  |
-|        | 34    | fafnir motor solenoid 4        | bool  |
-| 0x721  | 0~31  | fafnir main valve percantage   | f32   |
-|        | 32~63 | airbrake percantage            | f32   |
-| 0x722  | 0~31  | thrust (from loadcell)         | f32   |
-| 0x723  | 0~31  | ax                             | f32   |
-|        | 32~63 | ay                             | f32   |
-| 0x724  | 0~31  | az                             | f32   |
-| 0x725  | 0~31  | vx                             | f32   |
-|        | 32~63 | vy                             | f32   |
-| 0x726  | 0~31  | vz                             | f32   |
-| 0x727  | 0~31  | roll                           | f32   |
-|        | 32~63 | pitch                          | f32   |
-| 0x728  | 0~31  | yaw                            | f32   |
-| 0x729  | 0~31  | longitude                      | f32   |
-|        | 32~63 | latitude                       | f32   |
-| 0x72A  | 0~31  | altitude                       | f32   |
-| 0x72B  | 0~31  | sigurd temperature 1           | f32   |
-|        | 32~64 | sigurd temperature 2           | f32   |
-| 0x72C  | 0~31  | sigurd temperature 3           | f32   |
-|        | 32~64 | sigurd temperature 4           | f32   |
-| 0x72D  | 0~31  | fjalar bat voltage             | f32   |
-|        | 32~63 | loki bat voltage               | f32   |
+| CAN ID | byte | data                           | type  |
+| ------ | ---- | ------------------------------ | ----- |
+| 0x720  | 0    | flight state                   | uint8 |
+|        | 1    | loki state                     | uint8 |
+|        | 2    | loki substate                  | uint8 |
+|        | 3    | drogue deployed                | bool  |
+|        | 4    | main deployed/line cut         | bool  |
+|        | 5    | freyr airbrake safety solenoid | bool  |
+|        | 6    | gnss fix                       | bool  |
+| 0x721  | 0~3  | fafnir main valve percantage   | f32   |
+|        | 4    | fafnir motor solenoid 1        | bool  |
+|        | 5    | fafnir motor solenoid 2        | bool  |
+|        | 6    | fafnir motor solenoid 3        | bool  |
+|        | 7    | fafnir motor solenoid 4        | bool  |
+| 0x722  | 0~3  | thrust (from loadcell)         | f32   |
+| 0x723  | 0~3  | airbrake percantage            | f32   |
+| 0x724  | 0    | pyro1 fired/connected          | bool  |
+|        | 1    | pyro2 fired/connected          | bool  |
+|        | 2    | pyro3 fired/connected          | bool  |
+| 0x725  | 0~3  | ax                             | f32   |
+|        | 4~7  | ay                             | f32   |
+| 0x726  | 0~3  | az                             | f32   |
+| 0x727  | 0~3  | vx                             | f32   |
+|        | 4~7  | vy                             | f32   |
+| 0x72A  | 0~3  | vz                             | f32   |
+| 0x72B  | 0~3  | roll                           | f32   |
+|        | 4~7  | pitch                          | f32   |
+| 0x72C  | 0~3  | yaw                            | f32   |
+| 0x72D  | 0~3  | longitude                      | f32   |
+|        | 4~7  | latitude                       | f32   |
+| 0x72E  | 0~3  | altitude                       | f32   |
+| 0x72F  | 0~3  | sigurd temperature 1           | f32   |
+|        | 4~7  | sigurd temperature 2           | f32   |
+| 0x730  | 0~3  | sigurd temperature 3           | f32   |
+|        | 4~7  | sigurd temperature 4           | f32   |
+| 0x731  | 0~3  | fjalar bat voltage             | f32   |
+|        | 4~7  | loki bat voltage               | f32   |
 
 
 
