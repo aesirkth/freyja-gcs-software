@@ -1,4 +1,6 @@
-typedef enum : u_int8_t {
+#include <stdint.h>
+
+typedef enum {
     STATE_IDLE,
     STATE_AWAITING_INIT,
     STATE_INITIATED,
@@ -10,7 +12,7 @@ typedef enum : u_int8_t {
     STATE_LANDED,
 } fjalar_flight_state_t;
 
-typedef enum : u_int8_t {
+typedef enum {
     STATE_LOKI_STARTUP = 1,
     STATE_LOKI_READY,
     STATE_LOKI_ARMED,
@@ -19,16 +21,16 @@ typedef enum : u_int8_t {
     STATE_LOKI_WARN_EXT,
 } loki_state_t;
 
-typedef enum : u_int8_t {
+typedef enum {
     SUB_STATE_IDLE,
     SUB_STATE_ENGAGE,
     SUB_STATE_DISENGAGE,
 } loki_substate_t;
 
 typedef struct state_pkt {
-    fjalar_flight_state_t fjalar_flight_state;
-    loki_state_t loki_state;
-    loki_substate_t loki_substate;
+    uint8_t fjalar_flight_state;
+    uint8_t loki_state;
+    uint8_t loki_substate;
     bool drogue_deployed;
     bool gnss_fixed;
 } state_pkt_t;
@@ -84,13 +86,13 @@ typedef struct altitude_pkt {
 } altitude_pkt_t;
 
 typedef struct sigurd_temp_pkt_1 {
-    float temp_1:
-    float temp_2:
+    float temp_1;
+    float temp_2;
 } sigurd_temp_pkt_1_t;
 
 typedef struct sigurd_temp_pkt_2 {
-    float temp_3:
-    float temp_4:
+    float temp_3;
+    float temp_4;
 } sigurd_temp_pkt_2_t;
 
 typedef struct bat_pkt {
