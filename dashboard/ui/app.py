@@ -31,9 +31,10 @@ async def ui_loop():
         dpg.show_viewport()
 
         while dpg.is_dearpygui_running():
-            tel = fetch_latest_tel_data()
+            tel = await fetch_latest_tel_data()
             if not isinstance(tel, TelemetryInput):
                 tel = TelemetryInput.model_validate(tel or {})
+            print("Telemetry input: ", tel)
 
             plain_dashboard.update(tel, dashboard_tags["left"])
 

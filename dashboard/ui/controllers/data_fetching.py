@@ -4,13 +4,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def fetch_latest_tel_data():
+async def fetch_latest_tel_data():
     try:
-        print("Telemetry queue: \n")
-        print(telemetry_queue)
-        if isinstance(telemetry_queue, TelemetryInput):
-            return telemetry_queue
+        latest_tel_input = telemetry_queue._queue[0]
+        if isinstance(latest_tel_input, TelemetryInput):
+            return latest_tel_input
         else:
             raise TypeError
     except Exception as e:
-        logger.error(f"Error while fetching lates telemetry data. {e}")
+        logger.error(f"Error while fetching latest telemetry data. {e}")
