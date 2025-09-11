@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 async def fetch_latest_tel_data():
     try:
-        latest_tel_input = telemetry_queue._queue[0]
+        latest_tel_input = await telemetry_queue.get()
         if isinstance(latest_tel_input, TelemetryInput):
             return latest_tel_input
         else:

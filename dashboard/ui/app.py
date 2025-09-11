@@ -34,7 +34,7 @@ async def ui_loop():
             tel = await fetch_latest_tel_data()
             if not isinstance(tel, TelemetryInput):
                 tel = TelemetryInput.model_validate(tel or {})
-            print("Telemetry input: ", tel)
+            # print("Telemetry input: ", tel)
 
             plain_dashboard.update(tel, dashboard_tags["left"])
 

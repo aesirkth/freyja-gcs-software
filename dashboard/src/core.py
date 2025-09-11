@@ -11,9 +11,9 @@ async def core_loop():
         while True:
             # Temporary test data
             tel_data = TelemetryInput(
-                speed=20 + random.random()*5,
-                battery_voltage=12.1,
-                tank_temp=35.0,
+                speed=random.random()*50,
+                battery_voltage=random.random()*50,
+                tank_temp=random.random()*50,
             )
             print("Running")
             await telemetry_queue.put(tel_data)
