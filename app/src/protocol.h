@@ -103,7 +103,7 @@ typedef struct bat_pkt {
 } bat_pkt_t;
 
 typedef enum {
-    PKT_TYPE_STATE,
+    PKT_TYPE_STATE = 20,
     PKT_TYPE_FAFNIR,
     PKT_TYPE_THRUST,
     PKT_TYPE_AIRBRAKE,
