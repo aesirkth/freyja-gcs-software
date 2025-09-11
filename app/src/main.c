@@ -26,10 +26,12 @@ int main(void) {
 
 	ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
 	if (ret < 0) {
+		LOG_ERR("could not configure pin");
 		return 0;
 	}
 	ret = gpio_pin_set_dt(&led, 1);
 	if (ret < 0) {
+		LOG_ERR("could not set pin");
 		return 0;
 	}
 
