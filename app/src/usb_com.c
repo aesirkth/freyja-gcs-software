@@ -5,7 +5,7 @@
 
 LOG_MODULE_REGISTER(cdc_com);
 
-#define TX_BUF_LEN 11 // 2 header bytes, 1 length, CAN packet max length of 8 
+#define TX_BUF_LEN 12 // 2 header bytes, 1 byte packet type, 1 length, CAN packet max length of 8 
 #define PKT_HEADER (uint8_t[]){0xAA, 0xAA}
 
 static const struct device *const usb_uart = DEVICE_DT_GET(DT_NODELABEL(cdc_acm_uart0));

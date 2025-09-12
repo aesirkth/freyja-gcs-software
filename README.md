@@ -144,4 +144,17 @@ uv sync
 |        | 4~7  | loki bat voltage               | f32   |
 
 
+## usb message specification
 
+the can packets are packaged with a header that's for byte long and then sent
+over usb cdc acm.
+
+| byte | data | description                     |
+| ---- | ---- | ------------------------------- |
+| 0    | 0xAA | header byte 1                   |
+| 1    | 0xAA | header byte 2                   |
+| 2    | x    | packet type i.e. CAN ID - 0x700 |
+| 3    | x    | length of CAN packet            |
+| 4~11 | x    | CAN packet                      |
+
+note that the CAN packet's size is between 1 and 8 bytes. 
