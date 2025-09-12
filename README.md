@@ -68,7 +68,7 @@ make
 to flash over usb enter bootloader by holding the upper button while pressing the
 lower button briefly. and then:
 ```bash
-make flash-app-usb
+make flash-app
 ```
 
 
