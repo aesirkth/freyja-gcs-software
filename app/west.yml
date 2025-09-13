@@ -2,11 +2,13 @@ manifest:
   remotes:
     - name: zephyrproject
       url-base: https://github.com/zephyrproject-rtos
+    - name: zephyr_macos_stm32prog
+      url-base: https://github.com/PepperoniPingu/
 
   projects:
     - name: zephyr
-      remote: zephyrproject
-      revision: v4.2.0
+      remote: zephyr_macos_stm32prog
+      revision: v4.2.0-macos-stm32prog
       path: ext/zephyr
       west-commands: scripts/west-commands.yml
 
