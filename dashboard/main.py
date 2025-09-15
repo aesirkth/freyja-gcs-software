@@ -1,14 +1,14 @@
 import asyncio
-from src.core import core_loop
-from ui.app import ui_loop
+from src.core import core_serial_task
+from ui.app import ui_task
 import contextlib
 
 async def main():
     tasks = [
-        asyncio.create_task(core_loop(), name="core"),
+        asyncio.create_task(core_serial_task(), name="core"),
     ]
     try:
-        await ui_loop()
+        await ui_task()
     finally:
         for t in tasks:
             t.cancel()

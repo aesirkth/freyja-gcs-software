@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-async def core_loop():
+async def core_serial_task():
     try:
         print("Running!")
         while True:

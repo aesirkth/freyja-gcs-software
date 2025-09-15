@@ -7,7 +7,7 @@ import asyncio
 
 logger = logging.getLogger(__name__)
 
-async def ui_loop():
+async def ui_task():
     try:
         dpg.create_context()
         dpg.create_viewport(title="Example Window", width=1200, height=600, vsync=True)
