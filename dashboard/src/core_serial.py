@@ -1,8 +1,8 @@
-import asyncio, serial
+import logging
 from .core.can_conversion import read_and_apply_once
 from models.input_data import TelemetryInput
 from src.state.bus import telemetry_queue
-import logging
+import serial
 
 logger = logging.getLogger(__name__)
 

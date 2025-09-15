@@ -33,39 +33,39 @@ def _find_sync(ser: serial.Serial) -> bool:
             if not b0:
                 return False
 
-def _u8(b, byte_index):  return b[byte_index]
-def _b1(b, byte_index):  return b[byte_index] != 0
-def _f32(b, byte_index): return struct.unpack_from("<f", b, byte_index)[0]  # Assuming STM32 little-endian?
+def _to_u8(pkt, byte_index):  return pkt[byte_index]
+def _to_b1(pkt, byte_index):  return pkt[byte_index] != 0
+def _to_f32(pkt, byte_index): return struct.unpack_from("<f", pkt, byte_index)[0]  # Assuming STM32 little-endian?
 
-def _apply_0x720(p, t):
-    t.flight_state    = _u8(p, 0)
-    t.loki_state      = _u8(p, 1)
-    t.loki_substate   = _u8(p, 2)
-    t.drogue_deployed = _b1(p, 3)
-    t.main_deployed   = _b1(p, 4)
-    t.gnss_fix        = _b1(p, 5)
+def _apply_0x720(pkt, tel_object):
+    tel_object.flight_state    = _to_u8(pkt, 0)
+    tel_object.loki_state      = _to_u8(pkt, 1)
+    tel_object.loki_substate   = _to_u8(pkt, 2)
+    tel_object.drogue_deployed = _to_b1(pkt, 3)
+    tel_object.main_deployed   = _to_b1(pkt, 4)
+    tel_object.gnss_fix        = _to_b1(pkt, 5)
 
-def _apply_0x721(p, t):
-    t.fafnir_main_valve_pct = _f32(p, 0)
-    t.fafnir_sol_1 = _b1(p, 4)
-    t.fafnir_sol_2 = _b1(p, 5)
-    t.fafnir_sol_3 = _b1(p, 6)
-    t.fafnir_sol_4 = _b1(p, 7)
+def _apply_0x721(pkt, tel_object):
+    tel_object.fafnir_main_valve_pct = _to_f32(pkt, 0)
+    tel_object.fafnir_sol_1 = _to_b1(pkt, 4)
+    tel_object.fafnir_sol_2 = _to_b1(pkt, 5)
+    tel_object.fafnir_sol_3 = _to_b1(pkt, 6)
+    tel_object.fafnir_sol_4 = _to_b1(pkt, 7)
 
-def _apply_0x722(pkt, tel_object): tel_object.thrust = _f32(pkt, 0)
-def _apply_0x723(pkt, tel_object): tel_object.airbrake_safety = _b1(pkt, 0); tel_object.airbrake_pct = _f32(pkt, 1)
-def _apply_0x724(pkt, tel_object): tel_object.pyro1 = _b1(pkt, 0); tel_object.pyro2 = _b1(pkt, 1); tel_object.pyro3 = _b1(pkt, 2)
-def _apply_0x725(pkt, tel_object): tel_object.ax = _f32(pkt, 0); tel_object.ay = _f32(pkt, 4)
-def _apply_0x726(pkt, tel_object): tel_object.az = _f32(pkt, 0)
-def _apply_0x727(pkt, tel_object): tel_object.vx = _f32(pkt, 0); tel_object.vy = _f32(pkt, 4)
-def _apply_0x72A(pkt, tel_object): tel_object.vz = _f32(pkt, 0)
-def _apply_0x72B(pkt, tel_object): tel_object.roll = _f32(pkt, 0); tel_object.pitch = _f32(pkt, 4)
-def _apply_0x72C(pkt, tel_object): tel_object.yaw = _f32(pkt, 0)
-def _apply_0x72D(pkt, tel_object): tel_object.longitude = _f32(pkt, 0); tel_object.latitude = _f32(pkt, 4)
-def _apply_0x72E(pkt, tel_object): tel_object.altitude = _f32(pkt, 0)
-def _apply_0x72F(pkt, tel_object): tel_object.sigurd_temp1 = _f32(pkt, 0); tel_object.sigurd_temp2 = _f32(pkt, 4)
-def _apply_0x730(pkt, tel_object): tel_object.sigurd_temp3 = _f32(pkt, 0); tel_object.sigurd_temp4 = _f32(pkt, 4)
-def _apply_0x731(pkt, tel_object): tel_object.fjalar_bat_voltage = _f32(pkt, 0); tel_object.loki_bat_voltage = _f32(pkt, 4)
+def _apply_0x722(pkt, tel_object): tel_object.thrust = _to_f32(pkt, 0)
+def _apply_0x723(pkt, tel_object): tel_object.airbrake_safety = _to_b1(pkt, 0); tel_object.airbrake_pct = _to_f32(pkt, 1)
+def _apply_0x724(pkt, tel_object): tel_object.pyro1 = _to_b1(pkt, 0); tel_object.pyro2 = _to_b1(pkt, 1); tel_object.pyro3 = _to_b1(pkt, 2)
+def _apply_0x725(pkt, tel_object): tel_object.ax = _to_f32(pkt, 0); tel_object.ay = _to_f32(pkt, 4)
+def _apply_0x726(pkt, tel_object): tel_object.az = _to_f32(pkt, 0)
+def _apply_0x727(pkt, tel_object): tel_object.vx = _to_f32(pkt, 0); tel_object.vy = _to_f32(pkt, 4)
+def _apply_0x72A(pkt, tel_object): tel_object.vz = _to_f32(pkt, 0)
+def _apply_0x72B(pkt, tel_object): tel_object.roll = _to_f32(pkt, 0); tel_object.pitch = _to_f32(pkt, 4)
+def _apply_0x72C(pkt, tel_object): tel_object.yaw = _to_f32(pkt, 0)
+def _apply_0x72D(pkt, tel_object): tel_object.longitude = _to_f32(pkt, 0); tel_object.latitude = _to_f32(pkt, 4)
+def _apply_0x72E(pkt, tel_object): tel_object.altitude = _to_f32(pkt, 0)
+def _apply_0x72F(pkt, tel_object): tel_object.sigurd_temp1 = _to_f32(pkt, 0); tel_object.sigurd_temp2 = _to_f32(pkt, 4)
+def _apply_0x730(pkt, tel_object): tel_object.sigurd_temp3 = _to_f32(pkt, 0); tel_object.sigurd_temp4 = _to_f32(pkt, 4)
+def _apply_0x731(pkt, tel_object): tel_object.fjalar_bat_voltage = _to_f32(pkt, 0); tel_object.loki_bat_voltage = _to_f32(pkt, 4)
 
 DECODERS = {
     0x720: _apply_0x720,
