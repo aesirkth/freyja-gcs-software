@@ -16,7 +16,7 @@ def _read_exact(ser: serial.Serial, n_bytes: int) -> bytes | None:
         buffer += chunk
     return buffer
 
-def _find_sync(ser: serial.Serial) -> bool:
+def _find_sync_bytes(ser: serial.Serial) -> bool:
     b0 = _read_exact(ser, 1)
     if not b0:
         return False
@@ -86,30 +86,39 @@ DECODERS = {
     0x731: _apply_0x731,
 }
 
-def read_packet_blocking(ser: serial.Serial):
-    if not _find_sync(ser):
-        return None
-    header = _read_exact(ser, 2)
-    if not header:
-        return None
-    pkt_type_byte, pkt_len = header[0], header[1]
-    if not (1 <= pkt_len <= 8):
-        return None
-    can_pkt_payload = _read_exact(ser, pkt_len)
-    if not can_pkt_payload:
-        return None
-    can_id = 0x700 + pkt_type_byte
+def read_usb_frame(ser: serial.Serial):
+    try:
+        if not _find_sync_bytes(ser):
+            return None
+        header = _read_exact(ser, 2)
+        if not header:
+            return None
+        pkt_type_byte, pkt_len = header[0], header[1]
+        if not (1 <= pkt_len <= 8):
+            return None
+        can_pkt_payload = _read_exact(ser, pkt_len)
+        if not can_pkt_payload:
+            return None
+        can_id = 0x700 + pkt_type_byte
+    except Exception as e:
+        logger.error(f"Error while reading USB frame. {e}")
 
     return can_id, can_pkt_payload
 
 def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) -> bool:
-    can_id, can_pkt_payload = read_packet_blocking(ser)
+    try:
+        frame = read_usb_frame(ser)
+        if not frame:
+            return False
+        can_id, can_pkt_payload = frame
 
-    if not can_id or not can_pkt_payload:
+        if not can_id or not can_pkt_payload:
+            return False
+        decode_pkt = DECODERS.get(can_id)
+
+        if decode_pkt:
+            decode_pkt(can_pkt_payload, empty_tel_object)
+            return True
         return False
-    decode_pkt = DECODERS.get(can_id)
-
-    if decode_pkt:
-        decode_pkt(can_pkt_payload, empty_tel_object)
-        return True
-    return False
+    except Exception as e:
+        logger.error(f"Error while reading and applying bytes to telemetry object. {e}")
