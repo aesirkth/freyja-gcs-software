@@ -1,11 +1,11 @@
 import asyncio
-from src.core import core_serial_task
+from dashboard.src.core_serial import core_serial_task
 from ui.app import ui_task
 import contextlib
 
 async def main():
     tasks = [
-        asyncio.create_task(core_serial_task(), name="core"),
+        asyncio.create_task(core_serial_task(), name="core-serial"),
     ]
     try:
         await ui_task()
