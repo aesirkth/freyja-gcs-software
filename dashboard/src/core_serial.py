@@ -1,6 +1,6 @@
 import logging, asyncio
 from .core.can_conversion import read_and_apply_once
-from models.input_data import TelemetryInput
+from models.input_tel_data import TelemetryInput
 from src.state.bus import telemetry_queue
 import serial
 

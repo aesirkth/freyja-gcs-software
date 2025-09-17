@@ -1,4 +1,4 @@
-from models.input_data import TelemetryInput
+from models.input_tel_data import TelemetryInput
 from src.state.bus import telemetry_queue
 import logging
 

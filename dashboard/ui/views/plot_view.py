@@ -1,6 +1,6 @@
 import dearpygui.dearpygui as dpg
 from ui.utils.value_formatting import format_value
-from models.input_data import TelemetryInput
+from dashboard.models.input_tel_data import TelemetryInput
 from ui.tags_config import PLOT_DASHBOARD
 
 def build(parent: int | str) -> dict:
