@@ -1,5 +1,5 @@
 import asyncio
-from dashboard.src.core_serial import core_serial_task
+from src.core_serial import core_serial_task
 from ui.app import ui_task
 import contextlib
 

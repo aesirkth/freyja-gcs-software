@@ -1,5 +1,5 @@
 import serial, struct
-from dashboard.models.input_data import TelemetryInput
+from models.input_data import TelemetryInput
 import logging
 
 logger = logging.getLogger(__name__)
@@ -94,6 +94,7 @@ def read_usb_frame(ser: serial.Serial):
         if not header:
             return None
         pkt_type_byte, pkt_len = header[0], header[1]
+       
         if not (1 <= pkt_len <= 8):
             return None
         can_pkt_payload = _read_exact(ser, pkt_len)
@@ -108,6 +109,7 @@ def read_usb_frame(ser: serial.Serial):
 def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) -> bool:
     try:
         frame = read_usb_frame(ser)
+
         if not frame:
             return False
         can_id, can_pkt_payload = frame

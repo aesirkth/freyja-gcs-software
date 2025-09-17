@@ -9,4 +9,5 @@ class TelemetryInput(BaseModel):
     post_cc_temp: Optional[float] = None
     nozzle_temp: Optional[float] = None
     injector_pressure: Optional[float] = None
-    
+    thrust: Optional[float] = None
+   
