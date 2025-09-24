@@ -7,4 +7,5 @@ dependencies = [
   "dearpygui==2.1.0",
   "pydantic==2.11.7",
   "pyserial==3.5",
+  "numpy==2.3.3",
 ]

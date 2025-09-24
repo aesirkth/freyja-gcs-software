@@ -2,11 +2,15 @@ import logging, asyncio
 from .core.can_conversion import read_and_apply_once
 from models.input_tel_data import TelemetryInput
 from src.state.bus import telemetry_queue
+from serial.tools import list_ports
 import serial
 
 logger = logging.getLogger(__name__)
 
 async def core_serial_task():
+    ports = list_ports.comports()
+    for port in ports:
+        print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
     ser = serial.Serial("/dev/cu.usbmodem112201", baudrate=9600, timeout=1)
     try:
         latest_tel_data = TelemetryInput()
