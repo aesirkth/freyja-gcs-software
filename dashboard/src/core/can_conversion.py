@@ -1,4 +1,5 @@
 import serial, struct
+from .location_calc import calc_enu_location
 from models.input_tel_data import TelemetryInput
 import logging
 
@@ -61,7 +62,24 @@ def _apply_0x727(pkt, tel_object): tel_object.vx = _to_f32(pkt, 0); tel_object.v
 def _apply_0x72A(pkt, tel_object): tel_object.vz = _to_f32(pkt, 0)
 def _apply_0x72B(pkt, tel_object): tel_object.roll = _to_f32(pkt, 0); tel_object.pitch = _to_f32(pkt, 4)
 def _apply_0x72C(pkt, tel_object): tel_object.yaw = _to_f32(pkt, 0)
-def _apply_0x72D(pkt, tel_object): tel_object.longitude = _to_f32(pkt, 0); tel_object.latitude = _to_f32(pkt, 4)
+
+def _apply_0x72D(pkt, tel_object: TelemetryInput):
+    tel_object.longitude = _to_f32(pkt, 0)
+    tel_object.latitude  = _to_f32(pkt, 4)
+
+    if getattr(tel_object, "launch_lat", None) is None:
+        tel_object.launch_lon = tel_object.longitude
+        tel_object.launch_lat = tel_object.latitude
+
+    east, north, _ = calc_enu_location(
+        lon=tel_object.longitude,
+        lat=tel_object.latitude,
+        launch_lon=tel_object.launch_lon,
+        launch_lat=tel_object.launch_lat,
+    )
+    tel_object.east_enu = east
+    tel_object.north_enu = north
+
 def _apply_0x72E(pkt, tel_object): tel_object.altitude = _to_f32(pkt, 0)
 def _apply_0x72F(pkt, tel_object): tel_object.sigurd_temp1 = _to_f32(pkt, 0); tel_object.sigurd_temp2 = _to_f32(pkt, 4)
 def _apply_0x730(pkt, tel_object): tel_object.sigurd_temp3 = _to_f32(pkt, 0); tel_object.sigurd_temp4 = _to_f32(pkt, 4)
