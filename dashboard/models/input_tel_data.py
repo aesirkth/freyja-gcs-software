@@ -68,3 +68,6 @@ class TelemetryInput(BaseModel):
     # 0x731
     fjalar_bat_voltage: Optional[float] = None
     loki_bat_voltage: Optional[float] = None
+
+    east_enu: Optional[float] = None
+    north_enu: Optional[float] = None
