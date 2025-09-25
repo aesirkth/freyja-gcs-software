@@ -2,25 +2,67 @@ import dearpygui.dearpygui as dpg
 from ui.utils.value_formatting import format_value
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
+def _fmt_bool(val):
+    if val is True:  return "Yes"
+    if val is False: return "No"
+    return "--"
 
 def build(parent: int | str) -> dict:
-    with dpg.child_window(parent=parent, tag="plain_dashboard:panel", width=0, height=0, border=False):
-        dpg.add_text("Speed: -- m/s", tag=PLAIN_DASHBOARD["speed_text"])
-        dpg.add_text("Battery Voltage: -- V", tag=PLAIN_DASHBOARD["voltage_text"])
-        dpg.add_text("Tank Temperature: -- °C", tag=PLAIN_DASHBOARD["tank_temp_text"])
-        dpg.add_text("Injector temperature: -- °C", tag=PLAIN_DASHBOARD["injector_temp_text"])
-        dpg.add_text("Post-combustion Chamber Temperature: -- °C", tag=PLAIN_DASHBOARD["post_cc_temp_text"])
-        dpg.add_text("Nozzle temperature: -- °C", tag=PLAIN_DASHBOARD["nozzle_temp_text"])
-        dpg.add_text("Pressure at injector: -- P", tag=PLAIN_DASHBOARD["injector_pressure_text"])
+    with dpg.child_window(parent=parent, tag=PLAIN_DASHBOARD["panel"], width=0, height=0, border=False):
+
+        with dpg.collapsing_header(label="States", default_open=True):
+            dpg.add_text("Flight state: --", tag=PLAIN_DASHBOARD["flight_state_text"])
+            dpg.add_text("Loki state: --", tag=PLAIN_DASHBOARD["loki_state_text"])
+            dpg.add_text("Loki substate: --", tag=PLAIN_DASHBOARD["loki_substate_text"])
+
+        with dpg.collapsing_header(label="Recovery & GNSS", default_open=True):
+            dpg.add_text("Drogue deployed: --", tag=PLAIN_DASHBOARD["drogue_deployed_text"])
+            dpg.add_text("Main deployed: --", tag=PLAIN_DASHBOARD["main_deployed_text"])
+            dpg.add_text("GNSS fix: --", tag=PLAIN_DASHBOARD["gnss_fix_text"])
+
+        with dpg.collapsing_header(label="Fafnir (Actuators)", default_open=True):
+            dpg.add_text("Motor solenoid 1: --", tag=PLAIN_DASHBOARD["fafnir_sol1_text"])
+            dpg.add_text("Motor solenoid 2: --", tag=PLAIN_DASHBOARD["fafnir_sol2_text"])
+            dpg.add_text("Motor solenoid 3: --", tag=PLAIN_DASHBOARD["fafnir_sol3_text"])
+            dpg.add_text("Motor solenoid 4: --", tag=PLAIN_DASHBOARD["fafnir_sol4_text"])
+
+        with dpg.collapsing_header(label="Freyr / Airbrake", default_open=True):
+            dpg.add_text("Safety solenoid: --", tag=PLAIN_DASHBOARD["freyr_airbrake_safety_text"])
+
+        with dpg.collapsing_header(label="Pyrotechnics", default_open=True):
+            dpg.add_text("Pyro 1 fired: --", tag=PLAIN_DASHBOARD["pyro1_text"])
+            dpg.add_text("Pyro 2 fired: --", tag=PLAIN_DASHBOARD["pyro2_text"])
+            dpg.add_text("Pyro 3 fired: --", tag=PLAIN_DASHBOARD["pyro3_text"])
 
     return PLAIN_DASHBOARD
 
 def update(data: TelemetryInput, tags: dict) -> None:
-    dpg.set_value(tags["speed_text"], f"Speed: {format_value(getattr(data, "speed", 0.0), 'm/s', 1)}")
-    dpg.set_value(tags["voltage_text"], f"Battery Voltage: {format_value(getattr(data, "battery_voltage", 0.0), 'V', 2)}")
-    dpg.set_value(tags["tank_temp_text"], f"Tank Temperature: {format_value(getattr(data, "tank_temp", 0.0), '°C', 1)}")
-    dpg.set_value(tags["injector_temp_text"], f"Injector temperature: {format_value(getattr(data, "injector_temp", 0.0), '°C', 1)}")
-    dpg.set_value(tags["post_cc_temp_text"], f"Post-combustion Chamber Temperature: {format_value(getattr(data, "post_cc_temp", 0.0), '°C', 1)}")
-    dpg.set_value(tags["nozzle_temp_text"], f"Nozzle temperature: {format_value(getattr(data, "nozzle_temp", 0.0), '°C', 1)}")
-    dpg.set_value(tags["injector_pressure_text"], f"Pressure at injector: {format_value(getattr(data, "injecture_pressure", 0.0), 'P', 1)}")
-  
+    dpg.set_value(tags["flight_state_text"],
+                  f"Flight state: {format_value(getattr(data, 'flight_state', None), '', 0)}")
+    dpg.set_value(tags["loki_state_text"],
+                  f"Loki state: {format_value(getattr(data, 'loki_state', None), '', 0)}")
+    dpg.set_value(tags["loki_substate_text"],
+                  f"Loki substate: {format_value(getattr(data, 'loki_substate', None), '', 0)}")
+
+    dpg.set_value(tags["drogue_deployed_text"],
+                  f"Drogue deployed: {_fmt_bool(getattr(data, 'drogue_deployed', None))}")
+    dpg.set_value(tags["main_deployed_text"],
+                  f"Main deployed: {_fmt_bool(getattr(data, 'main_deployed', None))}")
+    dpg.set_value(tags["gnss_fix_text"],
+                  f"GNSS fix: {_fmt_bool(getattr(data, 'gnss_fix', None))}")
+
+    dpg.set_value(tags["fafnir_sol1_text"],
+                  f"Motor solenoid 1: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_1', None))}")
+    dpg.set_value(tags["fafnir_sol2_text"],
+                  f"Motor solenoid 2: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_2', None))}")
+    dpg.set_value(tags["fafnir_sol3_text"],
+                  f"Motor solenoid 3: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_3', None))}")
+    dpg.set_value(tags["fafnir_sol4_text"],
+                  f"Motor solenoid 4: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_4', None))}")
+
+    dpg.set_value(tags["freyr_airbrake_safety_text"],
+                  f"Safety solenoid: {_fmt_bool(getattr(data, 'freyr_airbrake_safety_solenoid', None))}")
+
+    dpg.set_value(tags["pyro1_text"], f"Pyro 1 fired: {_fmt_bool(getattr(data, 'pyro1_fired', None))}")
+    dpg.set_value(tags["pyro2_text"], f"Pyro 2 fired: {_fmt_bool(getattr(data, 'pyro2_fired', None))}")
+    dpg.set_value(tags["pyro3_text"], f"Pyro 3 fired: {_fmt_bool(getattr(data, 'pyro3_fired', None))}")

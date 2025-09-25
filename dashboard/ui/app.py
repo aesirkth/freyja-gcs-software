@@ -1,6 +1,7 @@
 import dearpygui.dearpygui as dpg
+from ui.views import plot_dashboard
 from ui.controllers.data_fetching import fetch_latest_tel_data
-from ui.views import plain_dashboard, plot_view
+from ui.views import plain_dashboard
 import logging
 import asyncio
 
@@ -24,7 +25,7 @@ async def ui_task():
                 with dpg.child_window(tag="panel:right", width=0, height=-1, border=True):
                     with dpg.tab_bar(tag="tabs:right"):
                         with dpg.tab(label="Plot Dashboard", tag="tab:right:plot"):
-                            dashboard_tags["right"] = plot_view.build(parent="tab:right:plot")
+                            dashboard_tags["right"] = plot_dashboard.build(parent="tab:right:plot")
 
         dpg.set_primary_window(primary_window, True)
         dpg.show_viewport()
