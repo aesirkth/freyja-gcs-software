@@ -69,6 +69,7 @@ class TelemetryInput(BaseModel):
     fjalar_bat_voltage: Optional[float] = None
     loki_bat_voltage: Optional[float] = None
 
+    # Location data
     launch_lon: Optional[float] = None
     launch_lat: Optional[float] = None
     east_enu: Optional[float] = None
