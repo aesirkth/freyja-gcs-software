@@ -24,6 +24,7 @@ dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pydantic" },
+    { name = "pymap3d" },
     { name = "pyserial" },
 ]
 
@@ -32,6 +33,7 @@ requires-dist = [
     { name = "dearpygui", specifier = "==2.1.0" },
     { name = "numpy" },
     { name = "pydantic", specifier = "==2.11.7" },
+    { name = "pymap3d" },
     { name = "pyserial", specifier = "==3.5" },
 ]
 
@@ -307,6 +309,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b8/e9/1f7efbe20d0b2b10f6718944b5d8ece9152390904f29a78e68d4e7961159/pydantic_core-2.33.2-pp311-pypy311_pp73-musllinux_1_1_armv7l.whl", hash = "sha256:de4b83bb311557e439b9e186f733f6c645b9417c84e2eb8203f3f820a4b988bf", size = 2239013, upload-time = "2025-04-23T18:33:26.621Z" },
     { url = "https://files.pythonhosted.org/packages/3c/b2/5309c905a93811524a49b4e031e9851a6b00ff0fb668794472ea7746b448/pydantic_core-2.33.2-pp311-pypy311_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:82f68293f055f51b51ea42fafc74b6aad03e70e191799430b90c13d643059ebb", size = 2238715, upload-time = "2025-04-23T18:33:28.656Z" },
     { url = "https://files.pythonhosted.org/packages/32/56/8a7ca5d2cd2cda1d245d34b1c9a942920a718082ae8e54e5f3e5a58b7add/pydantic_core-2.33.2-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:329467cecfb529c925cf2bbd4d60d2c509bc2fb52a20c1045bf09bb70971a9c1", size = 2066757, upload-time = "2025-04-23T18:33:30.645Z" },
+]
+
+[[package]]
+name = "pymap3d"
+version = "3.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/5c/6de7682c8d0d618acfd939425803ce74f02487eea7124f807c79997facc4/pymap3d-3.2.0.tar.gz", hash = "sha256:355e87c559ac681cba34a7fef5bcec3ad791f95336a0fdaf15e0335f48a309a2", size = 50818, upload-time = "2025-07-08T06:20:27.389Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4e/ce/3714d0d67a83577017b1e7c40193bc1cf768a1de39c4adff750b7d3c1539/pymap3d-3.2.0-py3-none-any.whl", hash = "sha256:fccd44f2f6021a95adec19771c603b8dac104eab120d863c463d76b9bc298669", size = 64845, upload-time = "2025-07-08T06:20:25.603Z" },
 ]
 
 [[package]]
