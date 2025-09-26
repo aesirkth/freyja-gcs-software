@@ -2,17 +2,36 @@ import dearpygui.dearpygui as dpg
 from ui.utils.value_formatting import format_value
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
+
 def _fmt_bool(val):
     if val is True:  return "Yes"
     if val is False: return "No"
     return "--"
 
+value = [("Flight state", 2), ("Flight state", 5), ("Flight state", 1)]
+
 def build(parent: int | str) -> dict:
     with dpg.child_window(parent=parent, tag=PLAIN_DASHBOARD["panel"], width=0, height=0, border=False):
+        with dpg.table(header_row=False, row_background=True, borders_innerH=True, borders_outerH=True, borders_innerV=True, borders_outerV=True):
+            dpg.add_table_column(label="Column 1")
+            dpg.add_table_column(label="Data col")
+
+            with dpg.table_row():
+                for j in range(0, 2):
+                    if j == 0:
+                        dpg.add_text("Flight state:")
+                    else:
+                        dpg.add_text("--", tag=PLAIN_DASHBOARD["flight_state_text"])
+            with dpg.table_row():
+                for j in range(0, 2):
+                    if j == 0:
+                        dpg.add_text("Loki state:")
+                    else:
+                        dpg.add_text("--", tag=PLAIN_DASHBOARD["loki_state_text"])
 
         with dpg.collapsing_header(label="States", default_open=True):
-            dpg.add_text("Flight state: --", tag=PLAIN_DASHBOARD["flight_state_text"])
-            dpg.add_text("Loki state: --", tag=PLAIN_DASHBOARD["loki_state_text"])
+            # dpg.add_text("Flight state: --", tag=PLAIN_DASHBOARD["flight_state_text"])
+            # dpg.add_text("Loki state: --", tag=PLAIN_DASHBOARD["loki_state_text"])
             dpg.add_text("Loki substate: --", tag=PLAIN_DASHBOARD["loki_substate_text"])
 
         with dpg.collapsing_header(label="Recovery & GNSS", default_open=True):
@@ -38,9 +57,9 @@ def build(parent: int | str) -> dict:
 
 def update(data: TelemetryInput, tags: dict) -> None:
     dpg.set_value(tags["flight_state_text"],
-                  f"Flight state: {format_value(getattr(data, 'flight_state', None), '', 0)}")
+                  f"{format_value(getattr(data, 'flight_state', None), '', 0)}")
     dpg.set_value(tags["loki_state_text"],
-                  f"Loki state: {format_value(getattr(data, 'loki_state', None), '', 0)}")
+                  f"{format_value(getattr(data, 'loki_state', None), '', 0)}")
     dpg.set_value(tags["loki_substate_text"],
                   f"Loki substate: {format_value(getattr(data, 'loki_substate', None), '', 0)}")
 

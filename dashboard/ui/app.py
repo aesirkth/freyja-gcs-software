@@ -15,12 +15,16 @@ async def ui_task():
 
         dashboard_tags = {"left": {}, "right": {}}
 
-        with dpg.window(width=1200, height=600, no_collapse=True, no_resize=True) as primary_window:
+        with dpg.window(width=1200, height=-1, no_collapse=True, no_resize=True) as primary_window:
             with dpg.group(horizontal=True):
-                with dpg.child_window(tag="panel:left", width=520, height=-1, border=True):
-                    with dpg.tab_bar(tag="tabs:left"):
-                        with dpg.tab(label="Plain Dashboard", tag="tab:left:dash"):
-                            dashboard_tags["left"] = plain_dashboard.build(parent="tab:left:dash")
+                with dpg.child_window(tag="panel:left", width=300, height=-1, border=True):
+                    with dpg.tab_bar(tag="tabs:left:1"):
+                        with dpg.tab(label="Propulsion", tag="tab:left:1:dash"):
+                            dashboard_tags["left"] = plain_dashboard.build(parent="tab:left:1:dash")
+
+                    with dpg.tab_bar(tag="tabs:left:2"):
+                        with dpg.tab(label="Avionics", tag="tab:left:2:dash"):
+                            dashboard_tags["left"] = plain_dashboard.build(parent="tab:left:2:dash")
 
                 with dpg.child_window(tag="panel:right", width=0, height=-1, border=True):
                     with dpg.tab_bar(tag="tabs:right"):
@@ -31,8 +35,9 @@ async def ui_task():
         dpg.show_viewport()
 
         while dpg.is_dearpygui_running():
-            tel = await fetch_latest_tel_data()
+            tel = fetch_latest_tel_data()
             plain_dashboard.update(tel, dashboard_tags["left"])
+            plot_dashboard.update(tel, dashboard_tags["right"])
             dpg.render_dearpygui_frame()
             await asyncio.sleep(1/60)
 

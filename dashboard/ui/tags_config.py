@@ -26,7 +26,7 @@ PLAIN_DASHBOARD = {
     "pyro3_text": "plain_dashboard:pyro3_text",
 }
 
-
 PLOT_DASHBOARD = {
-    "plot": "plot_view:plot",
+    "plot": "plot_dashboard:plot",
+    "enu_location": "plot_dashboard:enu_location"
 }

@@ -138,7 +138,6 @@ def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) ->
             return False
         
         decode_pkt = DECODERS.get(can_id)
-        print(decode_pkt)
         if decode_pkt:
             decode_pkt(can_pkt_payload, empty_tel_object)
             return True
