@@ -1,5 +1,7 @@
 PLAIN_DASHBOARD = {
-    "panel": "plain_dashboard:panel",
+    "propulsion:tab": "plain_dashboard:propulsion:tab",
+    "avionics:tab": "plain_dashboard:avionics:tab",
+    "recovery:tab": "plain_dashboard:recovery:tab",
 
     # States / enums
     "flight_state_text": "plain_dashboard:flight_state_text",
