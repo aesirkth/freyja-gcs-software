@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def format_value(value, unit, digits=1):
+def format_numerical(value, unit, digits=1):
     try:
         if value is None:
             return f"-- {unit}"

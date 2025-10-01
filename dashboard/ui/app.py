@@ -21,7 +21,6 @@ async def ui_task():
             with dpg.group(horizontal=True):
                 with dpg.child_window(tag="panel:left", width=280, height=-1, border=True):
                     with dpg.group(horizontal=False):
-
                         with dpg.child_window(tag="panel:top", width=-1, height=150, border=True):
                             with dpg.tab_bar(tag="tabs:top"):
                                 with dpg.tab(label="Propulsion", tag="tab:top:prop"):
@@ -32,7 +31,7 @@ async def ui_task():
                                 with dpg.tab(label="Avionics", tag="tab:middle:avio"):
                                     dashboard_tags["avionics"] = avionics_tab.build(parent="tab:middle:avio")
 
-                        with dpg.child_window(tag="panel:bottom", width=-1, height=150, border=True):
+                        with dpg.child_window(tag="panel:bottom", width=-1, height=200, border=True):
                             with dpg.tab_bar(tag="tabs:bottom"):
                                 with dpg.tab(label="Recovery", tag="tab:bottom:reco"):
                                     dashboard_tags["recovery"] = recovery_tab.build(parent="tab:bottom:reco")

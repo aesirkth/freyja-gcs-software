@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from ui.utils.value_formatting import format_value
+from dashboard.ui.utils.numerical_formatting import format_value
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
 
@@ -18,8 +18,6 @@ def build(parent: int | str) -> dict:
             dpg.add_text("Loki substate: --", tag=PLAIN_DASHBOARD["loki_substate_text"])
 
         with dpg.collapsing_header(label="Recovery & GNSS", default_open=True):
-            dpg.add_text("Drogue deployed: --", tag=PLAIN_DASHBOARD["drogue_deployed_text"])
-            dpg.add_text("Main deployed: --", tag=PLAIN_DASHBOARD["main_deployed_text"])
             dpg.add_text("GNSS fix: --", tag=PLAIN_DASHBOARD["gnss_fix_text"])
 
         with dpg.collapsing_header(label="Fafnir (Actuators)", default_open=True):
@@ -31,21 +29,12 @@ def build(parent: int | str) -> dict:
         with dpg.collapsing_header(label="Freyr / Airbrake", default_open=True):
             dpg.add_text("Safety solenoid: --", tag=PLAIN_DASHBOARD["freyr_airbrake_safety_text"])
 
-        with dpg.collapsing_header(label="Pyrotechnics", default_open=True):
-            dpg.add_text("Pyro 1 fired: --", tag=PLAIN_DASHBOARD["pyro1_text"])
-            dpg.add_text("Pyro 2 fired: --", tag=PLAIN_DASHBOARD["pyro2_text"])
-            dpg.add_text("Pyro 3 fired: --", tag=PLAIN_DASHBOARD["pyro3_text"])
-
     return PLAIN_DASHBOARD
 
 def update(data: TelemetryInput, tags: dict) -> None:
     dpg.set_value(tags["loki_substate_text"],
                   f"Loki substate: {format_value(getattr(data, 'loki_substate', None), '', 0)}")
 
-    dpg.set_value(tags["drogue_deployed_text"],
-                  f"Drogue deployed: {_fmt_bool(getattr(data, 'drogue_deployed', None))}")
-    dpg.set_value(tags["main_deployed_text"],
-                  f"Main deployed: {_fmt_bool(getattr(data, 'main_deployed', None))}")
     dpg.set_value(tags["gnss_fix_text"],
                   f"GNSS fix: {_fmt_bool(getattr(data, 'gnss_fix', None))}")
 
@@ -60,7 +49,3 @@ def update(data: TelemetryInput, tags: dict) -> None:
 
     dpg.set_value(tags["freyr_airbrake_safety_text"],
                   f"Safety solenoid: {_fmt_bool(getattr(data, 'freyr_airbrake_safety_solenoid', None))}")
-
-    dpg.set_value(tags["pyro1_text"], f"Pyro 1 fired: {_fmt_bool(getattr(data, 'pyro1_fired', None))}")
-    dpg.set_value(tags["pyro2_text"], f"Pyro 2 fired: {_fmt_bool(getattr(data, 'pyro2_fired', None))}")
-    dpg.set_value(tags["pyro3_text"], f"Pyro 3 fired: {_fmt_bool(getattr(data, 'pyro3_fired', None))}")
