@@ -3,8 +3,6 @@ from ui.utils.bool_formatting import fmt_bool
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
 
-value = [("Flight state", 2), ("Flight state", 5), ("Flight state", 1)]
-
 def build(parent: int | str) -> dict:
     with dpg.child_window(parent=parent, tag=PLAIN_DASHBOARD["recovery:tab"], width=-1, height=-1, border=False):
         with dpg.table(header_row=False, row_background=True, borders_innerH=True, borders_outerH=True, borders_innerV=True, borders_outerV=True):

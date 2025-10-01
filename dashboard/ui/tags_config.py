@@ -13,6 +13,7 @@ PLAIN_DASHBOARD = {
     "main_deployed_text": "plain_dashboard:main_deployed_text",
     "gnss_fix_text": "plain_dashboard:gnss_fix_text",
 
+    "fafnir_main_valve_pct_text": "plain_dashboard:fafnir_main_valve_pct_text",
     # Fafnir – only booleans (actuators)
     "fafnir_sol1_text": "plain_dashboard:fafnir_sol1_text",
     "fafnir_sol2_text": "plain_dashboard:fafnir_sol2_text",
