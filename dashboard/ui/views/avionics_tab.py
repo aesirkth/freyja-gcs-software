@@ -1,12 +1,8 @@
 import dearpygui.dearpygui as dpg
-from dashboard.ui.utils.numerical_formatting import format_value
+from ui.utils.numerical_formatting import format_numerical
+from ui.utils.bool_formatting import fmt_bool
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
-
-def _fmt_bool(val):
-    if val is True:  return "Yes"
-    if val is False: return "No"
-    return "--"
 
 value = [("Flight state", 2), ("Flight state", 5), ("Flight state", 1)]
 
@@ -33,19 +29,19 @@ def build(parent: int | str) -> dict:
 
 def update(data: TelemetryInput, tags: dict) -> None:
     dpg.set_value(tags["loki_substate_text"],
-                  f"Loki substate: {format_value(getattr(data, 'loki_substate', None), '', 0)}")
+                  f"Loki substate: {format_numerical(getattr(data, 'loki_substate', None), '', 0)}")
 
     dpg.set_value(tags["gnss_fix_text"],
-                  f"GNSS fix: {_fmt_bool(getattr(data, 'gnss_fix', None))}")
+                  f"GNSS fix: {fmt_bool(getattr(data, 'gnss_fix', None))}")
 
     dpg.set_value(tags["fafnir_sol1_text"],
-                  f"Motor solenoid 1: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_1', None))}")
+                  f"Motor solenoid 1: {fmt_bool(getattr(data, 'fafnir_motor_solenoid_1', None))}")
     dpg.set_value(tags["fafnir_sol2_text"],
-                  f"Motor solenoid 2: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_2', None))}")
+                  f"Motor solenoid 2: {fmt_bool(getattr(data, 'fafnir_motor_solenoid_2', None))}")
     dpg.set_value(tags["fafnir_sol3_text"],
-                  f"Motor solenoid 3: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_3', None))}")
+                  f"Motor solenoid 3: {fmt_bool(getattr(data, 'fafnir_motor_solenoid_3', None))}")
     dpg.set_value(tags["fafnir_sol4_text"],
-                  f"Motor solenoid 4: {_fmt_bool(getattr(data, 'fafnir_motor_solenoid_4', None))}")
+                  f"Motor solenoid 4: {fmt_bool(getattr(data, 'fafnir_motor_solenoid_4', None))}")
 
     dpg.set_value(tags["freyr_airbrake_safety_text"],
-                  f"Safety solenoid: {_fmt_bool(getattr(data, 'freyr_airbrake_safety_solenoid', None))}")
+                  f"Safety solenoid: {fmt_bool(getattr(data, 'freyr_airbrake_safety_solenoid', None))}")

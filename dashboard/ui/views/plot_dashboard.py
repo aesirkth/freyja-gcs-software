@@ -1,6 +1,5 @@
 from math import sin
 import dearpygui.dearpygui as dpg
-from dashboard.ui.utils.numerical_formatting import format_value
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLOT_DASHBOARD
 
@@ -28,5 +27,5 @@ def build(parent: int | str) -> dict:
 
 def update(data: TelemetryInput, tags: dict) -> None:
     data = TelemetryInput()
-    # dpg.set_value(tags["plot"], f"Speed: {format_value(data.altitude, 'm/s', 1)}")
+    # dpg.set_value(tags["plot"], f"Speed: {format_numerical(data.altitude, 'm/s', 1)}")
     dpg.set_value(tags["enu_location"], [xs, ys])

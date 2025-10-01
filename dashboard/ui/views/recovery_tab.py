@@ -1,12 +1,7 @@
 import dearpygui.dearpygui as dpg
-from dashboard.ui.utils.numerical_formatting import format_value
+from ui.utils.bool_formatting import fmt_bool
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
-
-def _fmt_bool(val):
-    if val is True:  return "Yes"
-    if val is False: return "No"
-    return "--"
 
 value = [("Flight state", 2), ("Flight state", 5), ("Flight state", 1)]
 
@@ -51,14 +46,14 @@ def build(parent: int | str) -> dict:
 
 def update(data: TelemetryInput, tags: dict) -> None:
     dpg.set_value(tags["pyro1_text"],
-                  f"{_fmt_bool(getattr(data, "pyro1_fired", None))}")
+                  f"{fmt_bool(getattr(data, "pyro1_fired", None))}")
     dpg.set_value(tags["pyro2_text"],
-                  f"{_fmt_bool(getattr(data, "pyro2_fired", None))}")
+                  f"{fmt_bool(getattr(data, "pyro2_fired", None))}")
     dpg.set_value(tags["pyro3_text"],
-                  f"{_fmt_bool(getattr(data, "pyro3_fired", None))}")
+                  f"{fmt_bool(getattr(data, "pyro3_fired", None))}")
     
     dpg.set_value(tags["drogue_deployed_text"],
-                  f"{_fmt_bool(getattr(data, "drogue_deployed", None))}")
+                  f"{fmt_bool(getattr(data, "drogue_deployed", None))}")
     dpg.set_value(tags["main_deployed_text"],
-                  f"{_fmt_bool(getattr(data, "main_deployed", None))}")
+                  f"{fmt_bool(getattr(data, "main_deployed", None))}")
    

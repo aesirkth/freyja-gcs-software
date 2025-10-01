@@ -1,12 +1,7 @@
 import dearpygui.dearpygui as dpg
-from dashboard.ui.utils.numerical_formatting import format_value
+from ui.utils.numerical_formatting import format_numerical
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
-
-def _fmt_bool(val):
-    if val is True:  return "Yes"
-    if val is False: return "No"
-    return "--"
 
 value = [("Flight state", 2), ("Flight state", 5), ("Flight state", 1)]
 
@@ -27,5 +22,5 @@ def build(parent: int | str) -> dict:
 
 def update(data: TelemetryInput, tags: dict) -> None:
     dpg.set_value(tags["loki_state_text"],
-                  f"{format_value(getattr(data, 'loki_state', None), '', 0)}")
+                  f"{format_numerical(getattr(data, 'loki_state', None), '', 0)}")
    
