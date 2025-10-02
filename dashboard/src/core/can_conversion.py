@@ -143,6 +143,7 @@ def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) ->
             empty_tel_object.timezone = datetime.timezone
             empty_tel_object.timestamp = datetime.time
             decode_pkt(can_pkt_payload, empty_tel_object)
+            print(empty_tel_object)
             return True
 
         return False
