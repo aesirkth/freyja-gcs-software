@@ -1,7 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional
+import datetime
 
 class TelemetryInput(BaseModel):
+    timestamp: datetime
     # 0x720
     flight_state: Optional[int] = None
     loki_state: Optional[int] = None
