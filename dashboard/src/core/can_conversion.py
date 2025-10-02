@@ -1,7 +1,7 @@
 import serial, struct
 from .location_calc import calc_enu_location
 from models.input_tel_data import TelemetryInput
-import datetime
+from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -140,10 +140,9 @@ def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) ->
       
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
-            empty_tel_object.timezone = datetime.timezone
-            empty_tel_object.timestamp = datetime.time
+            current_time = datetime.now().strftime("%H:%M:%S")
+            empty_tel_object.timestamp = current_time
             decode_pkt(can_pkt_payload, empty_tel_object)
-            print(empty_tel_object)
             return True
 
         return False

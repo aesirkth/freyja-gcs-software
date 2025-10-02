@@ -3,7 +3,6 @@ from typing import Optional
 from datetime import datetime
 
 class TelemetryInput(BaseModel):
-    timezone: Optional[datetime] = None
     timestamp: Optional[datetime] = None
 
     # 0x720
