@@ -137,9 +137,10 @@ def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) ->
         can_id, can_pkt_payload = frame
         if not can_id or not can_pkt_payload:
             return False
-        
+      
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
+            empty_tel_object.timezone = datetime.timezone
             empty_tel_object.timestamp = datetime.time
             decode_pkt(can_pkt_payload, empty_tel_object)
             return True
