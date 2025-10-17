@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 def fetch_latest_tel_data() -> TelemetryInput:
     try:
         latest_tel_input: TelemetryInput = telemetry_queue.get_nowait()
-
         if isinstance(latest_tel_input, TelemetryInput):
             test_lat = 59.334591 + random.random() / 10
             test_lon = 18.063240 + random.random() / 10
@@ -22,7 +21,7 @@ def fetch_latest_tel_data() -> TelemetryInput:
             )
             latest_tel_input.east_enu = east
             latest_tel_input.north_enu = north
-
+             
             return latest_tel_input
         else:
             print("wrong type")

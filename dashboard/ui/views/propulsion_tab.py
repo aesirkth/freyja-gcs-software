@@ -21,4 +21,22 @@ def build(parent: int | str) -> dict:
 def update(data: TelemetryInput, tags: dict) -> None:
     dpg.set_value(tags["fafnir_main_valve_pct_text"],
                   f"{format_numerical(getattr(data, "fafnir_main_valve_percentage", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_sol1_text"],
+                  f"{format_numerical(getattr(data, "fafnir_motor_solenoid_1", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_sol2_text"],
+                  f"{format_numerical(getattr(data, "fafnir_motor_solenoid_2", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_sol3_text"],
+                  f"{format_numerical(getattr(data, "fafnir_motor_solenoid_3", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_sol4_text"],
+                  f"{format_numerical(getattr(data, "fafnir_motor_solenoid_4", None), "%", 2)}")
+    dpg.set_value(tags["th"],
+                  f"{format_numerical(getattr(data, "fafnir_main_valve_percentage", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_main_valve_pct_text"],
+                  f"{format_numerical(getattr(data, "fafnir_main_valve_percentage", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_main_valve_pct_text"],
+                  f"{format_numerical(getattr(data, "fafnir_main_valve_percentage", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_main_valve_pct_text"],
+                  f"{format_numerical(getattr(data, "fafnir_main_valve_percentage", None), "%", 2)}")
+    dpg.set_value(tags["fafnir_main_valve_pct_text"],
+                  f"{format_numerical(getattr(data, "fafnir_main_valve_percentage", None), "%", 2)}")
    
