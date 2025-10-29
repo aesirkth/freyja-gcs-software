@@ -1,3 +1,4 @@
+import asyncio
 import random
 from src.core.location_calc import calc_enu_location
 from models.input_tel_data import TelemetryInput
@@ -7,8 +8,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 async def fetch_latest_tel_data() -> TelemetryInput:
-    latest_tel_input: TelemetryInput = await telemetry_queue.get()
-    print("Value: ", latest_tel_input)
+    try:
+        latest_tel_input = telemetry_queue.get_nowait()
+    except asyncio.QueueEmpty:
+        telemetry_queue.put_nowait(TelemetryInput())
+        latest_tel_input = telemetry_queue.get_nowait()
+        print(latest_tel_input)
     try:
         if isinstance(latest_tel_input, TelemetryInput):
             test_lat = 59.334591 + random.random() / 10

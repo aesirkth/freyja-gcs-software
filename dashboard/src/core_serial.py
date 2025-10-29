@@ -8,7 +8,6 @@ import serial
 logger = logging.getLogger(__name__)
 
 async def core_serial_task():
-    print("Running")
     ports = list_ports.comports()
     for port in ports:
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")

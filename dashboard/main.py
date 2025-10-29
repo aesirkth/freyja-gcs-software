@@ -9,7 +9,6 @@ async def main():
     ]
     try:
         await ui_task()
-        # await asyncio.sleep(0)
     finally:
         for t in tasks:
             t.cancel()
