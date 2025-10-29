@@ -13,8 +13,9 @@ PLAIN_DASHBOARD = {
     "main_deployed_text": "plain_dashboard:main_deployed_text",
     "gnss_fix_text": "plain_dashboard:gnss_fix_text",
 
+    # Fafnir
     "fafnir_main_valve_pct_text": "plain_dashboard:fafnir_main_valve_pct_text",
-    # Fafnir – only booleans (actuators)
+    # Only booleans (actuators)
     "fafnir_sol1_text": "plain_dashboard:fafnir_sol1_text",
     "fafnir_sol2_text": "plain_dashboard:fafnir_sol2_text",
     "fafnir_sol3_text": "plain_dashboard:fafnir_sol3_text",
@@ -27,6 +28,10 @@ PLAIN_DASHBOARD = {
     "pyro1_text": "plain_dashboard:pyro1_text",
     "pyro2_text": "plain_dashboard:pyro2_text",
     "pyro3_text": "plain_dashboard:pyro3_text",
+
+    # Battery voltage
+    "fjalar_bat_voltage_text": "plain_dashboard:fjalar_bat_voltage_text",
+    "loki_bat_voltage_text": "plain_dashboard:loki_bat_voltage_text"
 }
 
 PLOT_DASHBOARD = {

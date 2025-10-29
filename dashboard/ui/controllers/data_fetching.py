@@ -13,7 +13,6 @@ async def fetch_latest_tel_data() -> TelemetryInput:
     except asyncio.QueueEmpty:
         telemetry_queue.put_nowait(TelemetryInput())
         latest_tel_input = telemetry_queue.get_nowait()
-        print(latest_tel_input)
     try:
         if isinstance(latest_tel_input, TelemetryInput):
             test_lat = 59.334591 + random.random() / 10
