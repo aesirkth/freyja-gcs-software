@@ -4,8 +4,8 @@ logger = logging.getLogger(__name__)
 
 def fmt_bool(val: bool) -> str:
     try:
-        if val is True:  return "Yes"
-        if val is False: return "No"
+        if val is True:  return "ON"
+        if val is False: return "OFF"
 
         return "--"
     except Exception as e: 

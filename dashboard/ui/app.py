@@ -21,7 +21,7 @@ async def ui_task():
             with dpg.group(horizontal=True):
                 with dpg.child_window(tag="panel:left", width=280, height=-1, border=True):
                     with dpg.group(horizontal=False):
-                        with dpg.child_window(tag="panel:top", width=-1, height=150, border=True):
+                        with dpg.child_window(tag="panel:top", width=-1, height=160, border=True):
                             with dpg.tab_bar(tag="tabs:top"):
                                 with dpg.tab(label="Propulsion", tag="tab:top:prop"):
                                     dashboard_tags["propulsion"] = propulsion_tab.build(parent="tab:top:prop")
@@ -31,7 +31,7 @@ async def ui_task():
                                 with dpg.tab(label="Avionics", tag="tab:middle:avio"):
                                     dashboard_tags["avionics"] = avionics_tab.build(parent="tab:middle:avio")
 
-                        with dpg.child_window(tag="panel:bottom", width=-1, height=200, border=True):
+                        with dpg.child_window(tag="panel:bottom", width=-1, height=160, border=True):
                             with dpg.tab_bar(tag="tabs:bottom"):
                                 with dpg.tab(label="Recovery", tag="tab:bottom:reco"):
                                     dashboard_tags["recovery"] = recovery_tab.build(parent="tab:bottom:reco")
@@ -45,14 +45,14 @@ async def ui_task():
         dpg.show_viewport()
 
         while dpg.is_dearpygui_running():
-            tel = fetch_latest_tel_data()
+            tel = await fetch_latest_tel_data()
             propulsion_tab.update(tel, dashboard_tags["propulsion"])
             avionics_tab.update(tel, dashboard_tags["avionics"])
             recovery_tab.update(tel, dashboard_tags["recovery"])
             plot_dashboard.update(tel, dashboard_tags["right"])
             dpg.render_dearpygui_frame()
-            await asyncio.sleep(1/60)
+            await asyncio.sleep(0)
 
         dpg.destroy_context()
     except Exception as e:
-        logger.error(f"Error while running DPG ui task. {e}")
+        logger.exception(f"Error while running DPG ui task. {e}")
