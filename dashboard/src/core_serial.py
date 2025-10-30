@@ -1,5 +1,5 @@
 import logging, asyncio
-from .core.can_conversion import read_and_apply_once
+from .core.can_conversion import read_next_frame_and_apply
 from models.input_tel_data import TelemetryInput
 from src.state.bus import telemetry_queue
 from serial.tools import list_ports
@@ -15,7 +15,7 @@ async def core_serial_task():
     try:
         latest_tel_data = TelemetryInput()
         while True:
-            """if read_and_apply_once(ser, latest_tel_data):
+            """if read_next_frame_and_apply(ser, latest_tel_data):
                 if telemetry_queue.full():
                     _ = telemetry_queue.get_nowait()"""
             await telemetry_queue.put(latest_tel_data)
@@ -25,4 +25,4 @@ async def core_serial_task():
         logger.error(f"Error while running core serial task. {e}")
     finally:
         # ser.close()
-        print("Done")
+        pass

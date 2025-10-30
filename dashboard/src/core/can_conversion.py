@@ -123,17 +123,18 @@ def read_usb_frame(ser: serial.Serial):
             return None
         
         can_id = 0x700 + pkt_type_byte
+        return can_id, can_pkt_payload
     except Exception as e:
         logger.error(f"Error while reading USB frame. {e}")
+        return None
 
-    return can_id, can_pkt_payload
 
-def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) -> bool:
+def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInput) -> bool:
     try:
         frame = read_usb_frame(ser)
         if not frame:
             return False
-        
+      
         can_id, can_pkt_payload = frame
         if not can_id or not can_pkt_payload:
             return False
@@ -148,3 +149,4 @@ def read_and_apply_once(ser: serial.Serial, empty_tel_object: TelemetryInput) ->
         return False
     except Exception as e:
         logger.error(f"Error while reading and applying bytes to telemetry object. {e}")
+        return None
