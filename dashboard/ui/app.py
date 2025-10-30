@@ -4,7 +4,8 @@ from ui.views import propulsion_tab
 from ui.views import avionics_tab
 from ui.views import recovery_tab
 from ui.views import location_plot
-from dashboard.ui.views import velocity_plot
+from ui.views import velocity_plot
+from ui.views import acceleration_plot
 import logging
 import asyncio
 
@@ -20,8 +21,9 @@ async def ui_task():
             "propulsion": {},
             "avionics": {},
             "recovery": {},
-            "right1": {},
-            "right2": {},
+            "location": {},
+            "velocity": {},
+            "acceleration": {},
         }
 
         with dpg.window(width=1200, height=-1, no_collapse=True, no_resize=True) as primary_window:
@@ -47,19 +49,19 @@ async def ui_task():
                     with dpg.child_window(tag="panel:right:first:top", width=-1, border=False):
                         with dpg.tab_bar(tag="tabs:right:first:top"):
                             with dpg.tab(label="Location (ENU)", tag="tab:right:first:top:plot"):
-                                dashboard_tags["right1"] = location_plot.build(parent="tab:right:first:top:plot")
+                                dashboard_tags["location"] = location_plot.build(parent="tab:right:first:top:plot")
 
                 with dpg.child_window(tag="panel:right:second", width=350, height=-1, border=False):
                     with dpg.child_window(tag="panel:right:second:top", width=-1, border=False):
                         with dpg.tab_bar(tag="tabs:right:second:top"):
                             with dpg.tab(label="Velocity", tag="tab:right:second:top:plot"):
-                                dashboard_tags["right2"] = velocity_plot.build(parent="tab:right:second:top:plot")
+                                dashboard_tags["velocity"] = velocity_plot.build(parent="tab:right:second:top:plot")
 
                 with dpg.child_window(tag="panel:right:third", width=350, height=-1, border=False):
                     with dpg.child_window(tag="panel:right:third:top", width=-1, border=False):
                         with dpg.tab_bar(tag="tabs:right:third:top"):
-                            with dpg.tab(label="Velocity", tag="tab:right:third:top:plot"):
-                                dashboard_tags["right2"] = acceleration_plot.build(parent="tab:right:third:top:plot")
+                            with dpg.tab(label="Acceleration", tag="tab:right:third:top:plot"):
+                                dashboard_tags["acceleration"] = acceleration_plot.build(parent="tab:right:third:top:plot")
 
         dpg.set_primary_window(primary_window, True)
         dpg.show_viewport()
@@ -69,8 +71,9 @@ async def ui_task():
             propulsion_tab.update(tel, dashboard_tags["propulsion"])
             avionics_tab.update(tel, dashboard_tags["avionics"])
             recovery_tab.update(tel, dashboard_tags["recovery"])
-            location_plot.update(tel, dashboard_tags["right1"])
-            velocity_plot.update(tel, dashboard_tags["right2"])
+            location_plot.update(tel, dashboard_tags["location"])
+            velocity_plot.update(tel, dashboard_tags["velocity"])
+            velocity_plot.update(tel, dashboard_tags["acceleration"])
             dpg.render_dearpygui_frame()
             await asyncio.sleep(0)
 

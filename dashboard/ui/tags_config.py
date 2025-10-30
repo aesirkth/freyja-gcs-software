@@ -36,9 +36,11 @@ PLAIN_DASHBOARD = {
 
 PLOT_DASHBOARD = {
     "location:panel": "plot_dashboard:location:panel",
-    "velocity:panel": "plot_dashboardvelocity:panel",
+    "velocity:panel": "plot_dashboard:velocity:panel",
+    "acceleration:panel": "plot_dashboard:acceleration:panel",
 
     "plot:panel:text": "plot_dashboard:plot:panel:text",
     "enu_location": "plot_dashboard:enu_location",
-    "plot_temp": "plot_dashboard:temp",
+    "velocity": "plot_dashboard:velocity",
+    "acceleration": "plot_dashboard:acceleration",
 }
