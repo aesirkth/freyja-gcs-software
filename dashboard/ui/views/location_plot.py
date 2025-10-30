@@ -1,10 +1,6 @@
-from math import sin
 import dearpygui.dearpygui as dpg
 from models.input_tel_data import TelemetryInput
 from ui.tags_config import PLOT_DASHBOARD
-
-xs = [i / 1000 for i in range(500)]
-ys = [0.5 + 0.5 * sin(50 * x) for x in xs]
 
 def build(parent: int | str) -> dict:
     with dpg.child_window(parent=parent, tag=PLOT_DASHBOARD["location:panel"], width=0, height=0, border=False):
@@ -12,7 +8,7 @@ def build(parent: int | str) -> dict:
             dpg.add_plot_legend()
             x_axis = dpg.add_plot_axis(dpg.mvXAxis, label="x")
             y_axis = dpg.add_plot_axis(dpg.mvYAxis, label="y")
-            line_id = dpg.add_scatter_series(xs, ys, label="Position", parent=y_axis, tag=PLOT_DASHBOARD["enu_location"])
+            line_id = dpg.add_scatter_series([0], [0], label="Position", parent=y_axis, tag=PLOT_DASHBOARD["enu_location"])
             dpg.fit_axis_data(x_axis)
             dpg.fit_axis_data(y_axis)
 
