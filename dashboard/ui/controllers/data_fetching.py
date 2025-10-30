@@ -15,17 +15,18 @@ async def fetch_latest_tel_data() -> TelemetryInput:
         latest_tel_input = telemetry_queue.get_nowait()
     try:
         if isinstance(latest_tel_input, TelemetryInput):
-            test_lat = 59.334591 + random.random() / 10
-            test_lon = 18.063240 + random.random() / 10
+            test_lat = 59.334591 + random.random() / 100
+            test_lon = 18.063240 + random.random() / 100
             east, north, _ = calc_enu_location(
                 lon=test_lon,
                 lat=test_lat,
                 launch_lon=18.063240,
                 launch_lat=59.334591,
             )
-            latest_tel_input.east_enu = east
-            latest_tel_input.north_enu = north
-             
+            latest_tel_input.east_enu = 18.063240 + random.random() / 10
+            latest_tel_input.north_enu = 18.063240 + random.random() / 10
+            print(east, north)
+
             return latest_tel_input
         else:
             print("wrong type")

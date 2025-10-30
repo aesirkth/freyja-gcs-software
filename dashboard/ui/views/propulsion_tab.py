@@ -54,4 +54,3 @@ def update(data: TelemetryInput, tags: dict) -> None:
                   f"{fmt_bool(getattr(data, "fafnirmotor_solenoid_3", None))}")
     dpg.set_value(tags["fafnir_sol4_text"],
                   f"{fmt_bool(getattr(data, "fafnir_motor_solenoid_4", None))}")
-  
