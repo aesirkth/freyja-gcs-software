@@ -39,4 +39,5 @@ def save_to_disk(data: TelemetryInput) -> bool:
 
     except Exception:
         logger.exception("Error while saving telemetry data to persistent disk storage.")
-   
+        return False
+    
