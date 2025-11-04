@@ -1,4 +1,3 @@
-from pathlib import Path
 from models.input_tel_data import TelemetryInput
 import logging
 import sqlite3
@@ -40,4 +39,4 @@ def save_to_disk(data: TelemetryInput) -> bool:
     except Exception:
         logger.exception("Error while saving telemetry data to persistent disk storage.")
         return False
-    
+   
