@@ -4,6 +4,7 @@
 #include <zephyr/sys/util.h>
 #include <errno.h>
 
+#include "clock.h"
 #include "protocol.h"
 #include "usb_com.h"
 
@@ -33,7 +34,13 @@ void can_rx_cb(const struct device *const device, struct can_frame *frame, void 
         LOG_ERR("received packet %#x has length %d but should be length %d", pkt_type, frame->dlc, pkt_size[pkt_type]);
     }
 
-    submit_usb_pkt(frame->data, pkt_type);
+    int64_t timestamp;
+    int ret = get_timestamp(&timestamp);
+    if (ret) {
+        LOG_ERR("could not get timestamp for can packet");
+        timestamp = -1;
+    }
+    submit_usb_pkt(frame->data, pkt_type, timestamp);
 }
 
 void can_tx_cb(const struct device *device, int error, void *user_data) {
