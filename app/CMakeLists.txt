@@ -10,4 +10,5 @@ project(freyja_gcs_fw)
 target_sources(app PRIVATE 
     src/main.c
     src/usb_com.c
+    src/can_com.c
 )
