@@ -28,6 +28,17 @@ void can_rx_cb(const struct device *const can_dev, struct can_frame *frame, void
     submit_usb_pkt(frame->data, pkt_type);
 }
 
+void submit_can_pkt(const void *packet, unsigned int type) {
+    const int length = pkt_size[type];
+    struct can_frame frame = {
+            .flags = 0,
+            .id = type + 0x700,
+            .dlc = length,
+    };
+    memcpy(frame.data, packet, length);
+    can_send(can_dev, &frame, K_MSEC(100), NULL, NULL);
+}
+
 int init_can(void) {
     int ret;
  

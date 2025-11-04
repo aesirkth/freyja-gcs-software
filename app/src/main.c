@@ -46,6 +46,7 @@ int main(void) {
 	while (1) {
 		const thrust_pkt_t pkt = {3.14f};
 		submit_usb_pkt(&pkt, PKT_TYPE_THRUST);
+		submit_can_pkt(&pkt, PKT_TYPE_THRUST);
 		k_msleep(10);
 	}
 	return 0;
