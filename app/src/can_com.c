@@ -1,4 +1,5 @@
 #include <zephyr/drivers/can.h>
+#include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/util.h>
 #include <errno.h>
@@ -7,6 +8,12 @@
 #include "usb_com.h"
 
 LOG_MODULE_REGISTER(can_com);
+
+K_MSGQ_DEFINE(can_tx_queue,
+              sizeof(struct can_frame),
+              8,            /* queue length (frames) */
+              1);            /* alignment */
+K_SEM_DEFINE(can_tx_done, 1, 1);
 
 const struct device *const can_dev = DEVICE_DT_GET(DT_NODELABEL(fdcan1));
 
@@ -30,14 +37,13 @@ void can_rx_cb(const struct device *const device, struct can_frame *frame, void 
 }
 
 void can_tx_cb(const struct device *device, int error, void *user_data) {
+    k_sem_give(&can_tx_done);
     if (error) {
-        LOG_ERR("can send callback error [%d]", error);
+        LOG_ERR("can send callback error %d", error);
     }
 }
 
 int submit_can_pkt(const void *packet, unsigned int type) {
-    int ret = 0;
-
     const int length = pkt_size[type];
     struct can_frame frame = {
             .flags = 0,
@@ -45,15 +51,48 @@ int submit_can_pkt(const void *packet, unsigned int type) {
             .dlc = length,
     };
     memcpy(frame.data, packet, length);
-    ret = can_send(can_dev, &frame, K_MSEC(10), can_tx_cb, NULL);
-
+    int ret = k_msgq_put(&can_tx_queue, &frame, K_NO_WAIT);
     if (ret == -EAGAIN) {
-        LOG_ERR("can send timeout");
-    } else if (ret) {
-        LOG_ERR("can send error [%d]", ret);
+        LOG_ERR("can tx queue full");
     }
-    return ret;
+    return 0;
 }
+
+void can_thread_fn(void) {
+    int ret;
+    struct can_frame frame;
+
+    while (1) {
+        ret = k_msgq_get(&can_tx_queue, &frame, K_FOREVER);
+        if (ret == -ENOMSG) { // queue purged during wait
+            continue; 
+        }
+
+        // wait until previous frame is sent
+        k_sem_take(&can_tx_done, K_MSEC(200));
+
+        LOG_INF("sending can message 0x%02X", frame.id);
+
+        // send frame (blocking until mailbox is available)
+        ret = can_send(can_dev, &frame,
+                           K_MSEC(100),
+                            can_tx_cb,
+                           NULL);
+
+        if (ret) { // callback not called
+            LOG_ERR("can send error %d", ret);
+            k_sem_give(&can_tx_done);
+        }
+    }
+}
+
+K_THREAD_DEFINE(can_thread,
+                1024,
+                can_thread_fn,
+                NULL, NULL, NULL,
+                1, // priority
+                0,
+                -1); // do not start
 
 int init_can(void) {
     int ret;
@@ -93,6 +132,8 @@ int init_can(void) {
     } else{
         LOG_INF("CAN started");
     }
+
+    k_thread_start(can_thread);
 
     return 0;
 }
