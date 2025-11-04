@@ -1,4 +1,5 @@
 import sqlite3
+from ui.utils.csv_saving import save_sql_as_csv
 import logging
 import csv
 
@@ -15,11 +16,7 @@ def get_tel_data_file() -> bool:
             if not res:
                 logger.exception(f"Given file '{DB_PATH}' is empty.")
                 return False
-            
-            with open('telemetry_data.csv', 'w', newline='') as csvfile:
-                spamwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                for row in res:
-                    spamwriter.writerow(row)
+            save_sql_as_csv(sql_data=res, out_file_name="telemetry_data.csv")
 
         return True
     except Exception:
