@@ -149,12 +149,13 @@ uv sync
 the can packets are packaged with a header that's for byte long and then sent
 over usb cdc acm.
 
-| byte | data | description                     |
-| ---- | ---- | ------------------------------- |
-| 0    | 0xAA | header byte 1                   |
-| 1    | 0xAA | header byte 2                   |
-| 2    | x    | packet type i.e. CAN ID - 0x700 |
-| 3    | x    | length of CAN packet            |
-| 4~11 | x    | CAN packet                      |
+| byte  | data | description                       |
+| ----- | ---- | --------------------------------- |
+| 0     | 0xAA | header byte 1                     |
+| 1     | 0xAA | header byte 2                     |
+| 2~9   | x    | milliseconds since 1970-01-01 UTC |
+| 10    | x    | packet type i.e. CAN ID - 0x700   |
+| 11    | x    | length of CAN packet              |
+| 12~19 | x    | CAN packet                        |
 
 note that the CAN packet's size is between 1 and 8 bytes. 

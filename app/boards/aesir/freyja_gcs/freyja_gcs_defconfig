@@ -3,9 +3,6 @@
 # enable GPIO
 CONFIG_GPIO=y
 
-# console
-CONFIG_CONSOLE=y
-
 # Enable MPU
 CONFIG_ARM_MPU=y
 
