@@ -1,6 +1,7 @@
 #include <zephyr/drivers/can.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/util.h>
+#include <errno.h>
 
 #include "protocol.h"
 #include "usb_com.h"
@@ -16,7 +17,7 @@ const struct can_filter filter = {
     .mask = 0b11110000000 // match from 0x700 to 0x77F
 };
 
-void can_rx_cb(const struct device *const can_dev, struct can_frame *frame, void *user_data){
+void can_rx_cb(const struct device *const device, struct can_frame *frame, void *user_data) {
     LOG_DBG("rx: %#X", frame->id);
 
     int pkt_type = frame->id - 0x700;
@@ -28,7 +29,15 @@ void can_rx_cb(const struct device *const can_dev, struct can_frame *frame, void
     submit_usb_pkt(frame->data, pkt_type);
 }
 
-void submit_can_pkt(const void *packet, unsigned int type) {
+void can_tx_cb(const struct device *device, int error, void *user_data) {
+    if (error) {
+        LOG_ERR("can send callback error [%d]", error);
+    }
+}
+
+int submit_can_pkt(const void *packet, unsigned int type) {
+    int ret = 0;
+
     const int length = pkt_size[type];
     struct can_frame frame = {
             .flags = 0,
@@ -36,7 +45,14 @@ void submit_can_pkt(const void *packet, unsigned int type) {
             .dlc = length,
     };
     memcpy(frame.data, packet, length);
-    can_send(can_dev, &frame, K_MSEC(100), NULL, NULL);
+    ret = can_send(can_dev, &frame, K_MSEC(10), can_tx_cb, NULL);
+
+    if (ret == -EAGAIN) {
+        LOG_ERR("can send timeout");
+    } else if (ret) {
+        LOG_ERR("can send error [%d]", ret);
+    }
+    return ret;
 }
 
 int init_can(void) {
