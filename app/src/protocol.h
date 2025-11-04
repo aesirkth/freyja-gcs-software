@@ -121,8 +121,8 @@ typedef enum {
 } pkt_type_t;
 
 static const size_t pkt_size[PKT_COUNT] = {
-    [PKT_TYPE_STATE] = sizeof(fafnir_pkt_t),
-    [PKT_TYPE_FAFNIR] = sizeof(thrust_pkt_t),
+    [PKT_TYPE_STATE] = sizeof(state_pkt_t),
+    [PKT_TYPE_FAFNIR] = sizeof(fafnir_pkt_t),
     [PKT_TYPE_THRUST] = sizeof(thrust_pkt_t),
     [PKT_TYPE_AIRBRAKE] = sizeof(airbrake_pkt_t),
     [PKT_TYPE_PYRO] = sizeof(pyro_pkt_t),

@@ -3,6 +3,7 @@
 #include <zephyr/drivers/uart.h>
 #include <zephyr/logging/log.h>
 
+#include "can_com.h"
 #include "usb_com.h"
 #include "protocol.h"
 
@@ -17,6 +18,11 @@ int main(void) {
 
 	if (init_usb() < 0) {
 		LOG_ERR("could not init usb");
+		return 0;
+	}
+
+	if (init_can() < 0) {
+		LOG_ERR("could not init can");
 		return 0;
 	}
 
