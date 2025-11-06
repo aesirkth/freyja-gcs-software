@@ -1,7 +1,7 @@
 import serial, struct
 from .location_calc import calc_enu_location
 from models.input_tel_data import TelemetryInput
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -113,7 +113,11 @@ def read_usb_frame(ser: serial.Serial):
         header = _read_exact(ser, 2)
         if not header:
             return None
-        
+
+        can_pkt_timestamp = _read_exact(ser, 8)
+        if not can_pkt_timestamp:
+            return None
+
         pkt_type_byte, pkt_len = header[0], header[1]
         if not (1 <= pkt_len <= 8):
             return None
@@ -121,9 +125,9 @@ def read_usb_frame(ser: serial.Serial):
         can_pkt_payload = _read_exact(ser, pkt_len)
         if not can_pkt_payload:
             return None
-        
+       
         can_id = 0x700 + pkt_type_byte
-        return can_id, can_pkt_payload
+        return can_id, can_pkt_timestamp, can_pkt_payload
     except Exception as e:
         logger.error(f"Error while reading USB frame. {e}")
         return None
@@ -135,14 +139,19 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
         if not frame:
             return False
       
-        can_id, can_pkt_payload = frame
+        can_id, can_pkt_timestamp, can_pkt_payload = frame
         if not can_id or not can_pkt_payload:
             return False
-      
+   
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
-            current_time = datetime.now().strftime("%H:%M:%S")
-            empty_tel_object.timestamp = current_time
+            # current_time = datetime.now().strftime("%H:%M:%S")
+            print("can_pkt_timestamp: ", can_pkt_timestamp)
+            ts = int(can_pkt_timestamp)
+            timestamp = datetime.fromtimestamp(ts, tz=timezone.utc).strftime('%F %T.%f')[:-3]
+            print("Formatted timestamp: ", timestamp)
+            # timestamp = datetime.utcfromtimestamp(ts).strftime('%F %T.%f')[:-3]
+            empty_tel_object.timestamp = timestamp
             decode_pkt(can_pkt_payload, empty_tel_object)
             return True
 
