@@ -2,17 +2,32 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/uart.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/random/random.h>
 
 #include "can_com.h"
 #include "clock.h"
 #include "usb_com.h"
 #include "protocol.h"
+#include <stdint.h> 
 
 LOG_MODULE_REGISTER(main);
 
 const struct device *cdc_acm = DEVICE_DT_GET(DT_NODELABEL(cdc_acm_uart0));
 
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl0_led), gpios);
+
+int int_randomizer(int min, int max) {
+    if (max < min) { int t = min; min = max; max = t; }
+    uint32_t span = (uint32_t)(max - min) + 1u;
+    uint32_t r = sys_rand32_get();
+    return min + (int)(r % span);
+}
+
+float float_randomizer(float min, float max) {
+    uint32_t r = sys_rand32_get();
+    float u = (float)r / (float)UINT32_MAX;
+    return min + u * (max - min);
+}
 
 int main(void) {
 	int ret;
@@ -51,20 +66,65 @@ int main(void) {
 	LOG_INF("started");
 
 	while (1) {
-		const state_pkt_t state_pkt = {9, 2, 6, 1, 0};
-		const fafnir_pkt_t fafnir_pkt = {9.12f, 1, 0, 1, 1};
-		const thrust_pkt_t thrust_pkt = {3.14f};
-		const airbrake_pkt_t airbrake_pkt = {1, 0.32f};
-		const pyro_pkt_t pyro_pkt = {1, 1, 1};
-		const acc_pkt_1_t acc_pkt_1 = {50.0, 2.0};
-		const acc_pkt_2_t acc_pkt_2 = {3.0};
-		const vel_pkt_1_t vel_pkt_1 = {200.0, 3.0};
-		const vel_pkt_2_t vel_pkt_2 = {3.0};
-		const coords_pkt_t coords_pkt = {30.5, 120.5};
-		const altitude_pkt_t altitude_pkt = {30.5};
-		const sigurd_temp_pkt_1_t sigurd_temp_pkt_1 = {30.5, 20.5};
-		const sigurd_temp_pkt_2_t sigurd_temp_pkt_2 = {30.5, 30.4};
-		const bat_pkt_t bat_pkt = {8.5, 11.4};
+		const state_pkt_t state_pkt = {
+			int_randomizer(0, 20),
+			int_randomizer(0, 20),
+			int_randomizer(0, 20),
+			1,
+			0
+		};
+		const fafnir_pkt_t fafnir_pkt = {
+			float_randomizer(0.0f, 20.0f),
+			1,
+			0,
+			1,
+			1
+		};
+		const thrust_pkt_t thrust_pkt = {
+			float_randomizer(0.0f, 20.0f)
+		};
+		const airbrake_pkt_t airbrake_pkt = {
+			1,
+			float_randomizer(0.0f, 20.0f)
+		};
+		const pyro_pkt_t pyro_pkt = {
+			1,
+			0,
+			1
+		};
+		const acc_pkt_1_t acc_pkt_1 = {
+			float_randomizer(0.0f, 20.0f), 
+			float_randomizer(0.0f, 20.0f)
+		};
+		const acc_pkt_2_t acc_pkt_2 = {
+			float_randomizer(0.0f, 20.0f)
+		};
+		const vel_pkt_1_t vel_pkt_1 = {
+			float_randomizer(0.0f, 20.0f),
+			float_randomizer(0.0f, 20.0f)
+		};
+		const vel_pkt_2_t vel_pkt_2 = {
+			float_randomizer(0.0f, 20.0f)
+		};
+		const coords_pkt_t coords_pkt = {
+			float_randomizer(0.0f, 20.0f),
+			float_randomizer(0.0f, 20.0f)
+		};
+		const altitude_pkt_t altitude_pkt = {
+			float_randomizer(0.0f, 20.0f)
+		};
+		const sigurd_temp_pkt_1_t sigurd_temp_pkt_1 = {
+			float_randomizer(0.0f, 20.0f),
+			float_randomizer(0.0f, 20.0f)
+		};
+		const sigurd_temp_pkt_2_t sigurd_temp_pkt_2 = {
+			float_randomizer(0.0f, 20.0f),
+			float_randomizer(0.0f, 20.0f)
+		};
+		const bat_pkt_t bat_pkt = {
+			float_randomizer(0.0f, 30.0f),
+			float_randomizer(0.0f, 30.0f)
+		};
 
 		submit_can_pkt(&state_pkt, PKT_TYPE_STATE);
 		submit_can_pkt(&fafnir_pkt, PKT_TYPE_FAFNIR);
