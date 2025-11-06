@@ -2,4 +2,4 @@
 
 int get_timestamp(int64_t *timestamp);
 
-int init_rtc(void);
+int init_clock(void);

@@ -75,7 +75,7 @@
 	};
 
 	buttons: buttons {
-		compatible = "gpio_keys";
+		compatible = "gpio-keys";
 		
 		tgl0: tgl0 {
 			gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
