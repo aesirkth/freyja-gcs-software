@@ -110,16 +110,19 @@ def read_usb_frame(ser: serial.Serial):
         if not _find_sync_bytes(ser):
             return None
         
+        can_pkt_timestamp = _read_exact(ser, 8)
+        print("Timestamp", can_pkt_timestamp)
+        if not can_pkt_timestamp:
+            return None
+        
         header = _read_exact(ser, 2)
         if not header:
             return None
 
-        can_pkt_timestamp = _read_exact(ser, 8)
-        if not can_pkt_timestamp:
-            return None
-
         pkt_type_byte, pkt_len = header[0], header[1]
         if not (1 <= pkt_len <= 8):
+            print("Type", pkt_type_byte)
+            print("Length", pkt_len)
             return None
         
         can_pkt_payload = _read_exact(ser, pkt_len)
@@ -132,27 +135,29 @@ def read_usb_frame(ser: serial.Serial):
         logger.error(f"Error while reading USB frame. {e}")
         return None
 
-
 def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInput) -> bool:
     try:
         frame = read_usb_frame(ser)
         if not frame:
+            print("Bug 1")
             return False
       
         can_id, can_pkt_timestamp, can_pkt_payload = frame
         if not can_id or not can_pkt_payload:
+            print("Bug 2")
             return False
-   
+  
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
+            decode_pkt(can_pkt_payload, empty_tel_object)
+            print("Tel object: ", empty_tel_object)
             # current_time = datetime.now().strftime("%H:%M:%S")
             print("can_pkt_timestamp: ", can_pkt_timestamp)
-            ts = int(can_pkt_timestamp)
-            timestamp = datetime.fromtimestamp(ts, tz=timezone.utc).strftime('%F %T.%f')[:-3]
+            ts_ms = int.from_bytes(can_pkt_timestamp, "little", signed=False)
+            timestamp = datetime.fromtimestamp(ts_ms/1000, tz=timezone.utc).strftime('%F %T.%f')[:-3]
             print("Formatted timestamp: ", timestamp)
             # timestamp = datetime.utcfromtimestamp(ts).strftime('%F %T.%f')[:-3]
             empty_tel_object.timestamp = timestamp
-            decode_pkt(can_pkt_payload, empty_tel_object)
             return True
 
         return False

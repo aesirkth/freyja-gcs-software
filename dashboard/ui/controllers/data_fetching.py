@@ -25,8 +25,8 @@ async def fetch_latest_tel_data() -> TelemetryInput:
             )
             latest_tel_input.east_enu = 18.063240 + random.random() / 10
             latest_tel_input.north_enu = 18.063240 + random.random() / 10
-            print(east, north)
-
+            # print(east, north)
+            # print(latest_tel_input)
             return latest_tel_input
         else:
             print("wrong type")
