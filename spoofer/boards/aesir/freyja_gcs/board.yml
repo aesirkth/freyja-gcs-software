@@ -1,0 +1,6 @@
+board:
+  name: freyja_gcs
+  full_name: freyja ground control station
+  vendor: aesir
+  socs:
+    - name: stm32u575xx
