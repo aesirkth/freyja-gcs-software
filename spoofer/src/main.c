@@ -8,7 +8,7 @@
 #include "clock.h"
 #include "usb_com.h"
 #include "protocol.h"
-#include <stdint.h> 
+#include <stdint.h>
 
 LOG_MODULE_REGISTER(main);
 
