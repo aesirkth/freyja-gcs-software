@@ -150,13 +150,9 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
             decode_pkt(can_pkt_payload, empty_tel_object)
-            print("Tel object: ", empty_tel_object)
-            # current_time = datetime.now().strftime("%H:%M:%S")
-            print("can_pkt_timestamp: ", can_pkt_timestamp)
             ts_ms = int.from_bytes(can_pkt_timestamp, "little", signed=False)
+            empty_tel_object.timestamp_ms = ts_ms
             timestamp = datetime.fromtimestamp(ts_ms/1000, tz=timezone.utc).strftime('%F %T.%f')[:-3]
-            print("Formatted timestamp: ", timestamp)
-            # timestamp = datetime.utcfromtimestamp(ts).strftime('%F %T.%f')[:-3]
             empty_tel_object.timestamp = timestamp
             return True
 

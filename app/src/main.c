@@ -81,7 +81,7 @@ int main(void) {
 			submit_can_pkt(&armd_pkt, PKT_TYPE_ARMD);
 			submit_can_pkt(&launch_pkt, PKT_TYPE_LAUNCH);
         }
-		k_msleep(1000);
+		k_msleep(50);
 	}
 	return 0;
 }
