@@ -111,7 +111,6 @@ def read_usb_frame(ser: serial.Serial):
             return None
         
         can_pkt_timestamp = _read_exact(ser, 8)
-        print("Timestamp", can_pkt_timestamp)
         if not can_pkt_timestamp:
             return None
         
@@ -121,8 +120,6 @@ def read_usb_frame(ser: serial.Serial):
 
         pkt_type_byte, pkt_len = header[0], header[1]
         if not (1 <= pkt_len <= 8):
-            print("Type", pkt_type_byte)
-            print("Length", pkt_len)
             return None
         
         can_pkt_payload = _read_exact(ser, pkt_len)
