@@ -14,7 +14,7 @@ const struct device *cdc_acm = DEVICE_DT_GET(DT_NODELABEL(cdc_acm_uart0));
 
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl0_led), gpios);
 static const struct gpio_dt_spec btn_launch = GPIO_DT_SPEC_GET(DT_NODELABEL(btn_launch), gpios);
-static const struct gpio_dt_spec launch_armd = GPIO_DT_SPEC_GET(DT_NODELABEL(launch_armd), gpios);
+static const struct gpio_dt_spec btn_arm = GPIO_DT_SPEC_GET(DT_NODELABEL(btn_arm), gpios);
 
 
 int main(void) {
@@ -36,7 +36,7 @@ int main(void) {
 		return 0;
 	}
 
-	if (!gpio_is_ready_dt(&led) || !gpio_is_ready_dt(&btn_launch) || !gpio_is_ready_dt(&launch_armd)) {
+	if (!gpio_is_ready_dt(&led) || !gpio_is_ready_dt(&btn_launch) || !gpio_is_ready_dt(&btn_arm)) {
 		return 0;
 	}
 
@@ -52,9 +52,9 @@ int main(void) {
         return;
     }
 
-    ret = gpio_pin_configure_dt(&launch_armd, GPIO_INPUT);
+    ret = gpio_pin_configure_dt(&btn_arm, GPIO_INPUT);
     if (ret) {
-        LOG_ERR("Failed to configure launch_armd", ret);
+        LOG_ERR("Failed to configure btn_arm", ret);
         return;
     }
 
@@ -67,18 +67,20 @@ int main(void) {
 	LOG_INF("started");
 
 	while (1) {
-		const thrust_pkt_t pkt = {3.14f};
 		get_timestamp(&timestamp);
-		submit_usb_pkt(&pkt, PKT_TYPE_THRUST, timestamp);
-		submit_can_pkt(&pkt, PKT_TYPE_THRUST);
 		
+        int val_armd = gpio_pin_get_dt(&btn_arm);
 		int val_launch = gpio_pin_get_dt(&btn_launch);
-        int val_armd = gpio_pin_get_dt(&launch_armd);
 		
+		const armd_pkt_t armd_pkt = {val_armd};
+		const launch_pkt_t launch_pkt = {val_launch};
+
         if (val_launch < 0 || val_armd < 0) {
 			LOG_ERR("Failed to read pins");
         } else {
-			LOG_INF("btn_launch = %d, launch_armd = %d", val_launch, val_armd);
+			LOG_INF("btn_launch = %d, btn_arm = %d", val_launch, val_armd);
+			submit_can_pkt(&armd_pkt, PKT_TYPE_ARMD);
+			submit_can_pkt(&launch_pkt, PKT_TYPE_LAUNCH);
         }
 		k_msleep(1000);
 	}
