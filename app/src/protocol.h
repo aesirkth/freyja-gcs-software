@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef enum {
     STATE_IDLE,
@@ -28,6 +29,14 @@ typedef enum {
     SUB_STATE_ENGAGE,
     SUB_STATE_DISENGAGE,
 } loki_substate_t;
+
+typedef struct armd_pkt {
+    bool armd;
+} armd_pkt_t;
+
+typedef struct launch_pkt {
+    bool launch;
+} launch_pkt_t;
 
 typedef struct state_pkt {
     uint8_t fjalar_flight_state;
@@ -103,6 +112,10 @@ typedef struct bat_pkt {
 } bat_pkt_t;
 
 typedef enum {
+    // gcs -> fjalar
+    PKT_TYPE_ARMD = 0x00,
+    PKT_TYPE_LAUNCH,
+    // fjalar -> gcs
     PKT_TYPE_STATE = 0x20,
     PKT_TYPE_FAFNIR,
     PKT_TYPE_THRUST,
@@ -121,6 +134,8 @@ typedef enum {
 } pkt_type_t;
 
 static const size_t pkt_size[PKT_COUNT] = {
+    [PKT_TYPE_ARMD] = sizeof(armd_pkt_t),
+    [PKT_TYPE_LAUNCH] = sizeof(launch_pkt_t),
     [PKT_TYPE_STATE] = sizeof(state_pkt_t),
     [PKT_TYPE_FAFNIR] = sizeof(fafnir_pkt_t),
     [PKT_TYPE_THRUST] = sizeof(thrust_pkt_t),

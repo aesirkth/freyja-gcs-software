@@ -71,14 +71,14 @@ int main(void) {
 		get_timestamp(&timestamp);
 		submit_usb_pkt(&pkt, PKT_TYPE_THRUST, timestamp);
 		submit_can_pkt(&pkt, PKT_TYPE_THRUST);
-
+		
 		int val_launch = gpio_pin_get_dt(&btn_launch);
         int val_armd = gpio_pin_get_dt(&launch_armd);
-
+		
         if (val_launch < 0 || val_armd < 0) {
-            LOG_ERR("Failed to read pins");
+			LOG_ERR("Failed to read pins");
         } else {
-            LOG_INF("btn_launch = %d, launch_armd = %d", val_launch, val_armd);
+			LOG_INF("btn_launch = %d, launch_armd = %d", val_launch, val_armd);
         }
 		k_msleep(1000);
 	}
