@@ -43,6 +43,7 @@ typedef struct state_pkt {
     uint8_t loki_state;
     uint8_t loki_substate;
     bool drogue_deployed;
+    bool main_line_cut;
     bool gnss_fixed;
 } state_pkt_t;
 
