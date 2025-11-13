@@ -41,6 +41,7 @@ PLOT_DASHBOARD = {
 
     "plot:panel:text": "plot_dashboard:plot:panel:text",
     "enu_location": "plot_dashboard:enu_location",
+    "launch_location": "plot_dashboard:launch_location",
     "velocity": "plot_dashboard:velocity",
     "acceleration": "plot_dashboard:acceleration",
 }
