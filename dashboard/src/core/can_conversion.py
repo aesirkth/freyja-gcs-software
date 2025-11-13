@@ -1,8 +1,7 @@
-import serial, struct
-from .location_calc import calc_enu_location
+import serial, struct, logging
+from .timestamp_decoder import apply_unix_timestamp
 from models.input_tel_data import TelemetryInput
-from datetime import datetime, timezone
-import logging
+from .location_calc import calc_enu_location
 
 logger = logging.getLogger(__name__)
 
@@ -136,21 +135,16 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
     try:
         frame = read_usb_frame(ser)
         if not frame:
-            print("Bug 1")
             return False
       
         can_id, can_pkt_timestamp, can_pkt_payload = frame
         if not can_id or not can_pkt_payload:
-            print("Bug 2")
             return False
   
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
             decode_pkt(can_pkt_payload, empty_tel_object)
-            ts_ms = int.from_bytes(can_pkt_timestamp, "little", signed=False)
-            empty_tel_object.timestamp_ms = ts_ms
-            timestamp = datetime.fromtimestamp(ts_ms/1000, tz=timezone.utc).strftime('%F %T.%f')[:-3]
-            empty_tel_object.timestamp = timestamp
+            apply_unix_timestamp(can_pkt_timestamp, empty_tel_object)
             return True
 
         return False

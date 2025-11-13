@@ -1,9 +1,7 @@
-import asyncio
-import random
+import asyncio, random, logging
 from src.core.location_calc import calc_enu_location
 from models.input_tel_data import TelemetryInput
 from src.state.bus import telemetry_queue
-import logging
 
 logger = logging.getLogger(__name__)
 
