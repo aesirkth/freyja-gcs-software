@@ -3,9 +3,9 @@ from ui.controllers.data_fetching import fetch_latest_tel_data
 from ui.views import propulsion_tab
 from ui.views import avionics_tab
 from ui.views import recovery_tab
-from ui.views import location_plot
-from ui.views import velocity_plot
-from ui.views import acceleration_plot
+from ui.views.plots import location_plot
+from ui.views.plots import velocity_plot
+from ui.views.plots import acceleration_plot
 import logging
 import asyncio
 
