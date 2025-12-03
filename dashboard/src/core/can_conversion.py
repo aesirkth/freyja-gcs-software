@@ -140,13 +140,13 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
         can_id, can_pkt_timestamp, can_pkt_payload = frame
         if not can_id or not can_pkt_payload:
             return False
-  
+
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
             decode_pkt(can_pkt_payload, empty_tel_object)
             apply_unix_timestamp(can_pkt_timestamp, empty_tel_object)
             return True
-
+        
         return False
     except Exception as e:
         logger.error(f"Error while reading and applying bytes to telemetry object. {e}")
