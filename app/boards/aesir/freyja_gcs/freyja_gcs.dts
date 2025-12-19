@@ -2,7 +2,7 @@
  * Copyright (c) 2021 Linaro Limited
  *
  * SPDX-License-Identifier: Apache-2.0
- */
+*/
 
 /dts-v1/;
 #include <st/u5/stm32u575Xg.dtsi>
@@ -76,7 +76,7 @@
 
 	buttons: buttons {
 		compatible = "gpio-keys";
-		
+
 		tgl0: tgl0 {
 			gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
 		};

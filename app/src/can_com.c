@@ -18,7 +18,6 @@ K_SEM_DEFINE(can_tx_done, 1, 1);
 
 const struct device *const can_dev = DEVICE_DT_GET(DT_NODELABEL(fdcan1));
 
-
 const struct can_filter filter = {
     .flags = 0,
     .id = 0x700,
