@@ -38,6 +38,10 @@ def _to_u8(pkt: bytes, byte_index: int):  return pkt[byte_index]
 def _to_b1(pkt: bytes, byte_index: int):  return pkt[byte_index] != 0
 def _to_f32(pkt: bytes, byte_index: int): return struct.unpack_from("<f", pkt, byte_index)[0]
 
+def _apply_0x700(pkt: bytes, tel_object: TelemetryInput):
+    tel_object.test_mode    = _to_b1(pkt, 0)
+    print(f"Received GCS test mode pkt! Value: {tel_object.test_mode}")
+
 def _apply_0x720(pkt: bytes, tel_object: TelemetryInput):
     tel_object.flight_state    = _to_u8(pkt, 0)
     tel_object.loki_state      = _to_u8(pkt, 1)
@@ -86,6 +90,7 @@ def _apply_0x730(pkt: bytes, tel_object: TelemetryInput): tel_object.sigurd_temp
 def _apply_0x731(pkt: bytes, tel_object: TelemetryInput): tel_object.fjalar_bat_voltage = _to_f32(pkt, 0); tel_object.loki_bat_voltage = _to_f32(pkt, 4)
 
 DECODERS = {
+    0x700: _apply_0x700,
     0x720: _apply_0x720,
     0x721: _apply_0x721,
     0x722: _apply_0x722,
