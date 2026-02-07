@@ -1,4 +1,4 @@
-from models.input_tel_data import TelemetryInput
+from models.input_tm_data import TelemetryInput
 import logging
 import sqlite3
 

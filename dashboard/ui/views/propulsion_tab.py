@@ -1,7 +1,7 @@
 import dearpygui.dearpygui as dpg
 from ui.utils.numerical_formatting import format_numerical
 from ui.utils.bool_formatting import fmt_bool
-from models.input_tel_data import TelemetryInput
+from models.input_tm_data import TelemetryInput
 from ui.tags_config import PLAIN_DASHBOARD
 
 def build(parent: int | str) -> dict:

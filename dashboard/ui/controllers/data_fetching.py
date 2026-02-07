@@ -1,16 +1,16 @@
 import asyncio, random, logging
 from src.core.location_calc import calc_enu_location
-from models.input_tel_data import TelemetryInput
-from src.state.bus import telemetry_queue
+from models.input_tm_data import TelemetryInput
+from src.state.tm_bus import tm_queue
 
 logger = logging.getLogger(__name__)
 
 async def fetch_latest_tel_data() -> TelemetryInput:
     try:
-        latest_tel_input = telemetry_queue.get_nowait()
+        latest_tel_input = tm_queue.get_nowait()
     except asyncio.QueueEmpty:
-        telemetry_queue.put_nowait(TelemetryInput())
-        latest_tel_input = telemetry_queue.get_nowait()
+        tm_queue.put_nowait(TelemetryInput())
+        latest_tel_input = tm_queue.get_nowait()
     try:
         if isinstance(latest_tel_input, TelemetryInput):
             test_lat = 59.334591 + random.random() / 100

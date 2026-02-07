@@ -1,6 +1,6 @@
 import serial, struct, logging
 from .timestamp_decoder import apply_unix_timestamp
-from models.input_tel_data import TelemetryInput
+from models.input_tm_data import TelemetryInput
 from .location_calc import calc_enu_location
 
 logger = logging.getLogger(__name__)

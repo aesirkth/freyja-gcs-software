@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from models.input_tel_data import TelemetryInput
+from models.input_tm_data import TelemetryInput
 import logging
 
 logger = logging.getLogger(__name__)

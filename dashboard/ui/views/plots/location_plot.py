@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from models.input_tel_data import TelemetryInput
+from models.input_tm_data import TelemetryInput
 from ui.tags_config import PLOT_DASHBOARD
 
 def build(parent: int | str) -> dict:

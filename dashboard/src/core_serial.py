@@ -1,7 +1,7 @@
 import logging, asyncio
 from .core.can_conversion import read_next_frame_and_apply
-from models.input_tel_data import TelemetryInput
-from src.state.bus import telemetry_queue
+from models.input_tm_data import TelemetryInput
+from src.state.tm_bus import tm_queue
 from serial.tools import list_ports
 from src.db.disk_saving import save_to_disk
 import serial
@@ -18,9 +18,9 @@ async def core_serial_task():
         print("Running ")
         while True:
             if read_next_frame_and_apply(ser, latest_tel_data):
-                if telemetry_queue.full():
-                    _ = telemetry_queue.get_nowait()
-            await telemetry_queue.put(latest_tel_data)
+                if tm_queue.full():
+                    _ = tm_queue.get_nowait()
+            await tm_queue.put(latest_tel_data)
             save_to_disk(latest_tel_data)
 
             await asyncio.sleep(0)
