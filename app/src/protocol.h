@@ -30,6 +30,10 @@ typedef enum {
     SUB_STATE_DISENGAGE,
 } loki_substate_t;
 
+typedef struct gcs_test_mode_pkt {
+    bool test_mode;
+} gcs_test_mode_pkt_t;
+
 typedef struct armd_pkt {
     bool armd;
 } armd_pkt_t;
@@ -113,8 +117,10 @@ typedef struct bat_pkt {
 } bat_pkt_t;
 
 typedef enum {
+    // gcs (board) -> gcs (RaspPi)
+    PKT_TYPE_GCS_TEST_MODE = 0x00,
     // gcs -> fjalar
-    PKT_TYPE_ARMD = 0x00,
+    PKT_TYPE_ARMD,
     PKT_TYPE_LAUNCH,
     // fjalar -> gcs
     PKT_TYPE_STATE = 0x20,
@@ -135,6 +141,7 @@ typedef enum {
 } pkt_type_t;
 
 static const size_t pkt_size[PKT_COUNT] = {
+    [PKT_TYPE_GCS_TEST_MODE] = sizeof(gcs_test_mode_pkt_t),
     [PKT_TYPE_ARMD] = sizeof(armd_pkt_t),
     [PKT_TYPE_LAUNCH] = sizeof(launch_pkt_t),
     [PKT_TYPE_STATE] = sizeof(state_pkt_t),
