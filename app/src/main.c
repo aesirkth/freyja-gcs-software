@@ -19,14 +19,7 @@ static const struct gpio_dt_spec tgl_7 = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl7), gp
 static const struct gpio_dt_spec launch_btn = GPIO_DT_SPEC_GET(DT_NODELABEL(btn_launch), gpios);
 static const struct gpio_dt_spec btn_arm = GPIO_DT_SPEC_GET(DT_NODELABEL(launch_armd), gpios);
 
-/*
-static const struct LedGpioMap led_gpio_map[] = {
-    { &led_0, &tgl_0 },
-};
-*/
-
 int main(void) {
-	// LEDRegistry registry;
 	int ret;
 	int64_t timestamp;
 
