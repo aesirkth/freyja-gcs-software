@@ -1,3 +1,3 @@
 import asyncio
 
-cmd_log_queue = asyncio.Queue(maxsize=1000)
+cmd_log_queue = asyncio.Queue(maxsize=10000)

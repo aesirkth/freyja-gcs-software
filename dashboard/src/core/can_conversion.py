@@ -158,5 +158,5 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
         
         return False
     except Exception as e:
-        logger.error(f"Error while reading and applying bytes to telemetry object. {e}")
+        logger.error(f"Error while reading and applying bytes to target object. {e}")
         return None
