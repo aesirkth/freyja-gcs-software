@@ -31,6 +31,11 @@ async def core_serial_task():
             await gcs_state_history.put(latest_gcs_state)
             save_to_disk(latest_tel_data)
 
+            if read_next_frame_and_apply(gse_ser, latest_tel_data):
+                if tm_queue.full():
+                    _ = tm_queue.get_nowait()
+            # Why await?
+            # await tm_queue.put(latest_tel_data)
             cmd_controller(cmd_transporter)
 
             await asyncio.sleep(0)
