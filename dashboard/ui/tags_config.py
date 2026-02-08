@@ -49,3 +49,7 @@ PLOT_DASHBOARD = {
 TEST_DASHBOARD = {
     "location:panel": "plot_dashboard:location:panel",
 }
+
+COMMAND_CONFIG = {
+    "test": "s"
+}

@@ -1,5 +1,5 @@
-import zlib
 import logging
+import zlib
 
 logger = logging.getLogger(__name__)
 
