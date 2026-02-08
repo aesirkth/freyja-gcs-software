@@ -3,10 +3,9 @@ from typing import Optional
 from datetime import datetime
 
 class TelemetryInput(BaseModel):
-    initial_timestamp_ms: Optional[int] = None
+    start_timestamp_ms: Optional[int] = None
     timestamp_ms: Optional[int] = None
     timestamp: Optional[datetime] = None
-    test_mode: Optional[bool] = None
 
     # 0x720
     flight_state: Optional[int] = None

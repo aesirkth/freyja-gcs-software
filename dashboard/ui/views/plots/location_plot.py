@@ -8,7 +8,7 @@ def build(parent: int | str) -> dict:
             x_axis = dpg.add_plot_axis(dpg.mvXAxis, label="E/W")
             y_axis = dpg.add_plot_axis(dpg.mvYAxis, label="N/S")
             current_location_id = dpg.add_scatter_series([0], [0], label=" Current Position", parent=y_axis, tag=PLOT_DASHBOARD["enu_location"])
-            init_location_id = dpg.add_scatter_series([0], [0], label=" Launch Position", parent=y_axis, tag=PLOT_DASHBOARD["launch_location"])
+            start_location_id = dpg.add_scatter_series([0], [0], label=" Launch Position", parent=y_axis, tag=PLOT_DASHBOARD["launch_location"])
             dpg.fit_axis_data(x_axis)
             dpg.fit_axis_data(y_axis)
 
@@ -16,7 +16,7 @@ def build(parent: int | str) -> dict:
         PLOT_DASHBOARD["x_axis"] = x_axis
         PLOT_DASHBOARD["y_axis"] = y_axis
         PLOT_DASHBOARD["current_location_id"] = current_location_id
-        PLOT_DASHBOARD["init_location_id_id"] = init_location_id
+        PLOT_DASHBOARD["start_location_id"] = start_location_id
 
     return PLOT_DASHBOARD
 

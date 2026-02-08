@@ -1,6 +1,7 @@
 import serial, struct, logging
 from .timestamp_decoder import apply_unix_timestamp
 from models.input_tm_data import TelemetryInput
+from models.gcs_state import GCSState
 from .location_calc import calc_enu_location
 
 logger = logging.getLogger(__name__)
@@ -136,7 +137,7 @@ def read_usb_frame(ser: serial.Serial):
         logger.error(f"Error while reading USB frame. {e}")
         return None
 
-def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInput) -> bool:
+def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInput, empty_gcs_state_object: GCSState) -> bool:
     try:
         frame = read_usb_frame(ser)
         if not frame:
@@ -148,10 +149,13 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
 
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
-            decode_pkt(can_pkt_payload, empty_tel_object)
+            if can_id == 0x700:
+                decode_pkt(can_pkt_payload, empty_int_state_object)
+            else:
+                decode_pkt(can_pkt_payload, empty_tel_object)
             apply_unix_timestamp(can_pkt_timestamp, empty_tel_object)
             return True
-        print("### Telemetry Object ### \n", empty_tel_object)
+        
         return False
     except Exception as e:
         logger.error(f"Error while reading and applying bytes to telemetry object. {e}")
