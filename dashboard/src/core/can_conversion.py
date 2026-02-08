@@ -150,7 +150,7 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
         decode_pkt = DECODERS.get(can_id)
         if decode_pkt:
             if can_id == 0x700:
-                decode_pkt(can_pkt_payload, empty_int_state_object)
+                decode_pkt(can_pkt_payload, empty_gcs_state_object)
             else:
                 decode_pkt(can_pkt_payload, empty_tel_object)
             apply_unix_timestamp(can_pkt_timestamp, empty_tel_object)
