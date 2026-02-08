@@ -1,5 +1,6 @@
 import logging, asyncio
 from .core.can_conversion import read_next_frame_and_apply
+from src.core.cmd_transport import CommandTransport
 from models.input_tm_data import TelemetryInput
 from models.gcs_state import GCSState
 from src.state.tm_bus import tm_queue
@@ -16,6 +17,7 @@ async def core_serial_task():
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
     ser = serial.Serial("/dev/cu.usbmodem1101", baudrate=9600, timeout=1)
     try:
+        cmd_transporter = CommandTransport(ser)
         latest_tel_data = TelemetryInput()
         latest_gcs_state = GCSState()
         while True:

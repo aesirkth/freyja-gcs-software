@@ -1,8 +1,21 @@
 import dearpygui.dearpygui as dpg
 from ui.utils.numerical_formatting import format_numerical
 from ui.utils.bool_formatting import fmt_bool
-from models.input_tm_data import TelemetryInput
+from src.state.cmd_logs import cmd_log_queue
+from models.gcs_state import GCSState
 from ui.tags_config import PLAIN_DASHBOARD
+from ui.tags_config import COMMAND_CONFIG
+
+def queue_command(sender, cmd_id: str):
+    cmd_log_queue.put(COMMAND_CONFIG[cmd_id])
+    dpg.set_value("text item", f"Mouse Button ID: {app_data}")
+
+def visible_call(sender, app_data):
+    print("I'm visible")
+
+with dpg.item_handler_registry(tag="widget handler") as handler:
+    dpg.add_item_clicked_handler(callback=queue_command)
+    dpg.add_item_visible_handler(callback=visible_call)
 
 def build(parent: int | str) -> dict:
     with dpg.child_window(parent=parent, tag=PLAIN_DASHBOARD["avionics:tab"], width=-1, height=-1, border=False):
@@ -49,17 +62,7 @@ def build(parent: int | str) -> dict:
 
     return PLAIN_DASHBOARD
 
-def update(data: TelemetryInput, tags: dict) -> None:
+def update(data: GCSState, tags: dict) -> None:
     dpg.set_value(tags["flight_state_text"],
                   f"{getattr(data, "flight_state", None)}")
-    dpg.set_value(tags["loki_state_text"],
-                  f"{getattr(data, "loki_state", None)}")
-    dpg.set_value(tags["loki_substate_text"],
-                  f"{getattr(data, "loki_substate", None)}")
-    dpg.set_value(tags["gnss_fix_text"],
-                  f"{getattr(data, "gnss_fix", None)}")
-    dpg.set_value(tags["fjalar_bat_voltage_text"],
-                  f"{format_numerical(getattr(data, "fjalar_bat_voltage", None), "V")}")
-    dpg.set_value(tags["loki_bat_voltage_text"],
-                  f"{format_numerical(getattr(data, "loki_bat_voltage", None), "V")}")
-   
+    

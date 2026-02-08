@@ -45,3 +45,7 @@ PLOT_DASHBOARD = {
     "velocity": "plot_dashboard:velocity",
     "acceleration": "plot_dashboard:acceleration",
 }
+
+TEST_DASHBOARD = {
+    "location:panel": "plot_dashboard:location:panel",
+}
