@@ -114,9 +114,9 @@ def read_usb_frame(ser: serial.Serial):
     try:
         if not _find_sync_bytes(ser):
             return None
-        
-        can_pkt_timestamp = _read_exact(ser, 8)
-        if not can_pkt_timestamp:
+       
+        usb_pkt_timestamp = _read_exact(ser, 8)
+        if not usb_pkt_timestamp:
             return None
         
         header = _read_exact(ser, 2)
@@ -127,12 +127,12 @@ def read_usb_frame(ser: serial.Serial):
         if not (1 <= pkt_len <= 8):
             return None
         
-        can_pkt_payload = _read_exact(ser, pkt_len)
-        if not can_pkt_payload:
+        usb_pkt_payload = _read_exact(ser, pkt_len)
+        if not usb_pkt_payload:
             return None
        
-        can_id = 0x700 + pkt_type_byte
-        return can_id, can_pkt_timestamp, can_pkt_payload
+        usb_id = 0x700 + pkt_type_byte
+        return usb_id, usb_pkt_timestamp, usb_pkt_payload
     except Exception as e:
         logger.error(f"Error while reading USB frame. {e}")
         return None
@@ -143,19 +143,20 @@ def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInp
         if not frame:
             return False
       
-        can_id, can_pkt_timestamp, can_pkt_payload = frame
-        if not can_id or not can_pkt_payload:
+        usb_id, usb_pkt_timestamp, usb_pkt_payload = frame
+        if not usb_id or not usb_pkt_payload:
             return False
 
-        decode_pkt = DECODERS.get(can_id)
+        decode_pkt = DECODERS.get(usb_id)
         if decode_pkt:
-            if can_id == 0x700:
-                decode_pkt(can_pkt_payload, empty_gcs_state_object)
+            if usb_id == 0x700:
+                decode_pkt(usb_pkt_payload, empty_gcs_state_object)
+                apply_unix_timestamp(usb_pkt_timestamp, empty_gcs_state_object)
             else:
-                decode_pkt(can_pkt_payload, empty_tel_object)
-            apply_unix_timestamp(can_pkt_timestamp, empty_tel_object)
+                decode_pkt(usb_pkt_payload, empty_tel_object)
+                apply_unix_timestamp(usb_pkt_timestamp, empty_tel_object)
             return True
-        
+       
         return False
     except Exception as e:
         logger.error(f"Error while reading and applying bytes to target object. {e}")

@@ -1,5 +1,5 @@
 import logging, asyncio
-from .core.can_conversion import read_next_frame_and_apply
+from src.core.usb_frame_decoder import read_next_frame_and_apply
 from src.controller.test_cmd_controller import cmd_controller
 from src.core.cmd_transport import CommandTransport
 from models.input_tm_data import TelemetryInput
