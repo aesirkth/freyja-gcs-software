@@ -5,12 +5,13 @@ from src.controller.board_decode_controller import decode_board_usb_frame
 from src.controller.gse_decode_controller import decode_gse_usb_frame
 from src.core.usb_frame_decoder import UsbFrameDecoder
 from src.core.pkt_applier import PacketApplier
-from models.gcs_state import GCSState
+from models.proto.gse_cmds_pb2 import Command1
 from src.state.tm_bus import tm_queue
 from src.state.gse_bus import gse_queue
 from src.state.system_state import gcs_state_history
-from serial.tools import list_ports
 from src.db.disk_saving import save_to_disk
+from models.gcs_state import GCSState
+from serial.tools import list_ports
 import logging, asyncio
 import serial
 
@@ -30,7 +31,7 @@ async def core_serial_task():
 
         latest_tel_data = TelemetryInput()
         latest_gcs_state = GCSState()
-        latest_gse_data = GSEInput()
+        latest_gse_data = Command1()
         while True:
             if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data, pkt_applier):
                 if tm_queue.full():
@@ -42,7 +43,7 @@ async def core_serial_task():
             if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data, pkt_applier):
                 if gse_queue.full():
                     _ = gse_queue.get_nowait()
-            # await gse_queue.put()
+            await gse_queue.put(latest_gse_data)
             # save_to_disk()
 
             cmd_controller(cmd_transporter)

@@ -10,8 +10,7 @@ def decode_gse_usb_frame(decoder_service: UsbFrameDecoder, empty_gse_object: Com
         if not usb_pkt_payload:
             return False
 
-        msg = Command1()
-        msg.ParseFromString(usb_pkt_payload)
+        empty_gse_object.ParseFromString(usb_pkt_payload)
       
         return True
     except Exception as e:
