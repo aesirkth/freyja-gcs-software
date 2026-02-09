@@ -1,10 +1,10 @@
 import logging
+from config.decoder_config import SYNC0, SYNC1
 import zlib
 
 logger = logging.getLogger(__name__)
 
-# Hämta från config fil istället
-MAGIC = b"\xAA\xAA"
+MAGIC = bytes([SYNC0, SYNC1])
 
 class CommandTransport:
     def __init__(self, serial_port):

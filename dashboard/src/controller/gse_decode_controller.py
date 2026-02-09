@@ -4,7 +4,7 @@ from src.core.pkt_applier import PacketApplier
 
 logger = logging.getLogger(__name__)
 
-def decode_gse_usb_frame(decoder_service: UsbFrameDecoder, empty_gcs_state_object: ?, pkt_applier: PacketApplier) -> bool:
+def decode_gse_usb_frame(decoder_service: UsbFrameDecoder, empty_gse_object: GSEInput, pkt_applier: PacketApplier) -> bool:
     try:
         usb_pkt_payload = decoder_service.read_gse_usb_frame
         if not pkt_payload:

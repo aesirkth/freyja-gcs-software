@@ -30,7 +30,7 @@ async def core_serial_task():
 
         latest_tel_data = TelemetryInput()
         latest_gcs_state = GCSState()
-        # GSE data model tbd
+        latest_gse_data = GSEInput()
         while True:
             if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data, pkt_applier):
                 if tm_queue.full():
