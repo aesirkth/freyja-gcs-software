@@ -1,13 +1,11 @@
 from .location_calc import calc_enu_location
+from typing import BaseModel
 from models.input_tm_data import TelemetryInput
 import struct, logging
 
 logger = logging.getLogger(__name__)
 
-class PacketApplier:
-    def __init__(self):
-        pass
-
+class PacketApplier(BaseModel):
     def _to_u8(pkt: bytes, byte_index: int):  return pkt[byte_index]
     def _to_b1(pkt: bytes, byte_index: int):  return pkt[byte_index] != 0
     def _to_f32(pkt: bytes, byte_index: int): return struct.unpack_from("<f", pkt, byte_index)[0]

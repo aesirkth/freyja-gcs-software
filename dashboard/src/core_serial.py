@@ -5,6 +5,7 @@ from src.core.usb_frame_decoder import UsbFrameDecoder
 from models.input_tm_data import TelemetryInput
 from src.controller.board_decode_controller import decode_board_usb_frame
 from src.controller.gse_decode_controller import decode_gse_usb_frame
+from src.core.pkt_applier import PacketApplier
 from models.gcs_state import GCSState
 from src.state.tm_bus import tm_queue
 from src.state.gse_bus import gse_queue
@@ -25,18 +26,20 @@ async def core_serial_task():
         cmd_transporter = CommandTransport(gse_ser_port)
         usb_board_frame_decoder = UsbFrameDecoder(board_ser_port)
         usb_gse_frame_decoder = UsbFrameDecoder(gse_ser_port)
+        pkt_applier = PacketApplier()
+
         latest_tel_data = TelemetryInput()
         latest_gcs_state = GCSState()
         # GSE data model tbd
         while True:
-            if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data):
+            if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data, pkt_applier):
                 if tm_queue.full():
                     _ = tm_queue.get_nowait()
             await tm_queue.put(latest_tel_data)
             await gcs_state_history.put(latest_gcs_state)
             save_to_disk(latest_tel_data)
 
-            if decode_gse_usb_frame(usb_gse_frame_decoder):
+            if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data, pkt_applier):
                 if gse_queue.full():
                     _ = gse_queue.get_nowait()
             # await gse_queue.put()

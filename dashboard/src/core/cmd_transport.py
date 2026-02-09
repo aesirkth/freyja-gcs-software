@@ -3,6 +3,7 @@ import zlib
 
 logger = logging.getLogger(__name__)
 
+# Hämta från config fil istället
 MAGIC = b"\xAA\xAA"
 
 class CommandTransport:

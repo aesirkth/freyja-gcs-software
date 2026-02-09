@@ -1,25 +1,21 @@
 import logging
+from src.core.usb_frame_decoder import UsbFrameDecoder
+from src.core.pkt_applier import PacketApplier
 
 logger = logging.getLogger(__name__)
 
-def decode_gse_usb_frame(ser: serial.Serial, empty_tel_object: TelemetryInput, empty_gcs_state_object: GCSState) -> bool:
+def decode_gse_usb_frame(decoder_service: UsbFrameDecoder, empty_gcs_state_object: ?, pkt_applier: PacketApplier) -> bool:
     try:
-        frame = read_usb_frame(ser)
-        if not frame:
+        usb_pkt_payload = decoder_service.read_gse_usb_frame
+        if not pkt_payload:
             return False
-      
-        usb_id, usb_pkt_timestamp, usb_pkt_payload = frame
-        if not usb_id or not usb_pkt_payload:
-            return False
-
+    
         decode_pkt = DECODERS.get(usb_id)
         if decode_pkt:
             if usb_id == 0x700:
-                decode_pkt(usb_pkt_payload, empty_gcs_state_object)
-                apply_unix_timestamp(usb_pkt_timestamp, empty_gcs_state_object)
-            else:
-                decode_pkt(usb_pkt_payload, empty_tel_object)
-                apply_unix_timestamp(usb_pkt_timestamp, empty_tel_object)
+                decode_pkt(usb_pkt_payload, empty_gse_object)
+                apply_unix_timestamp(usb_pkt_timestamp, empty_gse_object)
+            
             return True
        
         return False
