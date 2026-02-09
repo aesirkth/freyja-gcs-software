@@ -1,13 +1,48 @@
 from .location_calc import calc_enu_location
-from typing import BaseModel
+from typing import Callable
 from models.input_tm_data import TelemetryInput
 import struct, logging
 
 logger = logging.getLogger(__name__)
 
-class PacketApplier(BaseModel):
+ApplyFn = Callable[[bytes, TelemetryInput], None]
+
+class PacketApplier:
+    def __init__(self):
+        self.decoders: dict[int, ApplyFn] = {
+            0x700: self._apply_0x700,
+            0x720: self._apply_0x720,
+            0x721: self._apply_0x721,
+            0x722: self._apply_0x722,
+            0x723: self._apply_0x723,
+            0x724: self._apply_0x724,
+            0x725: self._apply_0x725,
+            0x726: self._apply_0x726,
+            0x727: self._apply_0x727,
+            0x72A: self._apply_0x72A,
+            0x72B: self._apply_0x72B,
+            0x72C: self._apply_0x72C,
+            0x72D: self._apply_0x72D,
+            0x72E: self._apply_0x72E,
+            0x72F: self._apply_0x72F,
+            0x730: self._apply_0x730,
+            0x731: self._apply_0x731,
+        }
+
+    def apply(self, pkt_id: int, pkt: bytes, tel: TelemetryInput) -> bool:
+        fn = self._decoders.get(pkt_id)
+        if not fn:
+            return False
+        fn(pkt, tel)
+        return True
+
+    @staticmethod
     def _to_u8(pkt: bytes, byte_index: int):  return pkt[byte_index]
+
+    @staticmethod
     def _to_b1(pkt: bytes, byte_index: int):  return pkt[byte_index] != 0
+
+    @staticmethod
     def _to_f32(pkt: bytes, byte_index: int): return struct.unpack_from("<f", pkt, byte_index)[0]
 
     def _apply_0x700(self, pkt: bytes, tel_object: TelemetryInput):
@@ -59,23 +94,3 @@ class PacketApplier(BaseModel):
     def _apply_0x72F(self, pkt: bytes, tel_object: TelemetryInput): tel_object.sigurd_temp1 = self._to_f32(pkt, 0); tel_object.sigurd_temp2 = self._to_f32(pkt, 4)
     def _apply_0x730(self, pkt: bytes, tel_object: TelemetryInput): tel_object.sigurd_temp3 = self._to_f32(pkt, 0); tel_object.sigurd_temp4 = self._to_f32(pkt, 4)
     def _apply_0x731(self, pkt: bytes, tel_object: TelemetryInput): tel_object.fjalar_bat_voltage = self._to_f32(pkt, 0); tel_object.loki_bat_voltage = self._to_f32(pkt, 4)
-
-    DECODERS = {
-        0x700: _apply_0x700,
-        0x720: _apply_0x720,
-        0x721: _apply_0x721,
-        0x722: _apply_0x722,
-        0x723: _apply_0x723,
-        0x724: _apply_0x724,
-        0x725: _apply_0x725,
-        0x726: _apply_0x726,
-        0x727: _apply_0x727,
-        0x72A: _apply_0x72A,
-        0x72B: _apply_0x72B,
-        0x72C: _apply_0x72C,
-        0x72D: _apply_0x72D,
-        0x72E: _apply_0x72E,
-        0x72F: _apply_0x72F,
-        0x730: _apply_0x730,
-        0x731: _apply_0x731,
-    }
