@@ -1,6 +1,7 @@
 import logging
 from src.core.usb_frame_decoder import UsbFrameDecoder
 from models.input_tm_data import TelemetryInput
+from src.core.timestamp_decoder import apply_unix_timestamp
 from src.core.pkt_applier import PacketApplier
 from models.gcs_state import GCSState
 
@@ -16,13 +17,12 @@ def decode_board_usb_frame(decoder_service: UsbFrameDecoder, empty_tel_object: T
         if not usb_id or not usb_pkt_payload:
             return False
 
-        decode_pkt = DECODERS.get(usb_id)
-        if decode_pkt:
+        if pkt_applier:
             if usb_id == 0x700:
-                decode_pkt(usb_pkt_payload, empty_gcs_state_object)
+                pkt_applier.apply(usb_id, usb_pkt_payload, empty_gcs_state_object)
                 apply_unix_timestamp(usb_pkt_timestamp, empty_gcs_state_object)
             else:
-                decode_pkt(usb_pkt_payload, empty_tel_object)
+                pkt_applier.apply(usb_id, usb_pkt_payload, empty_tel_object)
                 apply_unix_timestamp(usb_pkt_timestamp, empty_tel_object)
             return True
        
