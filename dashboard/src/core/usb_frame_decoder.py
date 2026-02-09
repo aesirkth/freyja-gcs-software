@@ -5,33 +5,32 @@ import zlib
 logger = logging.getLogger(__name__)
 
 class UsbFrameDecoder:
-    def __init__(self, board_ser_port, gse_ser_port):
-        self.board_port = board_ser_port
-        self.board_port = gse_ser_port
+    def __init__(self, ser_port: serial.Serial):
+        self.ser = ser_port
 
-    def _read_exact(ser: serial.Serial, n_bytes: int) -> bytes | None:
+    def _read_exact(self, n_bytes: int) -> bytes | None:
         buffer = b""
         while len(buffer) < n_bytes:
-            chunk = ser.read(n_bytes - len(buffer))
+            chunk = self.ser.read(n_bytes - len(buffer))
             if not chunk:
                 return None
             buffer += chunk
         return buffer
 
-    def _find_sync_bytes(self, ser: serial.Serial) -> bool:
-        b0 = self._read_exact(ser, 1)
+    def _find_sync_bytes(self) -> bool:
+        b0 = self._read_exact(self.ser, 1)
         if not b0:
             return False
         while True:
             if b0[0] == SYNC0:
-                b1 = self._read_exact(ser, 1)
+                b1 = self._read_exact(self.ser, 1)
                 if not b1:
                     return False
                 if b1[0] == SYNC1:
                     return True
                 b0 = b1
             else:
-                b0 = self._read_exact(ser, 1)
+                b0 = self._read_exact(self.ser, 1)
                 if not b0:
                     return False
    
@@ -48,16 +47,16 @@ class UsbFrameDecoder:
             logger.error(f"Error while computing checksum. {e}")
             return None
 
-    def read_board_usb_frame(self, ser: serial.Serial):
+    def read_board_usb_frame(self):
         try:
-            if not self._find_sync_bytes(ser):
+            if not self._find_sync_bytes(self.ser):
                 return None
         
-            usb_pkt_timestamp = self._read_exact(ser, 8)
+            usb_pkt_timestamp = self._read_exact(self.ser, 8)
             if not usb_pkt_timestamp:
                 return None
             
-            header = self._read_exact(ser, 2)
+            header = self._read_exact(self.ser, 2)
             if not header:
                 return None
 
@@ -65,7 +64,7 @@ class UsbFrameDecoder:
             if not (1 <= pkt_len <= 8):
                 return None
             
-            usb_pkt_payload = self._read_exact(ser, pkt_len)
+            usb_pkt_payload = self._read_exact(self.ser, pkt_len)
             if not usb_pkt_payload:
                 return None
         
@@ -75,20 +74,20 @@ class UsbFrameDecoder:
             logger.error(f"Error while reading USB tm data frame. {e}")
             return None
         
-    def read_gse_usb_frame(self, ser: serial.Serial):
+    def read_gse_usb_frame(self):
         try:
-            if not self._find_sync_bytes(ser):
+            if not self._find_sync_bytes(self.ser):
                 return None
             
-            pkt_len = self._read_exact(ser, 1)
+            pkt_len = self._read_exact(self.ser, 1)
             if not (1 <= pkt_len <= 8):
                 return None
             
-            usb_pkt_payload = self._read_exact(ser, pkt_len)
+            usb_pkt_payload = self._read_exact(self.ser, pkt_len)
             if not usb_pkt_payload:
                 return None
 
-            crc_bytes = self._read_exact(ser, 4)
+            crc_bytes = self._read_exact(self.ser, 4)
             checksum_result = self.checksum(usb_pkt_payload, crc_bytes)
             if checksum_result != True:
                 return None

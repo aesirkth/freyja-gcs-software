@@ -1,5 +1,4 @@
 import logging, asyncio
-from src.core.usb_frame_decoder import read_next_frame_and_apply
 from src.controller.test_cmd_controller import cmd_controller
 from src.core.cmd_transport import CommandTransport
 from src.core.usb_frame_decoder import UsbFrameDecoder
