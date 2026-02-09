@@ -1,0 +1,2 @@
+SYNC0 = 0xAA
+SYNC1 = 0xAA

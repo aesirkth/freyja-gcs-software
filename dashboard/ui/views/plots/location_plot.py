@@ -1,6 +1,6 @@
 import dearpygui.dearpygui as dpg
 from models.input_tm_data import TelemetryInput
-from ui.tags_config import PLOT_DASHBOARD
+from config.tags_config import PLOT_DASHBOARD
 
 def build(parent: int | str) -> dict:
     with dpg.child_window(parent=parent, tag=PLOT_DASHBOARD["location:panel"], width=0, height=0, border=False):

@@ -2,7 +2,7 @@ import dearpygui.dearpygui as dpg
 from ui.utils.numerical_formatting import format_numerical
 from ui.utils.bool_formatting import fmt_bool
 from models.input_tm_data import TelemetryInput
-from ui.tags_config import PLAIN_DASHBOARD
+from config.tags_config import PLAIN_DASHBOARD
 
 def build(parent: int | str) -> dict:
     with dpg.child_window(parent=parent, tag=PLAIN_DASHBOARD["propulsion:tab"], width=-1, height=-1, border=False):

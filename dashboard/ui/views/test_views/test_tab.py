@@ -3,8 +3,7 @@ from ui.utils.numerical_formatting import format_numerical
 from ui.utils.bool_formatting import fmt_bool
 from src.state.cmd_queue import cmd_queue
 from models.gcs_state import GCSState
-from ui.tags_config import TEST_DASHBOARD
-from ui.tags_config import COMMAND_CONFIG
+from dashboard.config.tags_config import TEST_DASHBOARD, COMMAND_CONFIG
 
 def queue_command(cmd_id, app_data):
     cmd_queue.put(COMMAND_CONFIG[cmd_id])
