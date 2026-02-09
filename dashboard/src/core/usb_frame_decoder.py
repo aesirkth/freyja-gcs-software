@@ -5,8 +5,9 @@ import zlib
 logger = logging.getLogger(__name__)
 
 class UsbFrameDecoder:
-    def __init__(self):
-        pass
+    def __init__(self, board_ser_port, gse_ser_port):
+        self.board_port = board_ser_port
+        self.board_port = gse_ser_port
 
     def _read_exact(ser: serial.Serial, n_bytes: int) -> bytes | None:
         buffer = b""

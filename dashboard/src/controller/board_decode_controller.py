@@ -1,5 +1,8 @@
+import logging
 
-def read_next_frame_and_apply(ser: serial.Serial, empty_tel_object: TelemetryInput, empty_gcs_state_object: GCSState) -> bool:
+logger = logging.getLogger(__name__)
+
+def decode_board_usb_frame(ser: serial.Serial, empty_tel_object: TelemetryInput, empty_gcs_state_object: GCSState) -> bool:
     try:
         frame = read_usb_frame(ser)
         if not frame:
