@@ -1,5 +1,6 @@
 import serial, logging
 from config.decoder_config import SYNC0, SYNC1
+from models.proto.gse_cmds_pb2 import Command1
 import zlib
 
 logger = logging.getLogger(__name__)
@@ -92,7 +93,7 @@ class UsbFrameDecoder:
             if checksum_result != True:
                 return None
 
-            return usb_pkt_payload
+            return Command1(usb_pkt_payload.ParseFromString())
         except Exception as e:
             logger.error(f"Error while reading GSE USB frame. {e}")
             return None
