@@ -97,7 +97,7 @@ uv sync
 
 ### gcs (board) to gcs (RaspPi)
 
-| CAN ID | bit | data             | type |
+| USB ID | bit | data             | type |
 | ------ | --- | ---------------- | ---- |
 | 0x700  | 0   | gcs test mode    | bool |
 
