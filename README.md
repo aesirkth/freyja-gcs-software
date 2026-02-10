@@ -95,12 +95,18 @@ uv sync
 
 ## can message specification
 
+### gcs (board) to gcs (RaspPi)
+
+| CAN ID | bit | data             | type |
+| ------ | --- | ---------------- | ---- |
+| 0x700  | 0   | gcs test mode    | bool |
+
 ### gcs to fjalar
 
 | CAN ID | bit | data             | type |
 | ------ | --- | ---------------- | ---- |
-| 0x700  | 0   | ready/arm fjalar | bool |
-| 0x701  | 0   | launch           | bool |
+| 0x701  | 0   | ready/arm fjalar | bool |
+| 0x702  | 0   | launch           | bool |
 
 
 ### fjalar to gcs
@@ -142,7 +148,6 @@ uv sync
 |        | 4~7  | sigurd temperature 4           | f32   |
 | 0x731  | 0~3  | fjalar bat voltage             | f32   |
 |        | 4~7  | loki bat voltage               | f32   |
-
 
 ## usb message specification
 

@@ -14,8 +14,8 @@ const struct device *cdc_acm = DEVICE_DT_GET(DT_NODELABEL(cdc_acm_uart0));
 
 static const struct gpio_dt_spec led_0 = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl0_led), gpios);
 static const struct gpio_dt_spec tgl_0 = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl0), gpios);
-static const struct gpio_dt_spec led_7 = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl7_led), gpios);
-static const struct gpio_dt_spec tgl_7 = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl7), gpios);
+static const struct gpio_dt_spec led_1 = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl1_led), gpios);
+static const struct gpio_dt_spec tgl_1 = GPIO_DT_SPEC_GET(DT_NODELABEL(tgl1), gpios);
 static const struct gpio_dt_spec launch_btn = GPIO_DT_SPEC_GET(DT_NODELABEL(btn_launch), gpios);
 static const struct gpio_dt_spec btn_arm = GPIO_DT_SPEC_GET(DT_NODELABEL(launch_armd), gpios);
 
@@ -38,7 +38,7 @@ int main(void) {
 		return 0;
 	}
 
-	if (!gpio_is_ready_dt(&led_0) || !gpio_is_ready_dt(&tgl_0) || !gpio_is_ready_dt(&led_7) ||  !gpio_is_ready_dt(&tgl_7) || !gpio_is_ready_dt(&launch_btn) || !gpio_is_ready_dt(&btn_arm)) {
+	if (!gpio_is_ready_dt(&led_0) || !gpio_is_ready_dt(&tgl_0) || !gpio_is_ready_dt(&led_1) ||  !gpio_is_ready_dt(&tgl_1) || !gpio_is_ready_dt(&launch_btn) || !gpio_is_ready_dt(&btn_arm)) {
 		return 0;
 	}
 
@@ -48,9 +48,9 @@ int main(void) {
 		LOG_ERR("Failed to configure LED pin 0 in");
 		return 0;
 	}
-	ret = gpio_pin_configure_dt(&tgl_7, GPIO_INPUT);
+	ret = gpio_pin_configure_dt(&tgl_1, GPIO_INPUT);
 	if (ret < 0) {
-		LOG_ERR("Failed to configure LED pin 7 in");
+		LOG_ERR("Failed to configure LED pin 1 in");
 		return 0;
 	}
 
@@ -60,9 +60,9 @@ int main(void) {
 		LOG_ERR("Failed to configure LED pin 0 out");
 		return 0;
 	}
-	ret = gpio_pin_configure_dt(&led_7, GPIO_OUTPUT);
+	ret = gpio_pin_configure_dt(&led_1, GPIO_OUTPUT);
 	if (ret < 0) {
-		LOG_ERR("Failed to configure LED pin 7 out");
+		LOG_ERR("Failed to configure LED pin 1 out");
 		return 0;
 	}
 
@@ -87,12 +87,12 @@ int main(void) {
 		int val_launch = gpio_pin_get_dt(&launch_btn);
 		int val_led_0 = gpio_pin_get_dt(&led_0);
 		int val_tgl_0 = gpio_pin_get_dt(&tgl_0);
-		int val_led_7 = gpio_pin_get_dt(&led_7);
-		int val_tgl_7 = gpio_pin_get_dt(&tgl_7);
+		int val_led_1 = gpio_pin_get_dt(&led_1);
+		int val_tgl_1 = gpio_pin_get_dt(&tgl_1);
 
 		const armd_pkt_t armd_pkt = {val_armd};
 		const launch_pkt_t launch_pkt = {val_launch};
-		const gcs_test_mode_pkt_t gcs_test_mode_pkt = {val_tgl_7};
+		const gcs_test_mode_pkt_t gcs_test_mode_pkt = {val_tgl_1};
 
 		if (val_tgl_0 < 0 && val_tgl_0) {
 			LOG_ERR("Failed to read LED toggle pin 0");
@@ -100,11 +100,11 @@ int main(void) {
 			LOG_INF("led_0 = %d", val_led_0);
 			LOG_INF("tgl_0 = %d", val_tgl_0);
 		}
-		if (val_tgl_7 < 0 && val_tgl_7) {
-			LOG_ERR("Failed to read LED toggle pin 7");
+		if (val_tgl_1 < 0 && val_tgl_1) {
+			LOG_ERR("Failed to read LED toggle pin 1");
 		} else {
-			LOG_INF("led_7 = %d", val_led_7);
-			LOG_INF("tgl_7 = %d", val_tgl_7);
+			LOG_INF("led_1 = %d", val_led_1);
+			LOG_INF("tgl_1 = %d", val_tgl_1);
 			int64_t timestamp;
     		int ret = get_timestamp(&timestamp);
 			submit_usb_pkt(&gcs_test_mode_pkt, PKT_TYPE_GCS_TEST_MODE, timestamp);
@@ -117,7 +117,7 @@ int main(void) {
 			submit_can_pkt(&armd_pkt, PKT_TYPE_ARMD);
 			submit_can_pkt(&launch_pkt, PKT_TYPE_LAUNCH);
         }
-		k_msleep(100);
+		k_msleep(50);
 	}
 	return 0;
 }
