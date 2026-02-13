@@ -1,6 +1,6 @@
 import serial, logging
-from config.decoder_config import SYNC0, SYNC1
-from models.proto.gse_cmds_pb2 import Command1
+from config.decoder_config import SYNC0, SYNC1, SURTR_SYNC_BYTE
+from models.proto import surtr_pb2
 import zlib
 
 logger = logging.getLogger(__name__)
@@ -19,23 +19,29 @@ class UsbFrameDecoder:
         return buffer
 
     def _find_sync_bytes(self) -> bool:
-        b0 = self._read_exact(self.ser, 1)
-        if not b0:
-            return False
-        while True:
-            if b0[0] == SYNC0:
-                b1 = self._read_exact(self.ser, 1)
-                if not b1:
-                    return False
-                if b1[0] == SYNC1:
+        try:
+            b0 = self._read_exact(self.ser, 1)
+            if not b0:
+                return False
+            while True:
+                if b0[0] == SYNC0:
+                    b1 = self._read_exact(self.ser, 1)
+                    if not b1:
+                        return False
+                    if b1[0] == SYNC1:
+                        return True
+                    b0 = b1
+                elif b0[0] == SURTR_SYNC_BYTE:
                     return True
-                b0 = b1
-            else:
-                b0 = self._read_exact(self.ser, 1)
-                if not b0:
-                    return False
-   
-    def checksum(payload: bytes, crc_bytes: bytes) -> bool:
+                else:
+                    b0 = self._read_exact(self.ser, 1)
+                    if not b0:
+                        return False
+        except Exception as e:
+            logger.error(f"Error while looking for sync bytes. {e}")
+            return None
+        
+    def _checksum(payload: bytes, crc_bytes: bytes) -> bool:
         try:
             recv_crc = int.from_bytes(crc_bytes, "little")
             calc_crc = zlib.crc32(payload) & 0xFFFFFFFF
@@ -79,7 +85,7 @@ class UsbFrameDecoder:
         try:
             if not self._find_sync_bytes(self.ser):
                 return None
-            
+           
             pkt_len = self._read_exact(self.ser, 1)
             if not (1 <= pkt_len <= 8):
                 return None
@@ -89,11 +95,11 @@ class UsbFrameDecoder:
                 return None
 
             crc_bytes = self._read_exact(self.ser, 4)
-            checksum_result = self.checksum(usb_pkt_payload, crc_bytes)
+            checksum_result = self._checksum(usb_pkt_payload, crc_bytes)
             if checksum_result != True:
                 return None
-
-            return Command1(usb_pkt_payload.ParseFromString())
+            
+            return surtr_pb2.ParseFromString(usb_pkt_payload)
         except Exception as e:
             logger.error(f"Error while reading GSE USB frame. {e}")
             return None

@@ -1,3 +1,4 @@
+from models.proto import surtr_pb2
 from src.core.cmd_transport import CommandTransport
 from models.input_tm_data import TelemetryInput
 from src.controller.test_cmd_controller import cmd_controller
@@ -5,7 +6,6 @@ from src.controller.board_decode_controller import decode_board_usb_frame
 from src.controller.gse_decode_controller import decode_gse_usb_frame
 from src.core.usb_frame_decoder import UsbFrameDecoder
 from src.core.pkt_applier import PacketApplier
-from models.proto.gse_cmds_pb2 import Command1
 from src.state.tm_bus import tm_queue
 from src.state.gse_bus import gse_queue
 from src.state.system_state import gcs_state_history
@@ -31,7 +31,7 @@ async def core_serial_task():
 
         latest_tel_data = TelemetryInput()
         latest_gcs_state = GCSState()
-        latest_gse_data = Command1()
+        latest_gse_data = surtr_pb2.SurtrMessage()
         while True:
             if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data, pkt_applier):
                 if tm_queue.full():
@@ -40,7 +40,7 @@ async def core_serial_task():
             await gcs_state_history.put(latest_gcs_state)
             save_to_disk(latest_tel_data)
 
-            if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data, pkt_applier):
+            if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data):
                 if gse_queue.full():
                     _ = gse_queue.get_nowait()
             await gse_queue.put(latest_gse_data)

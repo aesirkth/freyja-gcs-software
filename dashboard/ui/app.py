@@ -67,13 +67,13 @@ async def ui_task():
         dpg.show_viewport()
 
         while dpg.is_dearpygui_running():
-            tel = await fetch_latest_tel_data()
-            propulsion_tab.update(tel, dashboard_tags["propulsion"])
-            avionics_tab.update(tel, dashboard_tags["avionics"])
-            recovery_tab.update(tel, dashboard_tags["recovery"])
-            location_plot.update(tel, dashboard_tags["location"])
-            velocity_plot.update(tel, dashboard_tags["velocity"])
-            velocity_plot.update(tel, dashboard_tags["acceleration"])
+            tm = await fetch_latest_tel_data()
+            propulsion_tab.update(tm, dashboard_tags["propulsion"])
+            avionics_tab.update(tm, dashboard_tags["avionics"])
+            recovery_tab.update(tm, dashboard_tags["recovery"])
+            location_plot.update(tm, dashboard_tags["location"])
+            velocity_plot.update(tm, dashboard_tags["velocity"])
+            velocity_plot.update(tm, dashboard_tags["acceleration"])
             dpg.render_dearpygui_frame()
             await asyncio.sleep(0)
 

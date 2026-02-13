@@ -31,7 +31,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dearpygui", specifier = "==2.1.0" },
+    { name = "dearpygui" },
     { name = "numpy" },
     { name = "protobuf" },
     { name = "pydantic", specifier = "==2.11.7" },

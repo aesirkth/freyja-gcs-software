@@ -46,7 +46,7 @@ PLOT_DASHBOARD = {
     "acceleration": "plot_dashboard:acceleration",
 }
 
-TEST_DASHBOARD = {
+TEST_MODE_DASHBOARD = {
     "location:panel": "plot_dashboard:location:panel",
 }
 
