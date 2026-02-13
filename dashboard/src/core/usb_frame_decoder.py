@@ -81,7 +81,7 @@ class UsbFrameDecoder:
             logger.error(f"Error while reading USB tm data frame. {e}")
             return None
         
-    def read_gse_usb_frame(self):
+    def read_gse_usb_frame(self) -> bytes:
         try:
             if not self._find_sync_bytes(self.ser):
                 return None
@@ -99,7 +99,7 @@ class UsbFrameDecoder:
             if checksum_result != True:
                 return None
             
-            return surtr_pb2.ParseFromString(usb_pkt_payload)
+            return usb_pkt_payload
         except Exception as e:
             logger.error(f"Error while reading GSE USB frame. {e}")
             return None
