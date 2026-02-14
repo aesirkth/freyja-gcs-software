@@ -4,6 +4,7 @@ version = "0.1.0"
 requires-python = ">=3.10"
 
 dependencies = [
+  "dearpygui==2.1.0",
   "pydantic==2.11.7",
   "pyserial==3.5",
   "protobuf",
@@ -13,5 +14,4 @@ dependencies = [
 
 [project.optional-dependencies]
 gui = [
-  "dearpygui==2.1.0",
 ]
