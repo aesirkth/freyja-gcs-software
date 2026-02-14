@@ -1,19 +1,22 @@
-import asyncio
+import traceback
+from fastapi import FastAPI
+from pathlib import Path
+# from api.v1.api_v1 import api_router
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from src.core_serial import core_serial_task
-from ui.app import ui_task
-import contextlib
 
-async def main():
-    tasks = [
-        asyncio.create_task(core_serial_task(), name="core-serial"),
-    ]
+app = FastAPI()
+# app.include_router(api_router)
+
+@app.on_event("startup")
+async def startup_event():
     try:
-        await ui_task()
-    finally:
-        for t in tasks:
-            t.cancel()
-        with contextlib.suppress(asyncio.CancelledError):
-            await asyncio.gather(*tasks)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+        print("Hello!")
+        # core_serial_task()
+    except Exception as e:
+        traceback.print_exc()
+        raise e
+   
+FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="static")
