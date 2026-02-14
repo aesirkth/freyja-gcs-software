@@ -18,6 +18,8 @@ import serial
 logger = logging.getLogger(__name__)
 
 async def core_serial_task():
+    print("Running core serial task!")
+    """
     ports = list_ports.comports()
     for port in ports:
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
@@ -55,3 +57,4 @@ async def core_serial_task():
     finally:
         board_ser_port.close()
         gse_ser_port.close()
+    """

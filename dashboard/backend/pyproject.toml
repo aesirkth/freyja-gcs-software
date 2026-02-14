@@ -11,4 +11,5 @@ dependencies = [
   "uvicorn",
   "numpy",
   "pymap3d",
+  "websockets",
 ]

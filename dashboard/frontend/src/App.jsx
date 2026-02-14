@@ -1,10 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    socketRef.current = new WebSocket("ws://localhost:8000/ws");
+
+    socketRef.current.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+    };
+
+    socketRef.current.onopen = () => {
+      console.log('WebSocket connection established!');
+      socketRef.current.send('Hello Server!');
+    };
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close();
+      }
+    };
+  }, []);
+  
+  const handleOtherClick = () => {
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send(`Count: ${count}`);
+    } else {
+      console.error("WebSocket is not open.");
+    }
+  }
 
   return (
     <>
@@ -18,7 +47,10 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => {
+          setCount((prevCount) => prevCount + 1);
+          handleOtherClick(); 
+        }}>
           count is {count}
         </button>
         <p>

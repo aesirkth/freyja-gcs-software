@@ -83,6 +83,7 @@ dependencies = [
     { name = "pymap3d" },
     { name = "pyserial" },
     { name = "uvicorn" },
+    { name = "websockets" },
 ]
 
 [package.metadata]
@@ -94,6 +95,7 @@ requires-dist = [
     { name = "pymap3d" },
     { name = "pyserial" },
     { name = "uvicorn" },
+    { name = "websockets" },
 ]
 
 [[package]]
