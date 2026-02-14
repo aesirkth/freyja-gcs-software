@@ -9,7 +9,7 @@ ApplyFn = Callable[[bytes, TelemetryInput], None]
 
 class PacketApplier:
     def __init__(self):
-        self.decoders: dict[int, ApplyFn] = {
+        self._decoders: dict[int, ApplyFn] = {
             0x700: self._apply_0x700,
             0x720: self._apply_0x720,
             0x721: self._apply_0x721,

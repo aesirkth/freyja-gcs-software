@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
 
 class GCSState(BaseModel):
-    gcs_test_mode: Optional[bool] = False
+    test_mode: Optional[bool] = False
+    timestamp_ms: Optional[int] = None
+    timestamp: Optional[datetime] = None

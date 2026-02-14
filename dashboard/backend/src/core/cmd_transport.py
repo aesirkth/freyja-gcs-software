@@ -1,5 +1,6 @@
 import logging
 from config.decoder_config import SYNC0, SYNC1
+from models.proto import surtr_pb2
 import zlib
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ class CommandTransport:
 
     def write(self, protobuf_message) -> int:
         try:
-            payload = protobuf_message.SerializeToString()
+            payload = surtr_pb2.SerializeToString(protobuf_message)
             payload_len = len(payload)
 
             if payload_len > 0xFFFF:
@@ -27,8 +28,8 @@ class CommandTransport:
 
             return self._serial.write(frame)
 
-        except Exception:
-            logger.exception("Error while writing data over USB")
+        except Exception as e:
+            logger.exception(f"Error while writing data over USB. {e}")
             return 0
 
     def save_to_disk(self):

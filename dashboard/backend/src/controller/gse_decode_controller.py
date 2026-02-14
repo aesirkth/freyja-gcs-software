@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 def decode_gse_usb_frame(decoder_service: UsbFrameDecoder, empty_gse_object: surtr_pb2.SurtrMessage) -> bool:
     try:
-        usb_pkt_payload = decoder_service.read_gse_usb_frame
+        usb_pkt_payload = decoder_service.read_gse_usb_frame()
         if not usb_pkt_payload:
             return False
 

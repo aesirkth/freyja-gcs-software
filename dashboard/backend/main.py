@@ -13,7 +13,7 @@ app = FastAPI()
 async def startup_event():
     try:
         print("Hello!")
-        # core_serial_task()
+        await core_serial_task()
     except Exception as e:
         traceback.print_exc()
         raise e

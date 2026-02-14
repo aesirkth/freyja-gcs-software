@@ -21,8 +21,8 @@ async def core_serial_task():
     ports = list_ports.comports()
     for port in ports:
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
-    board_ser_port = serial.Serial("/dev/cu.usbmodem1101", baudrate=9600, timeout=1)
-    gse_ser_port = serial.Serial("", baudrate=9600, timeout=1)
+    board_ser_port = serial.Serial("/dev/cu.usbmodem101", baudrate=9600, timeout=1)
+    gse_ser_port = serial.Serial("/dev/cu.usbmodem103", baudrate=9600, timeout=1)
     try:
         cmd_transporter = CommandTransport(gse_ser_port)
         usb_board_frame_decoder = UsbFrameDecoder(board_ser_port)
@@ -33,7 +33,8 @@ async def core_serial_task():
         latest_gcs_state = GCSState()
         latest_gse_data = surtr_pb2.SurtrMessage()
         while True:
-            if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data, pkt_applier):
+            print("Running")
+            if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data, latest_gcs_state, pkt_applier):
                 if tm_queue.full():
                     _ = tm_queue.get_nowait()
             await tm_queue.put(latest_tel_data)

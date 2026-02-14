@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 def cmd_controller(command_transport: CommandTransport) -> None:
     try:
-        payload = cmd_queue.g.get()
+        payload = cmd_queue.get()
         if payload != None:
             res = command_transport.write(payload)
             if not isinstance(res, int):

@@ -20,12 +20,12 @@ class UsbFrameDecoder:
 
     def _find_sync_bytes(self) -> bool:
         try:
-            b0 = self._read_exact(self.ser, 1)
+            b0 = self._read_exact(1)
             if not b0:
                 return False
             while True:
                 if b0[0] == SYNC0:
-                    b1 = self._read_exact(self.ser, 1)
+                    b1 = self._read_exact(1)
                     if not b1:
                         return False
                     if b1[0] == SYNC1:
@@ -34,7 +34,7 @@ class UsbFrameDecoder:
                 elif b0[0] == SURTR_SYNC_BYTE:
                     return True
                 else:
-                    b0 = self._read_exact(self.ser, 1)
+                    b0 = self._read_exact(1)
                     if not b0:
                         return False
         except Exception as e:
@@ -56,14 +56,14 @@ class UsbFrameDecoder:
 
     def read_board_usb_frame(self):
         try:
-            if not self._find_sync_bytes(self.ser):
+            if not self._find_sync_bytes():
                 return None
         
-            usb_pkt_timestamp = self._read_exact(self.ser, 8)
+            usb_pkt_timestamp = self._read_exact(8)
             if not usb_pkt_timestamp:
                 return None
             
-            header = self._read_exact(self.ser, 2)
+            header = self._read_exact(2)
             if not header:
                 return None
 
@@ -71,7 +71,7 @@ class UsbFrameDecoder:
             if not (1 <= pkt_len <= 8):
                 return None
             
-            usb_pkt_payload = self._read_exact(self.ser, pkt_len)
+            usb_pkt_payload = self._read_exact(pkt_len)
             if not usb_pkt_payload:
                 return None
         
@@ -83,18 +83,18 @@ class UsbFrameDecoder:
         
     def read_gse_usb_frame(self) -> bytes:
         try:
-            if not self._find_sync_bytes(self.ser):
+            if not self._find_sync_bytes():
                 return None
            
-            pkt_len = self._read_exact(self.ser, 1)
+            pkt_len = self._read_exact(1)[0]
             if not (1 <= pkt_len <= 8):
                 return None
             
-            usb_pkt_payload = self._read_exact(self.ser, pkt_len)
+            usb_pkt_payload = self._read_exact(pkt_len)
             if not usb_pkt_payload:
                 return None
 
-            crc_bytes = self._read_exact(self.ser, 4)
+            crc_bytes = self._read_exact(4)
             checksum_result = self._checksum(usb_pkt_payload, crc_bytes)
             if checksum_result != True:
                 return None
