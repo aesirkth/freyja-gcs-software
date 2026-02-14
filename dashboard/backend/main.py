@@ -2,6 +2,7 @@ import traceback
 from fastapi import FastAPI, WebSocket
 from pathlib import Path
 import asyncio
+import subprocess
 # from api.v1.api_v1 import api_router
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -12,10 +13,13 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
+    await asyncio.sleep(3) 
     try:
-        print("Hello!")
+        subprocess.run(["xdotool", "key", "F5"], env={"DISPLAY": ":0"})
         await core_serial_task()
+        print("Kiosk refresh signal sent!")
     except Exception as e:
+        print(f"Failed to refresh kiosk: {e}")
         traceback.print_exc()
         raise e
 
