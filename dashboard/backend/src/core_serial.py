@@ -22,15 +22,6 @@ logger = logging.getLogger(__name__)
 
 async def core_serial_task(manager: ConnectionManager):
     print("Running core serial task!")
-    while True:
-        await manager.broadcast("data_from_sensor")
-        try:
-            latest_cmd = cmd_queue.get_nowait()
-            print(f"Latest command: {latest_cmd}")
-        except asyncio.QueueEmpty:
-            pass
-        await asyncio.sleep(0.1)
-    """
     ports = list_ports.comports()
     for port in ports:
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
@@ -59,13 +50,13 @@ async def core_serial_task(manager: ConnectionManager):
                     _ = gse_queue.get_nowait()
             await gse_queue.put(latest_gse_data)
             # save_to_disk()
-
+            
             cmd_controller(cmd_transporter)
 
+            await manager.broadcast("data_from_sensor")
             await asyncio.sleep(0)
     except Exception as e:
         logger.error(f"Error while running core serial task. {e}")
     finally:
         board_ser_port.close()
         gse_ser_port.close()
-    """

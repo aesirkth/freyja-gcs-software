@@ -1,11 +1,8 @@
 import logging
-from config.decoder_config import SYNC0, SYNC1, SURTR_SYNC_BYTE, SURTR_CRC_POLY, SURTR_CRC_SEED
-from models.proto import surtr_pb2
+from config.decoder_config import SURTR_SYNC_BYTE, SURTR_CRC_POLY, SURTR_CRC_SEED
 import zlib
 
 logger = logging.getLogger(__name__)
-
-MAGIC = bytes([SYNC0, SYNC1])
 
 class CommandTransport:
     def __init__(self, serial_port):
