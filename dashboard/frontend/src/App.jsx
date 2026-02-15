@@ -5,15 +5,29 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
   const [socketData, setSocketData] = useState("None")
+  const [serPortButtons, setSerPortButtons] = useState([])
   const socketRef = useRef(null);
 
   useEffect(() => {
     socketRef.current = new WebSocket("ws://localhost:8000/ws");
 
     socketRef.current.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setSocketData(data["data"]);
-      console.log(data);
+      try {
+        const data = JSON.parse(event.data);
+        
+        if (data.ports) {
+          setSerPortButtons(data.ports);
+          console.log("Ports received:", data.ports);
+        }
+        
+        if (data.data) {
+          setSocketData(data.data);
+        }
+
+        console.log("Full data object:", data);
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
     };
 
     socketRef.current.onopen = () => {
@@ -30,7 +44,7 @@ function App() {
   
   const handleOtherClick = () => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      socketRef.current.send(`Count: ${count}`);
+      socketRef.current.send(1);
     } else {
       console.error("WebSocket is not open.");
     }
@@ -38,23 +52,33 @@ function App() {
 
   return (
     <>
-      <section className="window">
-        <div>
-          <a href="https://react.dev" target="_blank">
+    <section className="parent-container">
+        <div className="logo-container">
+          <a href="" target="_blank">
             <img src={aesirLogo} className="logo aesir" alt="AESIR logo" />
           </a>
+          <p>GCS MJOLLNIR</p>
         </div>
-        <h1>Mjöllnir GCS</h1>
         <div className="card">
           <button onClick={() => {
             setCount((prevCount) => prevCount + 1);
             handleOtherClick(); 
           }}>
-            count is {count}
+            {count}
           </button>
           <p>
             Edit <code>src/App.jsx</code> and save to test HMR
           </p>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            {serPortButtons.map((port, index) => (
+              <button 
+                key={index} 
+                onClick={() => console.log(`Connecting to ${port}...`)}
+              >
+                {port}
+              </button>
+            ))}
+          </div>
           <p>
             Incoming data is {socketData}
           </p>
@@ -62,7 +86,7 @@ function App() {
         <p className="read-the-docs">
           Click on the Vite and React logos to learn more
         </p>
-      </section>
+    </section>
     </>
   )
 }

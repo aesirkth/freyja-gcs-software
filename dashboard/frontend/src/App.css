@@ -1,26 +1,54 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  
+}
+
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
-.window {
-  background-color: black;
-  width: 100%;
+body {
+  margin: 0;
+  padding: 0;
+  border-style: solid;
+  border-color: white;
+  border-width: 3px;
+}
+
+.parent-container {
+  height: 100dvh;
+  width: 100vw;
+  background-color: hsl(234, 45%, 12%);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  margin-left: 16px;
+  margin-right: 24px;
+  height: min-content;
+  justify-content: space-between;
+}
+
+.logo-container p {
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  align-self: center;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 40px;
+  width: auto;
   will-change: filter;
   transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  align-self: center;
 }
 
 @keyframes logo-spin {
