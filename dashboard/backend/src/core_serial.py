@@ -5,6 +5,7 @@ from src.controller.test_cmd_controller import cmd_controller
 from src.controller.board_decode_controller import decode_board_usb_frame
 from src.controller.gse_decode_controller import decode_gse_usb_frame
 from src.core.usb_frame_decoder import UsbFrameDecoder
+from config.decoder_config import SURTR_BAUDRATE
 from src.core.pkt_applier import PacketApplier
 from src.state.tm_bus import tm_queue
 from src.state.gse_bus import gse_queue
@@ -24,7 +25,7 @@ async def core_serial_task():
     for port in ports:
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
     board_ser_port = serial.Serial("/dev/cu.usbmodem101", baudrate=9600, timeout=1)
-    gse_ser_port = serial.Serial("/dev/cu.usbmodem103", baudrate=9600, timeout=1)
+    gse_ser_port = serial.Serial("/dev/cu.usbmodem103", baudrate=SURTR_BAUDRATE, timeout=1)
     try:
         cmd_transporter = CommandTransport(gse_ser_port)
         usb_board_frame_decoder = UsbFrameDecoder(board_ser_port)
