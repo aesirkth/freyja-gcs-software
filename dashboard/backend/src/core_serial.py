@@ -25,14 +25,13 @@ async def core_serial_task(manager: ConnectionManager):
     print("Running core serial task!")
     ports = list_ports.comports()
     available_ports = []
-    selected_ports = {
-        "board": None,
-        "gse": None
-    }
+    selected_ports = {"board": None, "gse": None}
 
     for port in ports:
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
         available_ports.append(port.device)
+    
+    manager.broadcast()
 
     while selected_ports["board"] == None or selected_ports["gse"] == None:
         if port_list:

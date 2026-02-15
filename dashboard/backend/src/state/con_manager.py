@@ -16,10 +16,6 @@ class ConnectionManager:
     async def broadcast(self, message: str):
         for connection in self.active_connections[:]:
             try:
-                if message:
-                    payload = {
-                        "data": message,
-                    }
-                await connection.send_text(json.dumps(payload))
+                await connection.send_text(json.dumps(message))
             except Exception:
                 self.disconnect(connection)
