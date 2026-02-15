@@ -23,7 +23,9 @@ class CommandRegistry:
             logger.error(f"Error while augmenting dommand instance. {e}")
             return None
         
-    def _apply_0x01(self, cmd_instance: surtr_pb2.SurtrMessage): cmd_instance.thrust = 1
+    def _apply_0x01(self, cmd_instance: surtr_pb2.SurtrMessage):
+        cmd_instance.step_ctrl.id = 1
+        cmd_instance.step_ctrl.motorDelta = -100
 
     def list_available_commands(self):
         return {k: v.__name__ for k, v in self._registry.items()}

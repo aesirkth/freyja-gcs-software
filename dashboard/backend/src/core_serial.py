@@ -5,6 +5,7 @@ from src.controller.test_cmd_controller import cmd_controller
 from src.controller.board_decode_controller import decode_board_usb_frame
 from src.controller.gse_decode_controller import decode_gse_usb_frame
 from src.core.usb_frame_decoder import UsbFrameDecoder
+from src.state.con_manager import ConnectionManager
 from config.decoder_config import SURTR_BAUDRATE
 from src.core.pkt_applier import PacketApplier
 from src.state.cmd_queue import cmd_queue
@@ -13,8 +14,8 @@ from src.state.gse_bus import gse_queue
 from src.state.system_state import gcs_state_history
 from src.db.disk_saving import save_to_disk
 from models.gcs_state import GCSState
+from src.state.ports import port_list
 from serial.tools import list_ports
-from src.state.con_manager import ConnectionManager
 import logging, asyncio
 import serial
 
@@ -23,10 +24,30 @@ logger = logging.getLogger(__name__)
 async def core_serial_task(manager: ConnectionManager):
     print("Running core serial task!")
     ports = list_ports.comports()
+    available_ports = []
+    selected_ports = {
+        "board": None,
+        "gse": None
+    }
+
     for port in ports:
         print(f"Device: {port.device}, Name: {port.name}, Description: {port.description}")
-    board_ser_port = serial.Serial("/dev/cu.usbmodem101", baudrate=9600, timeout=1)
-    gse_ser_port = serial.Serial("/dev/cu.usbmodem103", baudrate=SURTR_BAUDRATE, timeout=1)
+        available_ports.append(port.device)
+
+    while selected_ports["board"] == None or selected_ports["gse"] == None:
+        if port_list:
+            for port in port_list:
+                if port["type"] == "board":
+                    selected_ports["board"] = port["value"]
+                else: 
+                    selected_ports["gse"] = port["value"]
+        await asyncio.sleep(0)
+                   
+    temp1 = "/dev/cu.usbmodem101"
+    temp2 = "/dev/cu.usbserial-A505MMT7"
+    board_ser_port = serial.Serial(selected_ports["board"], baudrate=9600, timeout=1)
+    gse_ser_port = serial.Serial(selected_ports["gse"], baudrate=SURTR_BAUDRATE, timeout=1)
+
     try:
         cmd_transporter = CommandTransport(gse_ser_port)
         usb_board_frame_decoder = UsbFrameDecoder(board_ser_port)
@@ -38,12 +59,14 @@ async def core_serial_task(manager: ConnectionManager):
         latest_gse_data = surtr_pb2.SurtrMessage()
         while True:
             print("Running")
+            """
             if decode_board_usb_frame(usb_board_frame_decoder, latest_tel_data, latest_gcs_state, pkt_applier):
                 if tm_queue.full():
                     _ = tm_queue.get_nowait()
             await tm_queue.put(latest_tel_data)
             await gcs_state_history.put(latest_gcs_state)
             save_to_disk(latest_tel_data)
+            """
 
             if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data):
                 if gse_queue.full():
@@ -51,12 +74,12 @@ async def core_serial_task(manager: ConnectionManager):
             await gse_queue.put(latest_gse_data)
             # save_to_disk()
             
-            cmd_controller(cmd_transporter)
+            # cmd_controller(cmd_transporter)
 
             await manager.broadcast("data_from_sensor")
             await asyncio.sleep(0)
     except Exception as e:
         logger.error(f"Error while running core serial task. {e}")
     finally:
-        board_ser_port.close()
+        # board_ser_port.close()
         gse_ser_port.close()

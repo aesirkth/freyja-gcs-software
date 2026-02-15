@@ -83,12 +83,15 @@ class UsbFrameDecoder:
         
     def read_gse_usb_frame(self) -> bytes:
         try:
+            print("Decoding 1")
             if not self._find_sync_bytes():
                 return None
            
+            print("Decoding 2")
             pkt_len = self._read_exact(1)[0]
             if not (1 <= pkt_len <= 8):
                 return None
+            print(f"pkt_len: {pkt_len}")
             
             usb_pkt_payload = self._read_exact(pkt_len)
             if not usb_pkt_payload:
