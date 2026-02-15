@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import aesirLogo from './assets/ÆSIR.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [socketData, setSocketData] = useState("None")
   const socketRef = useRef(null);
 
   useEffect(() => {
@@ -12,6 +12,7 @@ function App() {
 
     socketRef.current.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      setSocketData(data["data"]);
       console.log(data);
     };
 
@@ -53,6 +54,9 @@ function App() {
           </button>
           <p>
             Edit <code>src/App.jsx</code> and save to test HMR
+          </p>
+          <p>
+            Incoming data is {socketData}
           </p>
         </div>
         <p className="read-the-docs">
