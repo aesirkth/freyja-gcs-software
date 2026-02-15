@@ -1,4 +1,5 @@
 import traceback
+import json
 from fastapi import FastAPI, WebSocket
 from src.state.cmd_queue import cmd_queue
 from pathlib import Path
@@ -35,7 +36,10 @@ async def websocket_endpoint(websocket: WebSocket):
         print(f"Received data: {data}")
         if data:
             await cmd_queue.put(data)
-        await websocket.send_text(f"Message text was: {data}")
+        payload = {
+            "data": data,
+        }
+        await websocket.send_text(json.dumps(payload))
         await asyncio.sleep(0.1)
 
 FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
