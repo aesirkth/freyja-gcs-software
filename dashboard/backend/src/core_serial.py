@@ -7,19 +7,29 @@ from src.controller.gse_decode_controller import decode_gse_usb_frame
 from src.core.usb_frame_decoder import UsbFrameDecoder
 from config.decoder_config import SURTR_BAUDRATE
 from src.core.pkt_applier import PacketApplier
+from src.state.cmd_queue import cmd_queue
 from src.state.tm_bus import tm_queue
 from src.state.gse_bus import gse_queue
 from src.state.system_state import gcs_state_history
 from src.db.disk_saving import save_to_disk
 from models.gcs_state import GCSState
 from serial.tools import list_ports
+from src.state.con_manager import ConnectionManager
 import logging, asyncio
 import serial
 
 logger = logging.getLogger(__name__)
 
-async def core_serial_task():
+async def core_serial_task(manager: ConnectionManager):
     print("Running core serial task!")
+    while True:
+        await manager.broadcast("data_from_sensor")
+        try:
+            latest_cmd = cmd_queue.get_nowait()
+            print(f"Latest command: {latest_cmd}")
+        except asyncio.QueueEmpty:
+            pass
+        await asyncio.sleep(0.1)
     """
     ports = list_ports.comports()
     for port in ports:
