@@ -8,7 +8,7 @@ class CommandTransport:
     def __init__(self, serial_port):
         self._serial = serial_port
     
-    def crc16(poly, seed, buf):
+    def crc16(self, poly, seed, buf):
         crc = seed
         for byte in buf:
             crc ^= (byte << 8)

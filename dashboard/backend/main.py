@@ -33,9 +33,9 @@ async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     while True:
         data = await websocket.receive_text()
-        print(f"Received data: {data}")
-        if data:
-            await cmd_queue.put(data)
+        # print(f"Received data: {data}")
+        
+        await cmd_queue.put(data)
         payload = {
             "data": data,
         }

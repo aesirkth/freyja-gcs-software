@@ -58,7 +58,7 @@ class UsbFrameDecoder:
         try:
             if not self._find_sync_bytes():
                 return None
-        
+
             usb_pkt_timestamp = self._read_exact(8)
             if not usb_pkt_timestamp:
                 return None
