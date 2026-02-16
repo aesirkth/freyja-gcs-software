@@ -3,9 +3,10 @@ import aesirLogo from './assets/ÆSIR.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [socketData, setSocketData] = useState("None")
-  const [serPortButtons, setSerPortButtons] = useState([])
+  const [count, setCount] = useState(0);
+  const [socketData, setSocketData] = useState("None");
+  const [serPortButtons, setSerPortButtons] = useState([]);
+  const actItems = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12"];
   const socketRef = useRef(null);
 
   useEffect(() => {
@@ -59,33 +60,31 @@ function App() {
           </a>
           <p>GCS MJOLLNIR</p>
         </div>
-        <div className="card">
-          <button onClick={() => {
-            setCount((prevCount) => prevCount + 1);
-            handleOtherClick(); 
-          }}>
-            {count}
-          </button>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test HMR
-          </p>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            {serPortButtons.map((port, index) => (
-              <button 
-                key={index} 
-                onClick={() => console.log(`Connecting to ${port}...`)}
-              >
-                {port}
-              </button>
-            ))}
+        <div className="main-screen">
+          <div className="procedure-list">
+
           </div>
-          <p>
-            Incoming data is {socketData}
-          </p>
+          <div className="command-list">
+            <div className="command">
+              <h3>
+                ACTUATION CONTROLS
+              </h3>
+              <div className="control-wrapper">
+                {actItems.map((item, index) => (
+                  <button key={index}>
+                    AC{item}
+                  </button>
+                ))}
+              </div>
+              <h3>
+                STEPPER CONTROLS
+              </h3>
+            </div>
+          </div>
         </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
+        <footer className="control-footer">
+
+        </footer>
     </section>
     </>
   )
