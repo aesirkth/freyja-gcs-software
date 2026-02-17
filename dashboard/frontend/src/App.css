@@ -33,14 +33,14 @@ body {
 }
 
 .logo-container p {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 600;
   color: white;
   align-self: center;
 }
 
 .logo {
-  height: 40px;
+  height: 36px;
   width: auto;
   will-change: filter;
   transition: filter 300ms;
@@ -55,31 +55,97 @@ body {
   align-items: stretch;
 }
 
-.procedure-list {
+.table-tab {
   width: 100%;
-  height: 600px;
+  height: 620px;
   border-style: solid;
   border-color: hsl(225, 16%, 70%);
   border-width: 1.25px;
   border-top: 12px solid hsl(225, 16%, 70%);
   background-color: hsl(225, 60%, 18%);
+  display: flex;
+}
+
+.table-1,
+.table-2 {
+  display: grid;
+  width: 50%;
+  height: min-content;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.table-1 {
+  border-right: 1.25px solid hsl(225, 16%, 70%)
+}
+
+.table-1 div,
+.table-2 div {
+  display: flex;
+  height: 42px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-1 div {
+  padding-right: 24px;
+  padding-left: 16px;
+}
+
+.table-2 div {
+  padding-left: 24px;
+  padding-right: 16px;
+}
+
+.table-1 div:nth-child(2n),
+.table-2 div:nth-child(2n) {
+  background-color: hsl(225, 60%, 21%);
+}
+
+.table-1 p {
+  font-size: 16px;
+  margin: 0 !important;
+  margin-block-end: 0;
+  margin-block-start: 0;
+}
+
+.data-title {
+  color: hsl(205, 100%, 65%);
+  font-weight: 700;
+}
+
+.data-value {
+  color: white;
+  font-weight: 500;
+}
+
+.procedure-list {
+  width: 80%;
+  height: 620px;
+  border-style: solid;
+  padding-inline: 16px;
+  border-color: hsl(225, 16%, 70%);
+  border-width: 1.25px;
+  border-top: 12px solid hsl(225, 16%, 70%);
+  background-color: hsl(225, 60%, 18%);
+}
+
+.procedure-list h3,
+.command-list h3 {
+  color: white;
+  font-weight: 600;
+  text-align: start;
+  color: white;
 }
 
 .command-list {
   width: 100%;
-  height: 600px;
+  height: 620px;
   border-style: solid;
   border-color: hsl(225, 16%, 70%);
   border-width: 1.25px;
   border-top: 12px solid hsl(225, 16%, 70%);
   background-color: hsl(225, 60%, 18%);
-  padding: 16px;
-}
-
-.command-list h3 {
-  font-weight: 600;
-  text-align: start;
-  color: white;
+  padding-inline: 16px;
 }
 
 .control-wrapper {
@@ -96,7 +162,7 @@ body {
   box-sizing: border-box;
   border-radius: 2px;
   width: 100%;
-  height: 64px;
+  height: 56px;
   background-color: hsl(205, 50%, 40%);
   color: hsl(215, 70%, 88%);
   font-size: 16px;
@@ -125,7 +191,7 @@ body {
 .control-footer {
   width: 100%;
   margin-top: 32px;
-  height: 160px;
+  height: 150px;
   background-color: hsl(225, 12%, 40%);
 }
 
@@ -142,12 +208,4 @@ body {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

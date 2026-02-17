@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, React } from 'react'
 import aesirLogo from './assets/ÆSIR.svg'
 import './App.css'
 
@@ -61,8 +61,31 @@ function App() {
           <p>GCS MJOLLNIR</p>
         </div>
         <div className="main-screen">
+          <div className="table-tab">
+            <table className="table-1">
+              {actItems.map((item, index) => (
+                <div key={index}>
+                  <p className="data-title">AC</p>
+                  <p className="data-value">{item}</p>
+                </div>
+              ))}
+            </table>
+            <table className="table-2">
+              {actItems.map((item, index) => (
+                <div key={index}>
+                  <p className="data-title">AC</p>
+                  <p className="data-value">{item}</p>
+                </div>
+              ))}
+            </table>
+          </div>
           <div className="procedure-list">
-
+            <h3>
+              TEST PROCEDURE
+            </h3>
+            <table>       
+                
+            </table>
           </div>
           <div className="command-list">
             <div className="command">
