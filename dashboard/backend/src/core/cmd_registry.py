@@ -23,9 +23,9 @@ class CommandRegistry:
             logger.error(f"Error while augmenting command instance. {e}")
             return None
 
-    def _apply_0x01(self, cmd_instance: surtr_pb2.SurtrMessage):
-        cmd_instance.sw_ctrl.id = 1
-        cmd_instance.sw_ctrl.state = 0
+    def _apply_0x01(self, ac_id: str, value: int, cmd_instance: surtr_pb2.SurtrMessage):
+        cmd_instance.sw_ctrl.id = ac_id
+        cmd_instance.sw_ctrl.state = value
 
     def list_available_commands(self):
         return {k: v.__name__ for k, v in self._registry.items()}
