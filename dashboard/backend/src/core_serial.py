@@ -86,9 +86,8 @@ async def core_serial_task(socket_manager: ConnectionManager):
             # save_to_disk()
 
             await cmd_controller(cmd_transporter, cmd_registry)
-
-            payload = format_message(latest_gse_data)
-            await socket_manager.broadcast(payload)
+            gui_payload = format_message(latest_gse_data)
+            await socket_manager.broadcast(gui_payload)
             await socket_manager.broadcast("data_from_sensor")
             await asyncio.sleep(0)
     except Exception as e:
