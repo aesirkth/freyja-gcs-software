@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, act } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import aesirLogo from './assets/ÆSIR.svg'
 import './App.css'
 
@@ -6,7 +6,7 @@ function App() {
   const [count, setCount] = useState(0);
   const [socketData, setSocketData] = useState("None");
   const [serPortButtons, setSerPortButtons] = useState([]);
-  const act_list = [
+  const adc_list = [
     { "id": 0, "value": 0.0 },
     { "id": 1, "value": 0.0 },
     { "id": 2, "value": 0.0 },
@@ -52,8 +52,14 @@ function App() {
         }
 
         if (data.adc) {
-          Object.keys(data.adc).map(function(k) {
-            act_dict[k] = data.adc[k];
+          Object.keys(data.adc).map(function(key) {
+            adc_list[key] = data.adc[key];
+          });
+        }
+
+        if (data.switch) {
+          Object.keys(data.switch).map(function(key) {
+            switch_list[key] = data.switch[key];
           });
         }
         
@@ -78,15 +84,16 @@ function App() {
       }
     };
   }, []);
-   const handleOtherClick = (item) => {
+
+  const handleOtherClick = (item) => {
     const buffer = { ...item };
     buffer["status"] = !buffer["status"];
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      const message = JSON.stringify(buffer); 
-      socketRef.current.send(message);
+        const message = JSON.stringify(buffer); 
+        socketRef.current.send(message);
     } else {
       console.error("WebSocket is not open.");
-  }
+    }
   }
 
   return (
@@ -101,17 +108,17 @@ function App() {
           <div className="main-screen">
             <div className="table-tab">
               <div className="table-1">
-                {act_list.map((item, index) => (
+                {adc_list.map((item, index) => (
                   <div key={index}>
-                    <p className="data-title">AC</p>
+                    <p className="data-title">ADC {item["id"]}</p>
                     <p className="data-value">{item["status"]}</p>
                   </div>
                 ))}
               </div>
               <div className="table-2">
-                {act_list.map((item, index) => (
+                {switch_list.map((item, index) => (
                   <div key={index}>
-                    <p className="data-title">AC</p>
+                    <p className="data-title">Switch {item["id"]}</p>
                     <p className="data-value">{item["status"]}</p>
                   </div>
                 ))}
