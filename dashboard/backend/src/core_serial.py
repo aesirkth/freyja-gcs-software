@@ -37,6 +37,7 @@ async def core_serial_task(manager: ConnectionManager):
     ports = {
         "ports": available_ports
     }
+    """
     while selected_ports["board"] == None or selected_ports["gse"] == None:
         while len(manager.active_connections) == 0:
             await asyncio.sleep(0)
@@ -50,7 +51,7 @@ async def core_serial_task(manager: ConnectionManager):
                 else: 
                     selected_ports["gse"] = port["value"]
         await asyncio.sleep(0)
-
+    """
     temp1 = "/dev/cu.usbmodem101"
     temp2 = "/dev/cu.usbserial-A505MMT7"
     # board_ser_port = serial.Serial("/dev/cu.usbmodem101", baudrate=9600, timeout=1)
@@ -76,13 +77,13 @@ async def core_serial_task(manager: ConnectionManager):
             await gcs_state_history.put(latest_gcs_state)
             save_to_disk(latest_tel_data)
 
+            """
             if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data):
                 if gse_queue.full():
                     _ = gse_queue.get_nowait()
             await gse_queue.put(latest_gse_data)
-            """
             # save_to_disk()
-            
+          
             await cmd_controller(cmd_transporter, cmd_registry)
 
             await manager.broadcast("data_from_sensor")

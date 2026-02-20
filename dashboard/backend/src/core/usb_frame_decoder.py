@@ -22,26 +22,33 @@ class UsbFrameDecoder:
         try:
             b0 = self._read_exact(1)
             if not b0:
+                print("error1")
                 return False
             while True:
-                if b0[0] == SYNC0:
+                if b0[0] == SURTR_SYNC_BYTE:
+                    print("sync surtr")
+                    return True
+                elif b0[0] == SYNC0:
+                    print("sync 1")
                     b1 = self._read_exact(1)
                     if not b1:
                         return False
                     if b1[0] == SYNC1:
                         return True
                     b0 = b1
-                elif b0[0] == SURTR_SYNC_BYTE:
-                    return True
-                else:
+                elif b0[0] == SYNC1:
                     b0 = self._read_exact(1)
+                    print("sync 2")
                     if not b0:
                         return False
+                else:
+                    print("error2")
+                    return False
         except Exception as e:
             logger.error(f"Error while looking for sync bytes. {e}")
             return None
-        
-    def _checksum(payload: bytes, crc_bytes: bytes) -> bool:
+
+    def _checksum(self, payload: bytes, crc_bytes: bytes) -> bool:
         try:
             recv_crc = int.from_bytes(crc_bytes, "little")
             calc_crc = zlib.crc32(payload) & 0xFFFFFFFF
@@ -86,20 +93,22 @@ class UsbFrameDecoder:
             print("Decoding 1")
             if not self._find_sync_bytes():
                 return None
-           
+            
             print("Decoding 2")
             pkt_len = self._read_exact(1)[0]
-            if not (1 <= pkt_len <= 8):
+            if not (1 <= pkt_len <= 16):
+                print("pkt len error")
                 return None
             print(f"pkt_len: {pkt_len}")
-            
+           
             usb_pkt_payload = self._read_exact(pkt_len)
             if not usb_pkt_payload:
                 return None
-
+            print(f"pkt payload: {usb_pkt_payload}")
             crc_bytes = self._read_exact(4)
             checksum_result = self._checksum(usb_pkt_payload, crc_bytes)
             if checksum_result != True:
+                print("checksum failed")
                 return None
             
             return usb_pkt_payload
