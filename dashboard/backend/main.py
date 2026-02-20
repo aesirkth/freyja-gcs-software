@@ -14,13 +14,13 @@ from src.core_serial import core_serial_task
 app = FastAPI()
 # app.include_router(api_router)
 
-manager = ConnectionManager()
+socket_manager = ConnectionManager()
 
 @app.on_event("startup")
 async def startup_event():
     await asyncio.sleep(3) 
     try:
-        asyncio.create_task(core_serial_task(manager))
+        asyncio.create_task(core_serial_task(socket_manager))
         # subprocess.run(["xdotool", "key", "F5"], env={"DISPLAY": ":0"})
         print("Kiosk refresh signal sent!")
     except Exception as e:
@@ -30,7 +30,7 @@ async def startup_event():
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
+    await socket_manager.connect(websocket)
     while True:
         data = await websocket.receive_text()
         # print(f"Received data: {data}")

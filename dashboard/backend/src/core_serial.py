@@ -14,6 +14,7 @@ from src.state.tm_bus import tm_queue
 from src.state.gse_bus import gse_queue
 from src.state.system_state import gcs_state_history
 from src.db.disk_saving import save_to_disk
+from src.utils.format_msg import format_message
 from models.gcs_state import GCSState
 from src.state.ports import port_list
 from serial.tools import list_ports
@@ -23,7 +24,7 @@ import json
 
 logger = logging.getLogger(__name__)
 
-async def core_serial_task(manager: ConnectionManager):
+async def core_serial_task(socket_manager: ConnectionManager):
     print("Running core serial task!")
     broadcasted = None
     ports = list_ports.comports()
@@ -39,10 +40,10 @@ async def core_serial_task(manager: ConnectionManager):
     }
     """
     while selected_ports["board"] == None or selected_ports["gse"] == None:
-        while len(manager.active_connections) == 0:
+        while len(socket_manager.active_connections) == 0:
             await asyncio.sleep(0)
         if broadcasted == None:
-            await manager.broadcast(json.dumps(ports))
+            await socket_manager.broadcast(json.dumps(ports))
             broadcasted = True
         if port_list:
             for port in port_list:
@@ -83,10 +84,12 @@ async def core_serial_task(manager: ConnectionManager):
                     _ = gse_queue.get_nowait()
             await gse_queue.put(latest_gse_data)
             # save_to_disk()
-          
+
             await cmd_controller(cmd_transporter, cmd_registry)
 
-            await manager.broadcast("data_from_sensor")
+            payload = format_message(latest_gse_data)
+            await socket_manager.broadcast(payload)
+            await socket_manager.broadcast("data_from_sensor")
             await asyncio.sleep(0)
     except Exception as e:
         logger.error(f"Error while running core serial task. {e}")
