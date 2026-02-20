@@ -11,7 +11,7 @@ def decode_gse_usb_frame(decoder_service: UsbFrameDecoder, empty_gse_object: sur
             print("decoding error")
             return False
         empty_gse_object.ParseFromString(usb_pkt_payload)
-        print(f"Payload: {empty_gse_object}")
+        print(f"Payload: {empty_gse_object.switch_states.sw1}")
         return True
     except Exception as e:
         logger.error(f"Error while reading and applying bytes to target object. {e}")

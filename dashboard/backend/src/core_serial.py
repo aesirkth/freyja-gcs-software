@@ -15,6 +15,7 @@ from src.state.gse_bus import gse_queue
 from src.state.system_state import gcs_state_history
 from src.db.disk_saving import save_to_disk
 from src.utils.format_msg import format_message
+from google.protobuf import json_format
 from models.gcs_state import GCSState
 from src.state.ports import port_list
 from serial.tools import list_ports
@@ -86,7 +87,11 @@ async def core_serial_task(socket_manager: ConnectionManager):
             # save_to_disk()
 
             await cmd_controller(cmd_transporter, cmd_registry)
-            gui_payload = format_message(latest_gse_data)
+            json_gse_data = json_format.MessageToJson(latest_gse_data)
+            # gui_payload = format_message(key="adc" , value=json_gse_data)
+            gui_payload = {
+                "adc": json_gse_data
+            }
             await socket_manager.broadcast(gui_payload)
             await socket_manager.broadcast("data_from_sensor")
             await asyncio.sleep(0)

@@ -90,26 +90,26 @@ class UsbFrameDecoder:
         
     def read_gse_usb_frame(self) -> bytes:
         try:
-            print("Decoding 1")
             if not self._find_sync_bytes():
                 return None
             
-            print("Decoding 2")
             pkt_len = self._read_exact(1)[0]
-            if not (1 <= pkt_len <= 16):
+            if not (1 <= pkt_len):
                 print("pkt len error")
                 return None
             print(f"pkt_len: {pkt_len}")
-           
+            
             usb_pkt_payload = self._read_exact(pkt_len)
             if not usb_pkt_payload:
                 return None
             print(f"pkt payload: {usb_pkt_payload}")
+            """
             crc_bytes = self._read_exact(4)
             checksum_result = self._checksum(usb_pkt_payload, crc_bytes)
             if checksum_result != True:
                 print("checksum failed")
                 return None
+            """
             
             return usb_pkt_payload
         except Exception as e:
