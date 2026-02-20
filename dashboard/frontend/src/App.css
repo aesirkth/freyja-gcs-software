@@ -176,9 +176,14 @@ body {
   outline: none;
 }
 
+.control-wrapper button:active {
+  background-color: hsl(205, 100%, 52%);
+  border: 1.5px solid transparent;
+  outline: none;
+}
+
 .control-wrapper button:focus {
-  background-color: hsl(205, 50%, 60%);
-  border: 1.5px solid white;
+  border: 1.5px solid transparent;
   outline: none;
 }
 

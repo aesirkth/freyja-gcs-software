@@ -118,7 +118,7 @@ function App() {
               <div className="table-2">
                 {switch_list.map((item, index) => (
                   <div key={index}>
-                    <p className="data-title">Switch {item["id"]}</p>
+                    <p className="data-title">SWITCH {item["id"]}</p>
                     <p className="data-value">{item["status"]}</p>
                   </div>
                 ))}
@@ -145,7 +145,7 @@ function App() {
                   ))}
                 </div>
                 <h3>
-                  STEPPER CONTROLS
+                  
                 </h3>
               </div>
             </div>
