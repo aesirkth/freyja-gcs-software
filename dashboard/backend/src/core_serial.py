@@ -88,10 +88,15 @@ async def core_serial_task(socket_manager: ConnectionManager):
 
             await cmd_controller(cmd_transporter, cmd_registry)
             json_gse_data = json_format.MessageToJson(latest_gse_data)
-            # gui_payload = format_message(key="adc" , value=json_gse_data)
-            gui_payload = {
-                "adc": json_gse_data
-            }
+            if latest_gse_data.adc_measurements:
+                gui_payload = {
+                    "adc": json_gse_data
+                }
+            elif latest_gse_data.sw_ctrl:
+                gui_payload = {
+                    "sw_ctrl": json_gse_data
+                }
+
             await socket_manager.broadcast(gui_payload)
             await socket_manager.broadcast("data_from_sensor")
             await asyncio.sleep(0)
