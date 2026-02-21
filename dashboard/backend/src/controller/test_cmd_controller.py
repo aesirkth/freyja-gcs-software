@@ -4,25 +4,28 @@ from src.core.cmd_transport import CommandTransport
 from src.core.cmd_registry import CommandRegistry
 from models.proto import surtr_pb2
 import asyncio
+import json
 
 logger = logging.getLogger(__name__)
 
 async def cmd_controller(command_transport: CommandTransport, command_registry: CommandRegistry) -> None:
     try:
         try:
-            cmd = cmd_queue.get_nowait()
-            print(f"Latest command: {cmd_id}")
+            cmd = await cmd_queue.get()
+            cmd_dict = json.loads(cmd)
+            empty_cmd_instance = surtr_pb2.SurtrMessage()
+            payload: surtr_pb2.SurtrMessage  = command_registry.augment_cmd_instance(cmd_dict["id"], cmd_dict["status"], empty_cmd_instance)
+            if isinstance(payload, surtr_pb2.SurtrMessage):
+                res = command_transport.write(payload)
+                if not isinstance(res, int):
+                    raise ValueError
+            else:
+                print("wrong type")
+
+            await asyncio.sleep(0)
         except asyncio.QueueEmpty:
-            await cmd_queue.put(1)
-            cmd_id = cmd_queue.get_nowait()
+            print("No command in queue")
             logger.debug("No registered commands in the command queue.")
 
-        print(cmd)
-        empty_cmd_instance = surtr_pb2.SurtrMessage()
-        payload: surtr_pb2.SurtrMessage  = command_registry.augment_cmd_instance(cmd["id"], cmd["value"], empty_cmd_instance, cmd_id)
-        if isinstance(payload, surtr_pb2.SurtrMessage):
-            res = command_transport.write(payload)
-            if not isinstance(res, int):
-                raise ValueError
     except Exception as e:
         logger.error(f"Error while calling command transport service: {e}")

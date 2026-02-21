@@ -78,8 +78,8 @@ async def core_serial_task(socket_manager: ConnectionManager):
             await tm_queue.put(latest_tel_data)
             await gcs_state_history.put(latest_gcs_state)
             save_to_disk(latest_tel_data)
-
             """
+
             if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data):
                 if gse_queue.full():
                     _ = gse_queue.get_nowait()

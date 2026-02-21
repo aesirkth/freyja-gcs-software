@@ -21,7 +21,7 @@ socket_manager = ConnectionManager()
 
 @app.on_event("startup")
 async def startup_event():
-    await asyncio.sleep(3) 
+    await asyncio.sleep(3)
     try:
         asyncio.create_task(core_serial_task(socket_manager))
         # subprocess.run(["xdotool", "key", "F5"], env={"DISPLAY": ":0"})
@@ -37,7 +37,6 @@ async def websocket_endpoint(websocket: WebSocket):
     while True:
         data = await websocket.receive_text()
         print(f"Received data: {data}")
-        
         await cmd_queue.put(data)
         payload = format_message(data)
         await websocket.send_text(json.dumps(payload))

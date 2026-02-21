@@ -12,18 +12,18 @@ class CommandRegistry:
             0x01: self._apply_0x01,
         }
 
-    def augment_cmd_instance(self, cmd_id: str, cmd_payload: dict, cmd_instance: surtr_pb2.SurtrMessage) -> surtr_pb2.SurtrMessage | None:
+    def augment_cmd_instance(self, cmd_id: str, cmd_value: bool, cmd_instance: surtr_pb2.SurtrMessage) -> surtr_pb2.SurtrMessage | None:
         try:
             fn = self._registry.get(cmd_id)
             if not fn:
                 return None
-            fn(cmd_payload["id"], cmd_payload["value"], cmd_instance)
+            fn(cmd_id, cmd_value, cmd_instance)
             return cmd_instance
         except Exception as e:
             logger.error(f"Error while augmenting command instance. {e}")
             return None
 
-    def _apply_0x01(self, ac_id: str, value: int, cmd_instance: surtr_pb2.SurtrMessage):
+    def _apply_0x01(self, ac_id: str, value: bool, cmd_instance: surtr_pb2.SurtrMessage):
         cmd_instance.sw_ctrl.id = ac_id
         cmd_instance.sw_ctrl.state = value
 
