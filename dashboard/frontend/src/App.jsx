@@ -3,11 +3,9 @@ import aesirLogo from './assets/ÆSIR.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0);
   const [socketData, setSocketData] = useState("None");
   const [serPortButtons, setSerPortButtons] = useState([]);
   const adc_list = [
-    { "id": 0, "value": 0.0 },
     { "id": 1, "value": 0.0 },
     { "id": 2, "value": 0.0 },
     { "id": 3, "value": 0.0 },
@@ -18,10 +16,10 @@ function App() {
     { "id": 8, "value": 0.0 },
     { "id": 9, "value": 0.0 },
     { "id": 10, "value": 0.0 },
-    { "id": 11, "value": 0.0 }
+    { "id": 11, "value": 0.0 },
+    { "id": 12, "value": 0.0 }
   ];
   const switch_list = [
-    { "id": 0, "status": false },
     { "id": 1, "status": false },
     { "id": 2, "status": false },
     { "id": 3, "status": false },
@@ -32,7 +30,8 @@ function App() {
     { "id": 8, "status": false },
     { "id": 9, "status": false },
     { "id": 10, "status": false },
-    { "id": 11, "status": false }
+    { "id": 11, "status": false },
+    { "id": 12, "status": false }
   ];
   const cmds = {
     
@@ -51,13 +50,13 @@ function App() {
           console.log("Ports received:", data.ports);
         }
 
-        if (data.adc) {
+        if (data.adc_measurements) {
           Object.keys(data.adc).map(function(key) {
             adc_list[key] = data.adc[key];
           });
         }
 
-        if (data.switch) {
+        if (data.sw_ctrl) {
           Object.keys(data.switch).map(function(key) {
             switch_list[key] = data.switch[key];
           });
