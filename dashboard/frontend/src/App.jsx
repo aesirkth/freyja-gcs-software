@@ -5,34 +5,35 @@ import './App.css'
 function App() {
   const [socketData, setSocketData] = useState("None");
   const [serPortButtons, setSerPortButtons] = useState([]);
-  const adc_list = [
-    { "id": 1, "value": 0.0 },
-    { "id": 2, "value": 0.0 },
-    { "id": 3, "value": 0.0 },
-    { "id": 4, "value": 0.0 },
-    { "id": 5, "value": 0.0 },
-    { "id": 6, "value": 0.0 },
-    { "id": 7, "value": 0.0 },
-    { "id": 8, "value": 0.0 },
-    { "id": 9, "value": 0.0 },
-    { "id": 10, "value": 0.0 },
-    { "id": 11, "value": 0.0 },
-    { "id": 12, "value": 0.0 }
-  ];
-  const switch_list = [
-    { "id": 1, "status": false },
-    { "id": 2, "status": false },
-    { "id": 3, "status": false },
-    { "id": 4, "status": false },
-    { "id": 5, "status": false },
-    { "id": 6, "status": false },
-    { "id": 7, "status": false },
-    { "id": 8, "status": false },
-    { "id": 9, "status": false },
-    { "id": 10, "status": false },
-    { "id": 11, "status": false },
-    { "id": 12, "status": false }
-  ];
+  const adc_dict = {
+    "1": { "tag": "ADC1", "value": 0.0 },
+    "2": { "tag": "ADC2", "value": 0.0 },
+    "3": { "tag": "ADC3", "value": 0.0 },
+    "4": { "tag": "ADC4", "value": 0.0 },
+    "5": { "tag": "ADC5", "value": 0.0 },
+    "6": { "tag": "ADC6", "value": 0.0 },
+    "7": { "tag": "ADC7", "value": 0.0 },
+    "8": { "tag": "ADC8", "value": 0.0 },
+    "9": { "tag": "ADC9", "value": 0.0 },
+    "10": { "tag": "ADC10", "value": 0.0 },
+    "11": { "tag": "ADC11", "value": 0.0 },
+    "12": { "tag": "ADC12", "value": 0.0 }
+  };
+
+  const switch_dict = {
+    "1": { "tag": "SW1", "status": false },
+    "2": { "tag": "SW2", "status": false },
+    "3": { "tag": "SW3", "status": false },
+    "4": { "tag": "SW4", "status": false },
+    "5": { "tag": "SW5", "status": false },
+    "6": { "tag": "SW6", "status": false },
+    "7": { "tag": "SW7", "status": false },
+    "8": { "tag": "SW8", "status": false },
+    "9": { "tag": "SW9", "status": false },
+    "10": { "tag": "SW10", "status": false },
+    "11": { "tag": "SW11", "status": false },
+    "12": { "tag": "SW12", "status": false }
+  };
   const cmds = {
     
   }
@@ -51,14 +52,22 @@ function App() {
         }
 
         if (data.adc_measurements) {
-          Object.keys(data.adc).map(function(key) {
-            adc_list[key] = data.adc[key];
+          Object.entries(adc_dict).forEach(([id, entry]) => {
+            const lookupKey = `value${id}`; 
+            
+            if (data.adc_measurements[lookupKey] !== undefined) {
+              entry.value = data.adc_measurements[lookupKey];
+            }
           });
         }
-
-        if (data.sw_ctrl) {
-          Object.keys(data.switch).map(function(key) {
-            switch_list[key] = data.switch[key];
+        
+        if (data.switch_states) {
+          Object.entries(switch_dict).forEach(([id, entry]) => {
+            const lookupKey = `sw${id}`; 
+            
+            if (data.switch_states[lookupKey] !== undefined) {
+              entry.status = data.adc_measurements[lookupKey];
+            }
           });
         }
         
@@ -107,18 +116,18 @@ function App() {
           <div className="main-screen">
             <div className="table-tab">
               <div className="table-1">
-                {adc_list.map((item, index) => (
+                {adc_dict.keys.map((id, index) => (
                   <div key={index}>
-                    <p className="data-title">ADC {item["id"]}</p>
-                    <p className="data-value">{item["status"]}</p>
+                    <p className="data-title">{adc_dict[id]["tag"]}</p>
+                    <p className="data-value">{adc_dict[id]["value"]}</p>
                   </div>
                 ))}
               </div>
               <div className="table-2">
-                {switch_list.map((item, index) => (
+                {switch_dict.keys.map((item, index) => (
                   <div key={index}>
-                    <p className="data-title">SW {item["id"]}</p>
-                    <p className="data-value">{item["status"]}</p>
+                    <p className="data-title">{item}</p>
+                    <p className="data-value">{switch_dict[item]}</p>
                   </div>
                 ))}
               </div>
@@ -137,9 +146,9 @@ function App() {
                   ACTUATION CONTROLS
                 </h3>
                 <div className="control-wrapper">
-                  {switch_list.map((item, index) => (
-                    <button onClick={() => handleOtherClick(item)} key={index}>
-                      AC {item["id"]}
+                  {switch_dict.keys.map((item, index) => (
+                    <button onClick={() => handleOtherClick(key)} key={index}>
+                      AC {switch_dict[item]}
                     </button>
                   ))}
                 </div>
