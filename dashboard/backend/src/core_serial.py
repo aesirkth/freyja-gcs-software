@@ -57,11 +57,11 @@ async def core_serial_task(socket_manager: ConnectionManager):
     temp1 = "/dev/cu.usbmodem101"
     temp2 = "/dev/cu.usbserial-A505MMT7"
     # board_ser_port = serial.Serial("/dev/cu.usbmodem101", baudrate=9600, timeout=1)
-    gse_ser_port = serial.Serial(temp2, baudrate=SURTR_BAUDRATE, timeout=1)
+    # gse_ser_port = serial.Serial(temp2, baudrate=SURTR_BAUDRATE, timeout=1)
 
     try:
-        cmd_transporter = CommandTransport(gse_ser_port)
-        usb_gse_frame_decoder = UsbFrameDecoder(gse_ser_port)
+        # cmd_transporter = CommandTransport(gse_ser_port)
+        # usb_gse_frame_decoder = UsbFrameDecoder(gse_ser_port)
         """
         usb_board_frame_decoder = UsbFrameDecoder(board_ser_port)
         pkt_applier = PacketApplier()
@@ -78,30 +78,25 @@ async def core_serial_task(socket_manager: ConnectionManager):
             await tm_queue.put(latest_tel_data)
             await gcs_state_history.put(latest_gcs_state)
             save_to_disk(latest_tel_data)
-            """
 
             if decode_gse_usb_frame(usb_gse_frame_decoder, latest_gse_data):
                 if gse_queue.full():
                     _ = gse_queue.get_nowait()
             await gse_queue.put(latest_gse_data)
+            """
             # save_to_disk()
 
-            await cmd_controller(cmd_transporter, cmd_registry)
-            json_gse_data = json_format.MessageToJson(latest_gse_data)
-            if latest_gse_data.adc_measurements:
-                gui_payload = {
-                    "adc": json_gse_data
-                }
-            elif latest_gse_data.sw_ctrl:
-                gui_payload = {
-                    "sw_ctrl": json_gse_data
-                }
+            # await cmd_controller(cmd_transporter, cmd_registry)
 
-            await socket_manager.broadcast(gui_payload)
+            if latest_gse_data:
+                json_gse_payload = json_format.MessageToJson(latest_gse_data)
+                await socket_manager.broadcast(json_gse_payload)
+                
             await socket_manager.broadcast("data_from_sensor")
-            await asyncio.sleep(0)
+            await asyncio.sleep(1)
     except Exception as e:
         logger.error(f"Error while running core serial task. {e}")
     finally:
         # board_ser_port.close()
-        gse_ser_port.close()
+        # gse_ser_port.close()
+        pass

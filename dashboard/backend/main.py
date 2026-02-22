@@ -21,15 +21,17 @@ socket_manager = ConnectionManager()
 
 @app.on_event("startup")
 async def startup_event():
-    await asyncio.sleep(3)
-    try:
-        asyncio.create_task(core_serial_task(socket_manager))
-        # subprocess.run(["xdotool", "key", "F5"], env={"DISPLAY": ":0"})
-        print("Kiosk refresh signal sent!")
-    except Exception as e:
-        logger.error(f"Failed to refresh kiosk: {e}")
-        traceback.print_exc()
-        raise e
+    asyncio.create_task(core_serial_task(socket_manager))
+    
+    async def delayed_refresh():
+        await asyncio.sleep(5)
+        try:
+            subprocess.run(["xdotool", "search", "--class", "chromium", "key", "F5"], env={"DISPLAY": ":0"})
+            print("Kiosk refresh signal sent!")
+        except Exception as e:
+            print(f"Refresh failed (normal if browser not open yet): {e}")
+
+    asyncio.create_task(delayed_refresh())
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -43,4 +45,11 @@ async def websocket_endpoint(websocket: WebSocket):
         await asyncio.sleep(0)
 
 FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
-app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="static")
+
+if FRONTEND_DIST.exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="static")
+else:
+    print(f"Warning: Frontend path {FRONTEND_DIST} not found!")
+"""
+FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="static")"""
