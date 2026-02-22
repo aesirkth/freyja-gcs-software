@@ -116,25 +116,25 @@ function App() {
           <div className="main-screen">
             <div className="table-tab">
               <div className="table-1">
-                {adc_dict.keys.map((id, index) => (
+                {Object.keys(adc_dict).map((key, index) => (
                   <div key={index}>
-                    <p className="data-title">{adc_dict[id]["tag"]}</p>
-                    <p className="data-value">{adc_dict[id]["value"]}</p>
+                    <p className="data-title">{adc_dict[key]["tag"]}</p>
+                    <p className="data-value">{adc_dict[key]["value"]}</p>
                   </div>
                 ))}
               </div>
               <div className="table-2">
-                {switch_dict.keys.map((item, index) => (
+                {Object.keys(switch_dict).map((key, index) => (
                   <div key={index}>
-                    <p className="data-title">{item}</p>
-                    <p className="data-value">{switch_dict[item]}</p>
+                    <p className="data-title">{switch_dict[key]["tag"]}</p>
+                    <p className="data-value">{switch_dict[key]["status"]}</p>
                   </div>
                 ))}
               </div>
             </div>
             <div className="procedure-list">
               <h3>
-                TEST PROCEDURE
+                TEST PROCEDURES
               </h3>
               <div>       
                   
@@ -146,9 +146,9 @@ function App() {
                   ACTUATION CONTROLS
                 </h3>
                 <div className="control-wrapper">
-                  {switch_dict.keys.map((item, index) => (
+                  {Object.keys(switch_dict).map((key, index) => (
                     <button onClick={() => handleOtherClick(key)} key={index}>
-                      AC {switch_dict[item]}
+                      AC{key}
                     </button>
                   ))}
                 </div>
