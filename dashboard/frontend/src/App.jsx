@@ -93,12 +93,14 @@ function App() {
     };
   }, []);
 
-  const handleOtherClick = (item) => {
-    const buffer = { ...item };
-    buffer["status"] = !buffer["status"];
+  const submitCommand = (key) => {
+    const buffer = {
+      "id": key,
+      "status": switch_dict["status"]
+    };
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-        const message = JSON.stringify(buffer); 
-        socketRef.current.send(message);
+        const cmd_payload = JSON.stringify(buffer); 
+        socketRef.current.send(cmd_payload);
     } else {
       console.error("WebSocket is not open.");
     }
@@ -147,7 +149,7 @@ function App() {
                 </h3>
                 <div className="control-wrapper">
                   {Object.keys(switch_dict).map((key, index) => (
-                    <button onClick={() => handleOtherClick(key)} key={index}>
+                    <button onClick={() => submitCommand(key)} key={index}>
                       AC{key}
                     </button>
                   ))}
