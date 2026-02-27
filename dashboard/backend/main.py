@@ -1,4 +1,3 @@
-import traceback
 import json
 from fastapi import FastAPI, WebSocket
 from src.state.cmd_queue import cmd_queue
@@ -6,7 +5,6 @@ from src.utils.format_msg import format_message
 from pathlib import Path
 import asyncio
 import subprocess
-# from api.v1.api_v1 import api_router
 from src.state.con_manager import ConnectionManager
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -15,7 +13,6 @@ import logging
 
 app = FastAPI()
 logger = logging.getLogger(__name__)
-# app.include_router(api_router)
 
 socket_manager = ConnectionManager()
 

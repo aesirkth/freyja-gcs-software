@@ -75,7 +75,7 @@ make flash-app
 ## installation of dashboard env
 
 ```bash
-cd dashboard
+cd dashboard/backend
 ```
 
 with pip:
