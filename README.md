@@ -92,6 +92,24 @@ source .venv/bin/activate
 uv sync
 ```
 
+## starting the dashboard
+
+To run the backend (which serves the frontend)
+```bash
+cd backend
+uv run uvicorn main:app --reload  
+```
+
+To run the frontend (from dashboard/frontend)
+```bash
+npm run dev
+```
+
+To build the frontend (from dashboard/frontend)
+```bash
+npm run build
+```
+
 
 ## can message specification
 

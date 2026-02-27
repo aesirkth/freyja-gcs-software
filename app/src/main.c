@@ -109,6 +109,19 @@ int main(void) {
     		int ret = get_timestamp(&timestamp);
 			submit_usb_pkt(&gcs_test_mode_pkt, PKT_TYPE_GCS_TEST_MODE, timestamp);
 		}
+		
+		if (val_tgl_1 < 0 && val_tgl_1) {
+			LOG_ERR("Failed to read LED toggle pin 1");
+		} else {
+			const fafnir_pkt_t fafnir_pkt = {
+			float_randomizer(0.0f, 20.0f),
+				1,
+				0,
+				1,
+				1
+			};
+			submit_can_pkt(&fafnir_pkt, PKT_TYPE_FAFNIR);
+		}
 
         if (val_launch < 0 || val_armd < 0) {
 			LOG_ERR("Failed to read pins");

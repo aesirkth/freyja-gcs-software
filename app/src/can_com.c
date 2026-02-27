@@ -18,28 +18,42 @@ K_SEM_DEFINE(can_tx_done, 1, 1);
 
 const struct device *const can_dev = DEVICE_DT_GET(DT_NODELABEL(fdcan1));
 
+/*
 const struct can_filter filter = {
     .flags = 0,
     .id = 0x700,
     .mask = 0b11110000000 // match from 0x700 to 0x77F
 };
+*/
+const struct can_filter filter = {
+    .flags = 0,
+    .id = 0,    
+    .mask = 0   
+};
 
 void can_rx_cb(const struct device *const device, struct can_frame *frame, void *user_data) {
-    LOG_DBG("rx: %#X", frame->id);
+    LOG_INF("CAN RX: ID 0x%03X | Data: %02x %02x %02x %02x", 
+            frame->id, frame->data[0], frame->data[1], frame->data[2], frame->data[3]);
 
-    int pkt_type = frame->id - 0x700;
-
-    if (frame->dlc != pkt_size[pkt_type]) {
-        LOG_ERR("received packet %#x has length %d but should be length %d", pkt_type, frame->dlc, pkt_size[pkt_type]);
+    if (frame->id < 0x700 || frame->id > 0x77F) {
+        return;
+    } else {
+        LOG_DBG("rx: %#X", frame->id);
+    
+        int pkt_type = frame->id - 0x700;
+    
+        if (frame->dlc != pkt_size[pkt_type]) {
+            LOG_ERR("received packet %#x has length %d but should be length %d", pkt_type, frame->dlc, pkt_size[pkt_type]);
+        }
+    
+        int64_t timestamp;
+        int ret = get_timestamp(&timestamp);
+        if (ret) {
+            LOG_ERR("could not get timestamp for can packet");
+            timestamp = -1;
+        }
+        submit_usb_pkt(frame->data, pkt_type, timestamp);
     }
-
-    int64_t timestamp;
-    int ret = get_timestamp(&timestamp);
-    if (ret) {
-        LOG_ERR("could not get timestamp for can packet");
-        timestamp = -1;
-    }
-    submit_usb_pkt(frame->data, pkt_type, timestamp);
 }
 
 void can_tx_cb(const struct device *device, int error, void *user_data) {
