@@ -13,6 +13,8 @@ def decode_gse_usb_frame(decoder_service: UsbFrameDecoder, empty_gse_object: sur
         empty_gse_object.ParseFromString(usb_pkt_payload)
         print(f"Switch1: {empty_gse_object.switch_states.sw1}")
         print(f"Switch2: {empty_gse_object.switch_states.sw2}")
+        print(f"Switch3: {empty_gse_object.switch_states.sw3}")
+        print(f"Switch4: {empty_gse_object.switch_states.sw4}")
 
         return True
     except Exception as e:
