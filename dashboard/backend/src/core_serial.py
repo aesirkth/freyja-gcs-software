@@ -92,7 +92,6 @@ async def core_serial_task(socket_manager: ConnectionManager):
                 json_gse_payload = json_format.MessageToJson(latest_gse_data)
                 await socket_manager.broadcast(json_gse_payload)
 
-            await socket_manager.broadcast("data_from_sensor")
             await asyncio.sleep(0)
     except Exception as e:
         logger.error(f"Error while running core serial task. {e}")
