@@ -121,11 +121,11 @@ npm run build
 
 ### gcs to fjalar
 
-| CAN ID | bit | data             | type |
-| ------ | --- | ---------------- | ---- |
-| 0x701  | 0   | ready/arm fjalar | bool |
-| 0x702  | 0   | launch           | bool |
-
+| CAN ID | bit | data                       | type  |
+| ------ | --- | -------------------------- | ----- |
+| 0x701  | 0   | ready/arm fjalar           | bool  |
+| 0x702  | 0   | launch                     | bool  |
+| 0x703  | 0   | launch sequence number     | uint8 |
 
 ### fjalar to gcs
 

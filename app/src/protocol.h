@@ -42,6 +42,10 @@ typedef struct launch_pkt {
     bool launch;
 } launch_pkt_t;
 
+typedef struct launch_seq_pkt {
+    uint8_t launch_seq;
+} launch_seq_pkt_t;
+
 typedef struct state_pkt {
     uint8_t fjalar_flight_state;
     uint8_t loki_state;
@@ -122,6 +126,7 @@ typedef enum {
     // gcs -> fjalar
     PKT_TYPE_ARMD,
     PKT_TYPE_LAUNCH,
+    PKT_TYPE_LAUNCH_SEQ,
     // fjalar -> gcs
     PKT_TYPE_STATE = 0x20,
     PKT_TYPE_FAFNIR,
@@ -144,6 +149,7 @@ static const size_t pkt_size[PKT_COUNT] = {
     [PKT_TYPE_GCS_TEST_MODE] = sizeof(gcs_test_mode_pkt_t),
     [PKT_TYPE_ARMD] = sizeof(armd_pkt_t),
     [PKT_TYPE_LAUNCH] = sizeof(launch_pkt_t),
+    [PKT_TYPE_LAUNCH_SEQ] = sizeof(launch_seq_pkt_t),
     [PKT_TYPE_STATE] = sizeof(state_pkt_t),
     [PKT_TYPE_FAFNIR] = sizeof(fafnir_pkt_t),
     [PKT_TYPE_THRUST] = sizeof(thrust_pkt_t),
